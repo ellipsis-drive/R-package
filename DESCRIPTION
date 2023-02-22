@@ -11,5 +11,6 @@ Encoding: UTF-8
 LazyData: true
 Import:
   httr,
-  glue
+  glue,
+  uuid
 RoxygenNote: 7.2.3

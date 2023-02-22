@@ -14,7 +14,7 @@ logIn(username, password, validFor = NULL)
 \item{validFor}{an integer indicating how long the token is valid}
 }
 \value{
-A string representing the login token
+a string representing the login token
 }
 \description{
 This function logs in a user, and returns a token the user can then use to
