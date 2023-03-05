@@ -58,3 +58,14 @@ stringToDate <- function(date)
   )
   return(d)
 }
+
+isNamedList <- function(input)
+{
+  if (!is.list(input))
+    return(FALSE)
+  if (is.null(names(input)))
+    return(FALSE)
+  if (length(names(input)) != length(input))
+    return(FALSE)
+  return(TRUE)
+}

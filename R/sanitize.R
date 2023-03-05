@@ -7,7 +7,7 @@ validUuid <- function(name, value, required)
 
   value <- tryCatch(
     {
-      uuid::uuid(value)
+      value = uuid::as.UUID(value)
     },
     error=function(cond)
     {
@@ -23,6 +23,45 @@ validUuid <- function(name, value, required)
     }
   )
   return(value)
+}
+
+validResolution <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  if (!isNamedList(value))
+    stop(glue::glue("Value error: {name} must be a named list with properties min and max as double"))
+
+  if (!"min" %in% names(value) || !"max" %in% names(value))
+    stop(glue::glue("Value error: {name} must be a named list with properties min and max as double"))
+
+  value <- tryCatch(
+    {
+      value <- list("min" = as.double(value[["min"]]), "max" = as.double(value[["max"]]))
+    },
+    error=function(cond)
+    {
+      stop(glue::glue("Value error: {name} must be a named list with properties min and max as double"))
+    })
+
+  return(value)
+}
+
+validDateRange <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  if (!isNamedList(value) || !"from" %in% names(value) || !"to" %in% names(value))
+    stop(glue::glue("Value error: date must be a named list with properties from and to that should be of type datetime"))
+
+  dateFrom <- value[["from"]]
+  dateTo <- value[["to"]]
+
+  dateFrom <- validDate("dateFrom", dateFrom, FALSE)
+  dateTo <- validDate("dateTo", dateTo, FALSE)
+  return(list("from" = dateFrom, "to" = dateTo))
 }
 
 validString <- function(name, value, required)
@@ -79,4 +118,56 @@ validInt <- function(name, value, required)
 
   if (!is.int(value))
     stop(glue::glue("Value error: {name} must be of type int"))
+}
+
+validBounds(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  keys = c("xMin", "xMax", "yMin", "yMax")
+  if (!isNamedList(value))
+    stop(glue::glue("Value error: {name} must be a named list with keys {keys} whose values must be of type float"))
+
+  for (key in keys)
+  {
+    if (!key %in% names(value) || !is.numeric(value[[key]]))
+      stop(glue::glue("Value error: {name} must be a named list with keys {keys} whose values must be of type float"))
+    value[[key]] = as.double(value[[key]])
+  }
+  return(value)
+}
+
+validStringArray <- function(name, value, required)
+{
+  if (required == FALSE & is.null(value))
+    return(NULL)
+
+  if (!is.list(value))
+    stop(glue::glue("Value error: {name} must be an iterable"))
+
+  for (x in value)
+  {
+    if (!isSingleString(x))
+      stop(glue::glue("Value error: {name} must be of type string"))
+  }
+
+  return(value)
+}
+
+validDate <- function(name, value, required)
+{
+  if (required == FALSE & is.null(value))
+    return(NULL)
+
+  value <- tryCatch(
+    {
+      value <- strftime(value, "%Y-%m-%dT%H:%M:%S")
+    },
+    error=function(cond)
+    {
+      stop(glue::glue("Value error: {name} must be a valid date"))
+    })
+
+  return(value)
 }

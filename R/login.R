@@ -12,9 +12,9 @@
 #' @param password a string representing the password
 #' @param validFor an integer indicating how long the token is valid
 #' @return a string representing the login token
-#' @roxygen_
+#' @roxygen_header1
 #' @export
-logIn <- function(username, password, validFor = NULL)
+account.logIn <- function(username, password, validFor = NULL)
 {
   username <- validString("username", username, TRUE)
   password <- validString("password", password, TRUE)
@@ -37,7 +37,7 @@ logIn <- function(username, password, validFor = NULL)
 #' @param listAll a boolean controlling whether to retrieve only the first page or all pages
 #' @return a dictionary/json table containing the content that is retrieved
 #' @export
-listRoot <- function(rootName, token, pathTypes = NULL, pageStart = NULL, listAll = TRUE)
+account.listRoot <- function(rootName, token, pathTypes = NULL, pageStart = NULL, listAll = TRUE)
 {
   token = validString("token", token, TRUE)
   rootName = validString("rootName", rootName, TRUE)
