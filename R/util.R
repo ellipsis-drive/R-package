@@ -34,3 +34,27 @@ recurse <- function(f, body, listAll, extraKey = NULL)
   }
   return(r)
 }
+
+stringToDate <- function(date)
+{
+  date <- validString("date", date, TRUE)
+
+  d <- tryCatch(
+    {
+      d <- strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ")
+    },
+    error=function(cond)
+    {
+      d <- tryCatch(
+        {
+          d <- strptime(date, "%Y-%m-%d %H:%M:%S.%f")
+        },
+        error=function(cond)
+        {
+          d <- strptime(date, "%Y-%m-%d %H:%M:%S")
+        }
+      )
+    }
+  )
+  return(d)
+}
