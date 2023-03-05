@@ -1,3 +1,12 @@
+#' Search for a path to a folder
+#'
+#' @param pathTypes a list with strings used to indicate the file types included in the search
+#' @param root a list of strings indicating the rootname of the folder you would like to search
+#' @param text a string indicating ...
+#' @param active a boolean indicating ...
+#' @param userId a uuid referencing the ...
+#' @param ....
+#' @return A name value list containing information about the folder
 #' @export
 path.search <- function(pathTypes = c("raster", "vector", "file", "folder"), root = NULL, text = NULL, active = NULL, userId = NULL, pageStart = NULL, hashtag = NULL, extent = NULL, resolution = NULL, date = NULL, listAll = FALSE, token = NULL)
 {
@@ -81,4 +90,20 @@ convertPath <- function(path)
   }
 
   return(path)
+}
+
+path.editMetaData <- function(pathId, token, description = NULL, attribution = NULL, licenseString = NULL, properties = NULL)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  token <- validString("token", token, TRUE)
+  attribution <- validString("attribution", attribution, FALSE)
+  description <- validString("description", description, FALSE)
+  properties <- validObject("properties", properties, FALSE)
+  licenseString <- validString("licenseString", licenseString, FALSE)
+  return(apiManager_patch(glue::glue("/path/{pathid}/metadata"), list(
+    "description" = description,
+    "attribution" = attribution,
+    "properties" = properties,
+    "license" = licenseString
+  ), token))
 }

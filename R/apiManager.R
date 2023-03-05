@@ -23,8 +23,13 @@ filterNULL <- function(body)
 
 apiManager_post <- function(url, body, token=NULL)
 {
-  r <- apiManager_call(method="POST", url = url, body = body, token = token)
+  r <- apiManager_call(method="httr::POST", url = url, body = body, token = token)
   return(r)
+}
+
+apiManager_patch <- function(url, body, token = NULL)
+{
+  r <- apiManager_call(method="httr::PATCH", url = url, body = body, token = token)
 }
 
 apiManager_get <- function(url, body = NULL, token = NULL, crash = TRUE)
@@ -43,7 +48,7 @@ apiManager_get <- function(url, body = NULL, token = NULL, crash = TRUE)
 
   url <- uPaste(uPaste(url, '?'), body)
 
-  r <- apiManager_call(method = "GET", url = url, body = NULL, token = token, crash = crash)
+  r <- apiManager_call(method = "httr::GET", url = url, body = NULL, token = token, crash = crash)
 }
 
 apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE)
@@ -59,31 +64,15 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
 
   if (is.null(token))
   {
-    if (method == "POST")
-    {
-      res <- httr::POST(url = uPaste(baseUrl, url), body = body, encode = "form")
-      r <- httr::content(res)
-    }
-    else if (method == "GET")
-    {
-      res <- httr::GET(url = uPaste(baseUrl, url), body)
-      r <- httr::content(res)
-    }
+    res <- method(url = uPaste(baseUrl, url), body)
+    r <- httr::content(res)
   }
   else
   {
     if (!grepl("Bearer", token, fixed = TRUE))
       token <- paste("bearer", token)
-    if (method == "POST")
-    {
-      res <- httr::POST(url = uPaste(baseUrl, url), body = body, httr::add_headers(Authorization = token), encode = "form")
-      r <- httr::content(res)
-    }
-    else if (method == "GET")
-    {
-      res <- httr::GET(url = uPaste(baseUrl, url), body, httr::add_headers(Authorization = token))
-      r <- httr::content(res)
-    }
+    res <- method(url = uPaste(baseUrl, url), body, httr::add_headers(Authorization = token))
+    r <- httr::content(res)
   }
 
   if (crash == TRUE)
