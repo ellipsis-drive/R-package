@@ -2,4 +2,9 @@
 
 export(account.listRoot)
 export(account.logIn)
+export(path.editMetaData)
 export(path.get)
+export(path.move)
+export(path.rename)
+export(path.search)
+export(path.trash)

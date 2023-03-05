@@ -23,13 +23,26 @@ filterNULL <- function(body)
 
 apiManager_post <- function(url, body, token=NULL)
 {
-  r <- apiManager_call(method="httr::POST", url = url, body = body, token = token)
+  r <- apiManager_call(method = httr::POST, url = url, body = body, token = token)
+  return(r)
+}
+
+apiManager_put <- function(url, body, token = NULL)
+{
+  r <- apiManager_call(method = httr::PUT, url = url, body = body, token = token)
   return(r)
 }
 
 apiManager_patch <- function(url, body, token = NULL)
 {
-  r <- apiManager_call(method="httr::PATCH", url = url, body = body, token = token)
+  r <- apiManager_call(method = httr::PATCH, url = url, body = body, token = token)
+  return(r)
+}
+
+apiManager_delete <- function(url, body, token = NULL)
+{
+  r <- apiManager_call(method = httr::DELETE, url = url, body = body, token = token)
+  return(r)
 }
 
 apiManager_get <- function(url, body = NULL, token = NULL, crash = TRUE)
@@ -48,7 +61,7 @@ apiManager_get <- function(url, body = NULL, token = NULL, crash = TRUE)
 
   url <- uPaste(uPaste(url, '?'), body)
 
-  r <- apiManager_call(method = "httr::GET", url = url, body = NULL, token = token, crash = crash)
+  r <- apiManager_call(method = httr::GET, url = url, body = NULL, token = token, crash = crash)
 }
 
 apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE)
@@ -64,14 +77,14 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
 
   if (is.null(token))
   {
-    res <- method(url = uPaste(baseUrl, url), body)
+    res <- method(url = uPaste(baseUrl, url), body = body, encode = "form")
     r <- httr::content(res)
   }
   else
   {
     if (!grepl("Bearer", token, fixed = TRUE))
       token <- paste("bearer", token)
-    res <- method(url = uPaste(baseUrl, url), body, httr::add_headers(Authorization = token))
+    res <- method(url = uPaste(baseUrl, url), body = body, httr::add_headers(Authorization = token), encode = "form")
     r <- httr::content(res)
   }
 
@@ -94,9 +107,9 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
         r <- httr::content(res, as="text")
       },
       finally=
-      {
+        {
 
-      }
+        }
     )
     return(r)
   }

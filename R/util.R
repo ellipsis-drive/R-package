@@ -61,11 +61,7 @@ stringToDate <- function(date)
 
 isNamedList <- function(input)
 {
-  if (!is.list(input))
-    return(FALSE)
-  if (is.null(names(input)))
-    return(FALSE)
-  if (length(names(input)) != length(input))
+  if (!is.null(input) & (!is.list(input) | (!all_names(input) & sum(names(list) != "", na.rm=TRUE) == 0)))
     return(FALSE)
   return(TRUE)
 }

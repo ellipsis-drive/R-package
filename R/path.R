@@ -92,6 +92,7 @@ convertPath <- function(path)
   return(path)
 }
 
+#' @export
 path.editMetaData <- function(pathId, token, description = NULL, attribution = NULL, licenseString = NULL, properties = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -106,4 +107,143 @@ path.editMetaData <- function(pathId, token, description = NULL, attribution = N
     "properties" = properties,
     "license" = licenseString
   ), token))
+}
+
+#' @export
+path.rename <- function(pathId, name, token)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  token <- validString("token", token, FALSE)
+  name <- validString("name", name, FALSE)
+
+  return(apiManager_put(glue::glue("/path/{pathId}/name"), list(
+    "name" = name
+  ), token))
+}
+
+#' @export
+path.move <- function(pathIds, parentId, token)
+{
+  token <- validString("token", token, FALSE)
+  pathIds <- validUuidArray("pathIds", pathIds, TRUE)
+  parentId <- validUuid("parentId", parentId, FALSE)
+
+  return(apiManager_put("/path/parentId", list(
+    "pathIds" = pathIds,
+    "parentId" = parentId
+  ), token))
+}
+
+#' @export
+path.trash <- function(pathId, token)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  token <- validString("token", token, FALSE)
+
+  return (apiManager_put(glue::glue("/path/{pathId}/trashed"), list(
+    "trashed" = TRUE
+  ), token))
+}
+
+#' export
+path.recover <- function(pathId, token)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  token <- validString("token", token, FALSE)
+
+  return (apiManager_put(glue::glue("/path/{pathId}/trashed"), list(
+    "trashed" = FALSE
+  ), token))
+}
+
+#' export
+path.delete <- function(pathId, token, recursive = FALSE)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  token <- validString("token", token, FALSE)
+  recursive <- validBool("recursive", recursive, TRUE)
+
+  if (recursive)
+  {
+    info <- path.get(pathId, token)
+    if (info[["type"]] == folder)
+    {
+      folders <- path.folder.listFolder(pathId = pathId, includeTrashed=True, pathTypes=list("folder"), token=token)[['result']]
+      for (f in folders)
+      {
+        path.delete(f[["id"]], token, TRUE)
+      }
+      maps <- path.folder.listFolder(pathId=pathId, pathTypes=list('raster','vector','file'), includeTrashed=True, token=token)[['result']]
+      for (m in maps)
+      {
+        path.delete(m[["id"]], token, TRUE)
+      }
+    }
+    apiManager_delete(glue::glue("/path/{pathId}"), NULL, token)
+  }
+  else
+    apiManager_delete(glue::glue("/path/{pathId}"), NULL, token)
+}
+
+#' export
+path.editPublicAccess <- function(pathId, token, accessLevel = NULL, hidden = NULL, processingUnits = NULL, geoFence = NULL)
+{
+  pathId <- validUuid('pathId', pathId, TRUE)
+  token <- validString('token', token, FALSE)
+  geoFence <- validObject('geoFence', geoFence, FALSE)
+  accessLevel <- validInt('accessLevel', accessLevel, FALSE)
+  processingUnits <- validInt('processingUnits', processingUnits, FALSE)
+  hidden <- validBool('hidden', hidden, FALSE)
+  body = list('accessLevel' = accessLevel, 'processingUnits' = processingUnits, 'geoFence' = geoFence, 'hidden'= hidden)
+
+  return(apiManager_patch(glue::glue("/path/{pathId}/publicAccess"), body, token))
+}
+
+#' export
+path.favorite <- function(pathId, token)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  token <- validString("token", token, FALSE)
+
+  body = list("favorite" = TRUE)
+
+  return(apiManager_put(glue::glue("/path/{pathId}/favorite"), body, token))
+}
+
+#' export
+path.unfavorite <- function(pathId, token)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  token <- validString("token", token, FALSE)
+
+  body = list("favorite" = FALSE)
+
+  return(apiManager_put(glue::glue("/path/{pathId}/favorite"), body, token))
+}
+
+path.convertPath <- function(path)
+{
+  if (path[["type"]] == "raster")
+  {
+    temp <- path[["raster"]][["timestamps"]]
+    path[["raster"]][["timestamps"]] = list()
+    for (x in temp)
+    {
+      timestamp <- temp
+      timestamp[[date]] = list("from" = stringToDate(temp[["date"]][["from"]]), "to" = stringToDate(temp[["date"]][["to"]]))
+      path[["raster"]][["timestamps"]] <- append(path[["raster"]][["timestamps"]], timestamp)
+    }
+  }
+  if (path[["type"]] == "vector")
+  {
+    temp <- path[["vector"]][["timestamps"]]
+    path[["vector"]][["timestamps"]] = list()
+    for (x in temp)
+    {
+      timestamp <- temp
+      timestamp[[date]] = list("from" = stringToDate(temp[["date"]][["from"]]), "to" = stringToDate(temp[["date"]][["to"]]))
+      path[["vector"]][["timestamps"]] <- append(path[["vector"]][["timestamps"]], timestamp)
+    }
+  }
+  return(path)
 }

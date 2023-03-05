@@ -64,6 +64,27 @@ validDateRange <- function(name, value, required)
   return(list("from" = dateFrom, "to" = dateTo))
 }
 
+validUuidArray <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  value <- tryCatch(
+    {
+      value <- list(value)
+    },
+    error=function(cond)
+    {
+      stop(glue::glue("Value error: {name} must be an iterable"))
+    })
+
+  for (Uuid in value)
+  {
+    Uuid <- validUuid("uuid", Uuid, TRUE)
+  }
+  return(value)
+}
+
 validString <- function(name, value, required)
 {
   if (!required & is.null(value))
@@ -120,7 +141,7 @@ validInt <- function(name, value, required)
     stop(glue::glue("Value error: {name} must be of type int"))
 }
 
-validBounds(name, value, required)
+validBounds <- function(name, value, required)
 {
   if (!required & is.null(value))
     return(NULL)
@@ -143,8 +164,15 @@ validStringArray <- function(name, value, required)
   if (required == FALSE & is.null(value))
     return(NULL)
 
-  if (!is.list(value))
-    stop(glue::glue("Value error: {name} must be an iterable"))
+  value <- tryCatch(
+    {
+      value <- list(value)
+    },
+    error=function(cond)
+    {
+      stop(glue::glue("Value error: {name} must be an iterable"))
+    })
+
 
   for (x in value)
   {
