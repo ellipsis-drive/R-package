@@ -115,3 +115,32 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
   }
   return(r)
 }
+
+apiManager_download <- function(url, filePath, token)
+{
+  token <- uPaste("Bearer ", token)
+
+  res <- tryCatch(
+    {
+      res <- httr::GET(uPaste(baseUrl, url), httr::add_headers(Authorization = token))
+      tryCatch(
+        {
+          bin <- httr::content(res, "raw")
+          writeBin(bin, filePath)
+        },
+        error=function(cond)
+        {
+          print("Something went wrong...")
+        },
+        finally=function(cond)
+        {
+
+        }
+      )
+    },
+    error=function(cond)
+    {
+      r <- httr::content(res, as="text")
+    }
+  )
+}

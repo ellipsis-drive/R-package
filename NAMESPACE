@@ -3,6 +3,7 @@
 export(account.listRoot)
 export(account.logIn)
 export(path.editMetaData)
+export(path.file.download)
 export(path.get)
 export(path.move)
 export(path.rename)
