@@ -116,6 +116,28 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
   return(r)
 }
 
+apiManager_upload <- function(url, filePath, token, key = "data")
+{
+  body <- filterNULL(body)
+
+  fileName <- basename(filePath)
+
+  for (k in names(body))
+  {
+    body[[k]] <- as.string(body[[k]])
+  }
+  body[["name"]] <- fileName
+  body[["filedata"]] <- upload_file(filePath)
+
+  res <- httr::POST(uPaste(baseUrl, url), httr::add_headers(Authorization = token), encode = "multipart", body = body)
+
+  errorMessage <- httr::content(res, as="text")
+  if (httr::status_code(res) != 200)
+    stop(glue::glue("ValueError: {errorMessage}"))
+
+  return(httr::content(res))
+}
+
 apiManager_download <- function(url, filePath, token)
 {
   token <- uPaste("Bearer ", token)
