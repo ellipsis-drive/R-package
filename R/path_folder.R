@@ -1,3 +1,4 @@
+#' @export
 path.folder.listFolder <- function(pathId, pathTypes = NULL, pageStart = NULL, listAll = TRUE, includeTrashed = FALSE, token = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -22,6 +23,7 @@ path.folder.listFolder <- function(pathId, pathTypes = NULL, pageStart = NULL, l
   return(r)
 }
 
+#' @export
 path.folder.add <- function(name, token, parentId = NULL, publicAccess = NULL, metadata = NULL)
 {
   name <- validString("name", name, TRUE)
