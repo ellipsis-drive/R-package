@@ -57,7 +57,7 @@ path.invite.getYourInvites <- function(token)
 }
 
 #' @export
-path.invite.getPathInvites(pathId, token)
+path.invite.getPathInvites <- function(pathId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   token <- validString("token", token, FALSE)
