@@ -77,14 +77,30 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
 
   if (is.null(token))
   {
-    res <- method(url = uPaste(baseUrl, url), body = body, encode = "form")
+    res <- tryCatch(
+      {
+        res <- method(url = uPaste(baseUrl, url), body = jsonlite::toJSON(body, auto_unbox=TRUE), httr::add_headers("Content-Type" = "application/json"), encode = "json")
+      },
+      error = function(cond)
+      {
+        res <- method(url = uPaste(baseUrl, url), body = body, encode = "form")
+      }
+    )
     r <- httr::content(res)
   }
   else
   {
     if (!grepl("Bearer", token, fixed = TRUE))
       token <- paste("bearer", token)
-    res <- method(url = uPaste(baseUrl, url), body = body, httr::add_headers(Authorization = token), encode = "form")
+    res <- tryCatch(
+      {
+        res <- method(url = uPaste(baseUrl, url), body = jsonlite::toJSON(body, auto_unbox=TRUE), httr::add_headers("Content-Type" = "application/json", Authorization = token), encode = "json")
+      },
+      error = function(cond)
+      {
+        res <- method(url = uPaste(baseUrl, url), body = body, httr::add_headers(Authorization = token), encode = "form")
+      }
+    )
     r <- httr::content(res)
   }
 

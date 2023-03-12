@@ -23,7 +23,7 @@ path.raster.style.delete <- function(pathId, styleId, token)
 }
 
 #' @export
-path.raster.style.edit <- function(pathId, styleId, method, parameters, )
+path.raster.style.edit <- function(pathId, styleId, method, parameters)
 {
   token <- validString("token", token, TRUE)
   pathId <- validUuid("pathId", pathId, TRUE)
