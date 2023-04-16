@@ -16,7 +16,7 @@ path.file.add <- function(filePath, token, parentId = NULL, publicAccess = NULL,
   fileName <- basename(filePath)
 
   body = list("name" = fileName, "publicAccess" = publicAccess, "metadata" = metadata, "parentId" = parentId)
-  r <- apiManager_upload("/path/file", filePath, body, token, key = "data")
+  r <- apiManager_upload("/path/file", filePath = filePath, body = body, token = token, key = "data")
   return(r)
 }
 

@@ -95,6 +95,56 @@ validString <- function(name, value, required)
   return(value)
 }
 
+validBoundCrsCombination <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  bounds <- value[1]
+  crs <- value[2]
+
+  value <- bounds
+  keys <- list("xMin", "xMax", "yMin", "yMax")
+  if (!isNamedList(value))
+    stop(glue::glue("ValueError: {name} must be a dictionary with keys xMin, xMax, yMin, yMax, whose values must be of type float"))
+
+  for (key in keys)
+  {
+    if (!key %in% names(value) || (!is.numeric(value[[key]]) & length(value[[key]]) <= 0))
+      stop(glue::glue("ValueError: {name} must be a dictionary with keys xMin, xMax, yMin, yMax, whose values must be of type float"))
+    value[[key]] = as.double(value[[key]])
+  }
+
+  if(!isSingleString(crs))
+    stop(glue::glue("ValueError: crs must be of type string"))
+
+  target_tile <- sf::st_polygon(x = c(c(bounds[["xMin"]], bounds[["yMin"]]), c(bounds[["xMin"]], bounds[["yMax"]]), c(bounds[["xMax"]], bounds[["yMax"]]), c(bounds[["xMax"]], bounds[["yMin"]])))
+  sh <- sf::st_sf(geometry = target_file)
+
+  d <- tryCatch(
+    {
+      sf::st_crs(sh) <- sf::st_crs(crs)
+    },
+    error = function(cond)
+    {
+      error_var1 <- name[1]
+      error_var2 <- name[2]
+      stop(glue::glue("ValueError: {error_var} does not fit with the projection given by {error_var2}"))
+    }
+  )
+  return(list(bounds, crs))
+}
+
+validArray <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  if (!is.matrix(value) || !is.array(value))
+    stop(glue::glue("Value error: {name} must be of type array or matrix"))
+  return(value)
+}
+
 validBool <- function(name, value, required)
 {
   if (!required & is.null(value))
@@ -114,7 +164,7 @@ validObject <- function(name, value, required)
 
     value <- tryCatch(
     {
-      value <- jsonDumps(value)
+      value <- purrr::quietly(jsonDumps)(value)$result
     },
     error=function(cond)
     {
@@ -136,9 +186,24 @@ validInt <- function(name, value, required)
 {
   if (!required & is.null(value))
     return(NULL)
-
-  if (!is.int(value))
+  if (!is.numeric(value))
     stop(glue::glue("Value error: {name} must be of type int"))
+  if (value != as.integer(value))
+    stop(glue::glue("Value error: {name} must be of type int"))
+
+  value <- as.integer(value)
+}
+
+validFloat <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  if (!is.numeric(value) & length(value) <= 0)
+    stop(glue::glue("Value error: {name} must be of type double"))
+
+  value <- as.double(value)
+  return(value)
 }
 
 validBounds <- function(name, value, required)

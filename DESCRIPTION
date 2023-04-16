@@ -12,5 +12,11 @@ LazyData: true
 Import:
   httr,
   glue,
-  uuid
+  uuid,
+  raster,
+  sf,
+  matrixcalc,
+  purrr,
+  rgdal,
+  sp
 RoxygenNote: 7.2.3
