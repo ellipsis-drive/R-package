@@ -138,15 +138,7 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
     raster_object <- raster::stack(raster::brick(r_total))
     raster::crs(raster_object) = glue::glue("+init=epsg:{epsg_string}")
     raster::extent(raster_object) <- raster::extent(extent[["xMin"]], extent[["xMax"]], extent[["yMin"]], extent[["yMax"]])
-    #test paths:
-    hill1 <- "C:/Users/ROCVA/Desktop/work/HARV_dtmCrop.tif"
-    hill2 <- "C:/Users/ROCVA/Desktop/work/HARV_DTMhill_WGS84.tif"
-    DTM_HARV <- raster::raster(hill1)
-    DTM_hill_HARV <- raster::raster(hill2)
-    DTM_hill_UTMZ18N_HARV <- raster::projectRaster(DTM_hill_HARV,
-                                           crs=raster::crs(DTM_HARV))
-    stop("end test")
-    proj_object <- raster::projectRaster(DEM, crs=sr)
+    raster_object <- raster::projectRaster(raster_object, crs=glue::glue("+init=epsg:{epsg}"))
     return(list("raster" = raster_object, "transform" = trans, "extent" = extent, "epsg" = epsg))
   }
 }
