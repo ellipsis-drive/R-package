@@ -106,7 +106,6 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
         r <- tiff::readTIFF(r[["content"]])
         if (!is.null(style))
           r <- raster::t(r)
-        r <- raster::as.array(r)
       }
       r_total[seq((y_index*256)+1:((y_index+1)*256)),seq((x_index*256)+1,((x_index+1)*256)),] <- r
 
@@ -137,10 +136,17 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
     #return(reprojectRaster(r = r_total, sourceExtent = mercatorExtent, targetExtent = extent, targetWidth = dim(r_total)[3], targetHeight = dim(r_total)[2], sourceEpsg = 3857, targetEpsg = epsg, interpolation = "nearest"))
     trans <- affineFromBounds(extent[["xMin"]], extent[["yMin"]], extent[["xMax"]], extent[["yMax"]], dim(r_total)[3], dim(r_total)[2])
     raster_object <- raster::stack(raster::brick(r_total))
-    raster::crs(raster_object) = "+init=epsg:{epsg_string}"
+    raster::crs(raster_object) = glue::glue("+init=epsg:{epsg_string}")
     raster::extent(raster_object) <- raster::extent(extent[["xMin"]], extent[["xMax"]], extent[["yMin"]], extent[["yMax"]])
-    #trans_object <- raster::raster
-    #raster_object <- raster::projectRaster(raster_object, raster_object, crs=glue::glue("+init=epsg:{epsg_string}"))
+    #test paths:
+    hill1 <- "C:/Users/ROCVA/Desktop/work/HARV_dtmCrop.tif"
+    hill2 <- "C:/Users/ROCVA/Desktop/work/HARV_DTMhill_WGS84.tif"
+    DTM_HARV <- raster::raster(hill1)
+    DTM_hill_HARV <- raster::raster(hill2)
+    DTM_hill_UTMZ18N_HARV <- raster::projectRaster(DTM_hill_HARV,
+                                           crs=raster::crs(DTM_HARV))
+    stop("end test")
+    proj_object <- raster::projectRaster(DEM, crs=sr)
     return(list("raster" = raster_object, "transform" = trans, "extent" = extent, "epsg" = epsg))
   }
 }
@@ -148,6 +154,9 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
 #' @export
 path.raster.timestamp.add <- function(pathId, token, description = NULL, date = list("from" = Sys.time(), "to" = Sys.time()))
 {
+  DEM <- raster::raster("C:/Users/ROCVA/Desktop/test.tif")
+  DEM
+  stop("test")
   token <- validString("token", token, TRUE)
   pathId <- validUuid("pathId", pathId, TRUE)
   date <- validDateRange("date", date, TRUE)
@@ -155,4 +164,5 @@ path.raster.timestamp.add <- function(pathId, token, description = NULL, date = 
   body = list("date" = date, "description" = description)
   return(apiManager_post(glue::glue("/path/{pathId}/raster/timestamp"), body, token))
 }
+
 
