@@ -9,7 +9,7 @@ path.raster.style.add <- function(pathId, name, method, parameters, token, defau
   parameters <- validObject("parameters", parameters, TRUE)
 
   body = list("name" = name, "method" = method, "parameters" = parameters, "default" = default)
-  return(apiManager_post(glue::glue("/path/{pathId}/raster/style"), body, token))
+  return(httr::content(apiManager_post(glue::glue("/path/{pathId}/raster/style"), body, token)))
 }
 
 #' @export
@@ -19,7 +19,7 @@ path.raster.style.delete <- function(pathId, styleId, token)
   pathId <- validUuid("pathId", pathId, TRUE)
   styleId <- validUuid("styleId", styleId, TRUE)
 
-  return(apiManager_delete(glue::glue("/path/{pathId}/raster/style/{styleId}"), NULL, token))
+  return(httr::content(apiManager_delete(glue::glue("/path/{pathId}/raster/style/{styleId}"), NULL, token)))
 }
 
 #' @export
@@ -33,5 +33,5 @@ path.raster.style.edit <- function(pathId, styleId, method, parameters)
   default <- validBool("default", default, FALSE)
 
   body = list("method" = method, "parameters" = parameters, "default" = default)
-  return(apiManager_patch(glue::glue("/path/{pathId}/raster/style/{styleId}"), body, token))
+  return(httr::content(apiManager_patch(glue::glue("/path/{pathId}/raster/style/{styleId}"), body, token)))
 }

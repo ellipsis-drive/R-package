@@ -15,7 +15,7 @@ listFolder <- function(pathId, pathTypes = NULL, pageStart = NULL, listAll = TRU
 
   f <- function(body)
   {
-    return(apiManager_get(glue::glue("/path/{pathId}/list"), body, token))
+    return(httr::content(apiManager_get(glue::glue("/path/{pathId}/list"), body, token)))
   }
 
   r <- recurse(f, body, listAll)

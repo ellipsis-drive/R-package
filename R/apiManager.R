@@ -53,12 +53,22 @@ apiManager_get <- function(url, body = NULL, token = NULL, crash = TRUE)
     body[["token"]] <- token
   body <- filterNULL(body)
   for (key in names(body))
-    if (!isSingleString(body))
-      body[[key]] <- purrr::quietly(jsonDumps)(body[[key]])$result
-
-  body <- URLencode(body)
-
-  url <- uPaste(uPaste(url, '?'), body)
+  {
+    if (!isSingleString(body[[key]]))
+    {
+      body[[key]] <- jsonDumps(body[[key]])
+    }
+  }
+  body_string <- ""
+  # There is no good way to encode urls like urllib.parse.urlencode in R
+  for (key in names(body))
+  {
+    val <- body[[key]]
+    body_string <- uPaste(body_string, glue::glue("{key}={val}&"))
+  }
+  # Remove dangling '&'
+  body_string <- substring(body_string, 1, nchar(body_string)-1)
+  url <- uPaste(uPaste(url, '?'), body_string)
   r <- apiManager_call(method = httr::GET, url = url, body = NULL, token = token, crash = crash)
   return(r)
 }
@@ -85,7 +95,6 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
         res <- method(url = uPaste(baseUrl, url), body = body, encode = "form")
       }
     )
-    r <- httr::content(res)
   }
   else
   {
@@ -93,14 +102,13 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
       token <- paste("bearer", token)
     res <- tryCatch(
       {
-        res <- method(url = uPaste(baseUrl, url), body = jsonlite::toJSON(body, auto_unbox=TRUE), httr::add_headers("Content-Type" = "application/json", Authorization = token), encode = "json")
+        res <- method(url = uPaste(baseUrl, url), body = jsonlite::toJSON(body, auto_unbox=TRUE), httr::add_headers("Content-Type" = "application/json"), encode = "json")
       },
       error = function(cond)
       {
-        res <- method(url = uPaste(baseUrl, url), body = body, httr::add_headers(Authorization = token), encode = "form")
+        res <- method(url = uPaste(baseUrl, url), body = body, encode = "form")
       }
     )
-    r <- httr::content(res)
   }
 
   if (crash == TRUE)
@@ -126,9 +134,9 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
 
         }
     )
-    return(r)
+    return(res)
   }
-  return(r)
+  return(res)
 }
 
 apiManager_upload <- function(url, filePath, body, token, key = "data")

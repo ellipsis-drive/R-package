@@ -20,7 +20,8 @@ account.logIn <- function(username, password, validFor = NULL)
   password <- validString("password", password, TRUE)
   validFor <- validInt("validFor", validFor, FALSE)
   json <- list("username" = username, "password" = password, "validFor" = validFor)
-  r <- apiManager_post("/account/login", json)
+  res <- apiManager_post("/account/login", json)
+  r <- httr::content(res)
   token <- r$"token"
   return(token)
 }
@@ -53,7 +54,7 @@ account.listRoot <- function(rootName, token, pathTypes = NULL, pageStart = NULL
   f <- function(body)
   {
     r <- apiManager_get(url, body, token)
-    return(r)
+    return(httr::content(r))
   }
   r <- recurse(f, body, listAll)
   return(r)

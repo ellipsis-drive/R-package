@@ -25,7 +25,7 @@ path.raster.timestamp.file.get <- function(pathId, timestampId, token, pageStart
 
   f <- function(body)
   {
-    r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/file"), NULL, token)
+    r <- httr::content(apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/file"), NULL, token))
     for (i in seq(lengths(r[["result"]])))
     {
       if (!is.null(r[["result"]][[i]][["info"]] & !is.null(r[["result"]][[i]][["info"]][["bounds"]])))

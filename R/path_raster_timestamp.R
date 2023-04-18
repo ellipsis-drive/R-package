@@ -24,7 +24,7 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
   xMaxWeb <- bounds[["xMax"]]
   yMinWeb <- bounds[["yMin"]]
   yMaxWeb <- bounds[["yMax"]]
-  info <- apiManager_get(glue::glue("/path/{pathId}"), NULL, token)
+  info <- httr::content(apiManager_get(glue::glue("/path/{pathId}"), NULL, token))
   bands <- info[["raster"]][["bands"]]
   if (is.null(style))
   {
@@ -55,9 +55,7 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
       zoom <- item[["zoom"]]
     }
   }
-
   body <- list("style" = style)
-
   LEN <- 2.003751e+07
 
   x_start <- 2**zoom * (xMinWeb + LEN) / (2*LEN)
@@ -92,20 +90,23 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
       zoom_string <- toString(zoom)
       tileX_string <- toString(tileX)
       tileY_string <- toString(tileY)
+
       r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/tile/{zoom_string}/{tileX_string}/{tileY_string}"), body, token, FALSE)
-      if (r[["status"]] == 403)
+      if (httr::status_code(r) == 403)
       {
         stop("ValueError: insufficient access")
       }
-      if (r[["status"]] != 200)
+      if (httr::status_code(r) != 200)
       {
         r <- array(0, c(256, 256, num_bands))
       }
       else
       {
-        r <- tiff::readTIFF(r[["content"]])
+        r <- raster::stack(raster::brick(httr::content(r)))
         if (!is.null(style))
           r <- raster::t(r)
+        r <- raster::as.array(r)
+        print(r)
       }
       r_total[seq((y_index*256)+1:((y_index+1)*256)),seq((x_index*256)+1,((x_index+1)*256)),] <- r
 
@@ -139,6 +140,8 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
     raster::crs(raster_object) = glue::glue("+init=epsg:{epsg_string}")
     raster::extent(raster_object) <- raster::extent(extent[["xMin"]], extent[["xMax"]], extent[["yMin"]], extent[["yMax"]])
     raster_object <- raster::projectRaster(raster_object, crs=glue::glue("+init=epsg:{epsg}"))
+    # TODO: extent might be skewed and add bilinear and resolutioun options
+
     return(list("raster" = raster_object, "transform" = trans, "extent" = extent, "epsg" = epsg))
   }
 }

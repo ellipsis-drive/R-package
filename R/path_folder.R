@@ -15,7 +15,7 @@ path.folder.listFolder <- function(pathId, pathTypes = NULL, pageStart = NULL, l
 
   f <- function(body)
   {
-    return(apiManager_get(glue::glue("/path/{pathId}/list"), body, token))
+    return(httr::content(apiManager_get(glue::glue("/path/{pathId}/list"), body, token)))
   }
 
   r <- recurse(f, body, listAll)
@@ -34,5 +34,5 @@ path.folder.add <- function(name, token, parentId = NULL, publicAccess = NULL, m
 
   body = list("name" = name, "parentId" = parentId, "publicAccess" = publicAccess, "metadata" = metadata)
 
-  return(apiManager_post("/path/folder", body, token))
+  return(httr::content(apiManager_post("/path/folder", body, token)))
 }

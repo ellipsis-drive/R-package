@@ -164,7 +164,8 @@ validObject <- function(name, value, required)
 
     value <- tryCatch(
     {
-      value <- purrr::quietly(jsonDumps)(value)$result
+      value <- jsonlite::serializeJSON(value)
+      value <- jsonlite::unserializeJSON(value)
     },
     error=function(cond)
     {
