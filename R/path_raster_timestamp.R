@@ -103,25 +103,23 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
       else
       {
         r <- raster::stack(raster::brick(httr::content(r)))
-        if (!is.null(style))
-          r <- raster::t(r)
-        r <- raster::as.array(r)
-        print(r)
+        #if (!is.null(style))
+        #  r <- raster::t(r)
       }
-      r_total[seq((y_index*256)+1:((y_index+1)*256)),seq((x_index*256)+1,((x_index+1)*256)),] <- r
-
+      r_total[seq((y_index*256)+1,((y_index+1)*256)),seq((x_index*256)+1,((x_index+1)*256)),] <- raster::as.array(r)
       # Add progress bar later
       N <- N + 1
     }
+    return(r_total)
   }
   # Multithread later on
-  subTiles(tiles)
+  r_total <- subTiles(tiles)
 
   min_x_index <- as.integer(floor((x_start - x1_osm)*256))
   max_x_index <- max(as.integer(floor((x_end- x1_osm)*256 + 1 )), min_x_index + 1 )
   min_y_index <- as.integer(floor((y_start - y1_osm)*256))
   max_y_index <- max(as.integer(floor((y_end- y1_osm)*256 +1)), min_y_index + 1)
-  r_total <- r_total[min_y_index:max_y_index,min_x_index:max_x_index,]
+  r_total <- r_total[seq(min_y_index,max_y_index),seq(min_x_index,max_x_index),]
 
   mercatorExtent <- list('xMin' = xMinWeb, 'yMin'= yMinWeb, 'xMax'= xMaxWeb, 'yMax'= yMaxWeb)
   if (epsg == "3857")
@@ -134,14 +132,14 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
   }
   else
   {
-    #return(reprojectRaster(r = r_total, sourceExtent = mercatorExtent, targetExtent = extent, targetWidth = dim(r_total)[3], targetHeight = dim(r_total)[2], sourceEpsg = 3857, targetEpsg = epsg, interpolation = "nearest"))
     trans <- affineFromBounds(extent[["xMin"]], extent[["yMin"]], extent[["xMax"]], extent[["yMax"]], dim(r_total)[3], dim(r_total)[2])
+    #raster_object <- recolorize::array_to_RasterStack(r_total, type = "stack")
     raster_object <- raster::stack(raster::brick(r_total))
+    plot.new()
     raster::crs(raster_object) = glue::glue("+init=epsg:{epsg_string}")
     raster::extent(raster_object) <- raster::extent(extent[["xMin"]], extent[["xMax"]], extent[["yMin"]], extent[["yMax"]])
-    raster_object <- raster::projectRaster(raster_object, crs=glue::glue("+init=epsg:{epsg}"))
+    raster_object <- raster::projectRaster(raster_object, crs=glue::glue("+init=epsg:{epsg}"), method="ngb", resolution = 1000)
     # TODO: extent might be skewed and add bilinear and resolutioun options
-
     return(list("raster" = raster_object, "transform" = trans, "extent" = extent, "epsg" = epsg))
   }
 }
@@ -149,9 +147,6 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
 #' @export
 path.raster.timestamp.add <- function(pathId, token, description = NULL, date = list("from" = Sys.time(), "to" = Sys.time()))
 {
-  DEM <- raster::raster("C:/Users/ROCVA/Desktop/test.tif")
-  DEM
-  stop("test")
   token <- validString("token", token, TRUE)
   pathId <- validUuid("pathId", pathId, TRUE)
   date <- validDateRange("date", date, TRUE)

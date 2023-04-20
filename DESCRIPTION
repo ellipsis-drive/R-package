@@ -19,5 +19,6 @@ Import:
   purrr,
   rgdal,
   sp,
-  jsonlite
+  jsonlite,
+  recolorize
 RoxygenNote: 7.2.3

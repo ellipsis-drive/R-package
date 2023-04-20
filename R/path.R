@@ -45,7 +45,7 @@ path.search <- function(pathTypes = c("raster", "vector", "file", "folder"), roo
 
   f <- function(body)
   {
-    return(apiManager_get("/path", body, token))
+    return(httr::content(apiManager_get("/path", body, token)))
   }
 
   r <- recurse(f, body, listAll)
@@ -65,7 +65,7 @@ path.get <- function(pathId, token = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   token <- validString("token", token, FALSE)
-  r <- apiManager_get(glue::glue("/path/{pathId}"), NULL, token)
+  r <- httr::content(apiManager_get(glue::glue("/path/{pathId}"), NULL, token))
   r <- convertPath(r)
 
   return(r)
@@ -101,12 +101,12 @@ path.editMetaData <- function(pathId, token, description = NULL, attribution = N
   description <- validString("description", description, FALSE)
   properties <- validObject("properties", properties, FALSE)
   licenseString <- validString("licenseString", licenseString, FALSE)
-  return(apiManager_patch(glue::glue("/path/{pathid}/metadata"), list(
+  return(httr::content(apiManager_patch(glue::glue("/path/{pathid}/metadata"), list(
     "description" = description,
     "attribution" = attribution,
     "properties" = properties,
     "license" = licenseString
-  ), token))
+  ), token)))
 }
 
 #' @export
@@ -116,9 +116,9 @@ path.rename <- function(pathId, name, token)
   token <- validString("token", token, FALSE)
   name <- validString("name", name, FALSE)
 
-  return(apiManager_put(glue::glue("/path/{pathId}/name"), list(
+  return(httr::content(apiManager_put(glue::glue("/path/{pathId}/name"), list(
     "name" = name
-  ), token))
+  ), token)))
 }
 
 #' @export
@@ -128,10 +128,10 @@ path.move <- function(pathIds, parentId, token)
   pathIds <- validUuidArray("pathIds", pathIds, TRUE)
   parentId <- validUuid("parentId", parentId, FALSE)
 
-  return(apiManager_put("/path/parentId", list(
+  return(httr::content(apiManager_put("/path/parentId", list(
     "pathIds" = pathIds,
     "parentId" = parentId
-  ), token))
+  ), token)))
 }
 
 #' @export
