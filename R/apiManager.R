@@ -102,11 +102,11 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
       token <- paste("bearer", token)
     res <- tryCatch(
       {
-        res <- method(url = uPaste(baseUrl, url), body = jsonlite::toJSON(body, auto_unbox=TRUE), httr::add_headers("Content-Type" = "application/json"), encode = "json")
+        res <- method(url = uPaste(baseUrl, url), body = jsonlite::toJSON(body, auto_unbox=TRUE), httr::add_headers("Content-Type" = "application/json", "Authorization" = token), encode = "json")
       },
       error = function(cond)
       {
-        res <- method(url = uPaste(baseUrl, url), body = body, encode = "form")
+        res <- method(url = uPaste(baseUrl, url), body = body, httr::add_headers("Authorization" = token), encode = "form")
       }
     )
   }
@@ -151,21 +151,13 @@ apiManager_upload <- function(url, filePath, body, token, key = "data")
   }
   body[["name"]] <- fileName
   body[["filedata"]] <- httr::upload_file(filePath)
-  print(httr::upload_file(filePath))
+  print(body[["filedata"]])
+
   token <- paste("bearer", token)
-  u2 = evaluate::evaluate({
-    function()
-      {
-        res <- httr::POST(uPaste(baseUrl, url), body = body, httr::add_headers("Content-Type" = "multipart/form-data", Authorization = token), httr::verbose(info = TRUE))
-      }
-    })
-  print(u2)
+  print(uPaste(baseUrl, url))
+  stop("123")
+  res <- httr::POST(uPaste(baseUrl, url), body = body, httr::add_headers("Content-Type" = "multipart/form-data", Authorization = token))
   errorMessage <- httr::content(res, as="text")
-  fileConn<-file("output.txt")
-  print(res)
-  lapply(u[[2]], write, "test.txt", append=TRUE, ncolumns=1000)
-  close(fileConn)
-  #print(httr::content(res))
   if (httr::status_code(res) != 200)
     stop(glue::glue("ValueError: {errorMessage}"))
 

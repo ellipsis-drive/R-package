@@ -152,7 +152,7 @@ path.raster.timestamp.add <- function(pathId, token, description = NULL, date = 
   date <- validDateRange("date", date, TRUE)
   description <- validString("description", description, FALSE)
   body = list("date" = date, "description" = description)
-  return(apiManager_post(glue::glue("/path/{pathId}/raster/timestamp"), body, token))
+  return(httr::content(apiManager_post(glue::glue("/path/{pathId}/raster/timestamp"), body, token)))
 }
 
 
