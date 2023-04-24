@@ -149,13 +149,11 @@ apiManager_upload <- function(url, filePath, body, token, key = "data")
   {
     body[[k]] <- toString(body[[k]])
   }
-  body[["name"]] <- fileName
   body[["filedata"]] <- httr::upload_file(filePath)
   print(body[["filedata"]])
 
   token <- paste("bearer", token)
-  print(uPaste(baseUrl, url))
-  stop("123")
+
   res <- httr::POST(uPaste(baseUrl, url), body = body, httr::add_headers("Content-Type" = "multipart/form-data", Authorization = token))
   errorMessage <- httr::content(res, as="text")
   if (httr::status_code(res) != 200)
