@@ -67,3 +67,47 @@ path.raster.timestamp.file.get <- function(pathId, timestampId, token, pageStart
   r <- recurse(f, list("pageStart" = pageStart), listAll)
   return(r)
 }
+
+#' @export
+path.raster.timestamp.file.trash <- function(pathId, timestampId, fileId, token)
+{
+  token <- validString("token", token, TRUE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  fileId <- validUuid("fileId", fileId, TRUE)
+
+  r <- apiManager_put(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/file/{fileId}/trashed"), list("trashed" = TRUE), token)
+  return(httr::content(r))
+}
+
+#' @export
+path.raster.timestamp.file.recover(pathId, timestampId, fileId, token)
+{
+  token <- validString("token", token, TRUE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  fileId <- validUuid("fileId", fileId, TRUE)
+
+  r <- apiManager_put(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/file/{fileId}/trashed"), list("trashed" = FALSE), token)
+  return(httr::content(r))
+}
+
+#' @export
+path.raster.timestamp.file.delete(pathId, timestampId, fileId, token)
+
+
+#' @export
+path.raster.timestamp.file.download(pathId, timestampId, fileId, filePath, token)
+{
+  token <- validString("token", token, TRUE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  fileId <- validUuid("fileId", fileId, TRUE)
+  filePath <- validString("filePath", filePath, TRUE)
+
+  if (substr(filePath, nchar(filePath)-3, nchar(filePath)) != ".tif")
+    stop("valueError: filePath must end with .tif")
+
+  apiManager_download(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/file/{fileId}/data"), filePath, token)
+}
+
