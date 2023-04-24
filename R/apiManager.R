@@ -176,7 +176,7 @@ apiManager_download <- function(url, filePath, token)
         },
         error=function(cond)
         {
-          print("Something went wrong...")
+          stop("ValueError: filePath invalid")
         },
         finally=function(cond)
         {
@@ -187,6 +187,7 @@ apiManager_download <- function(url, filePath, token)
     error=function(cond)
     {
       r <- httr::content(res, as="text")
+      stop(glue::glue("ValueError: {r}"))
     }
   )
 }
