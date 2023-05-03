@@ -98,6 +98,16 @@ validString <- function(name, value, required)
   return(value)
 }
 
+validSFGeometry <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  if (!is(value, "sfg"))
+    stop(glue::glue("ValueError: {name} must be a simple feature geometry"))
+  return(value)
+}
+
 validBoundCrsCombination <- function(name, value, required)
 {
   if (!required & is.null(value))

@@ -20,5 +20,6 @@ Import:
   rgdal,
   sp,
   jsonlite,
-  recolorize
+  recolorize,
+  geojsonsf
 RoxygenNote: 7.2.3

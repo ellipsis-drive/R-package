@@ -1,4 +1,71 @@
+# TODO: during tests, see if crs transformations in analyse and alongline work out
+
 #' Service we deliver: We return an R raster object
+#' @export
+path.raster.timestamp.getDonwsampledRaster <- function(pathId, timestampId, extent, width, height, epsg=3857, style = NULL, token = NULL)
+{
+  return(path.raster.timestamp.getSampledRaster(pathId, timestampId, extent, width, height, epsg, style, token))
+}
+
+#' @export
+path.raster.timestamp.getSampledRaster <- function(pathId, timestampId, extent, width, height, epsg = 3857, style = NULL, token = NULL)
+{
+  bounds <- extent
+  token <- validString("token", token, FALSE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  bounds <- validBounds("bounds", bounds, TRUE)
+  style <- validObject("style", style, FALSE)
+  epsg <- validInt("epsg", epsg, TRUE)
+
+  body <- list("pathId" = pathId, "timestampId" = timestampId, "extent" = bounds, "width" = width, "height" = height, "style" = style, "epsg" = epsg)
+
+  r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/rasterByExtent"), body, token, crash = FALSE)
+  if (httr::status_code(r) != 200)
+  {
+    message <- httr::http_status(r)[["message"]]
+    stop(glue::glue("ValueError: {message}"))
+  }
+  r <- raster::stack(raster::brick(httr::content(r)))
+
+  xMin <- bounds[["xMin"]]
+  yMin <- bounds[["yMin"]]
+  xMax <- bounds[["xMax"]]
+  yMax <- bounds[["yMax"]]
+
+  trans <- affineFromBounds(xMin, yMin, xMax, yMax, dim(r)[3], dim(r)[2])
+
+  return(list("raster" = r, "transform" = trans, "extent" = list("xMin" = xMin, "yMin" = yMin, "xMax" = xMax, "yMax" = yMax), "crs" = glue::glue("EPSG:{epsg}")))
+}
+
+#' @export
+getValuesAlongLine <- function(pathId, timestampId, line, token = NULL, epsg = 4326, asRaster = FALSE)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  token <- validString("token", token, FALSE)
+  line <- validSFGeometry("line", line, TRUE)
+  asRaster <- validBool("asRaster", asRaster, TRUE)
+
+  if(!is(line, "LINESTRING"))
+    stop("ValueError: line must be a LINESTRING simple feature geometry")
+
+  temp <- sf::st_sf(geometry = sf::st_sfc(line))
+  temp <- sf::st_set_crs(temp, glue::glue("EPSG:{epsg}"))
+  temp <- sf::st_set_crs(temp, "EPSG:4326")
+
+  extent <- list("xMin" = sf::st_bbox(temp)[["xmin"]], "yMin" = sf::st_bbox(temp)[["ymin"]], "xMax" = sf::st_bbox(temp)[["xmax"]], "yMax" = sf::st_bbox(temp)[["ymax"]])
+  size <- 1000
+
+  r <- getSampledRaster(pathId = pathId, timestampId = timestampId, extent = extent, width = size, height = size, epsg = 4326)
+  raster <- r[["raster"]]
+
+  # Maybe first store raster in memory???
+  values <- sampleRandom(raster, size = 1000, asRaster = asRaster)
+
+  return(values)
+}
+
 #' @export
 path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style = NULL, threads = 1, token = NULL, showProgress = TRUE, epsg = 3857)
 {
@@ -133,15 +200,43 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
   else
   {
     trans <- affineFromBounds(extent[["xMin"]], extent[["yMin"]], extent[["xMax"]], extent[["yMax"]], dim(r_total)[3], dim(r_total)[2])
-    #raster_object <- recolorize::array_to_RasterStack(r_total, type = "stack")
     raster_object <- raster::stack(raster::brick(r_total))
-    plot.new()
     raster::crs(raster_object) = glue::glue("+init=epsg:{epsg_string}")
     raster::extent(raster_object) <- raster::extent(extent[["xMin"]], extent[["xMax"]], extent[["yMin"]], extent[["yMax"]])
     raster_object <- raster::projectRaster(raster_object, crs=glue::glue("+init=epsg:{epsg}"), method="ngb", resolution = 1000)
-    # TODO: extent might be skewed and add bilinear and resolutioun options
     return(list("raster" = raster_object, "transform" = trans, "extent" = extent, "epsg" = epsg))
   }
+}
+
+#' @export
+path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, returnType = "all", approximate = TRUE, token = null, epsg = 4326)
+{
+  token <- validString("token", token, FALSE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampIds <- validUuidArray("timestampIds", timestampIds, TRUE)
+  approximate <- validBool("approximate", approximate, TRUE)
+  geometry <- validSFGeometry("geometry", geometry, TRUE)
+  returnType <- validString("returnType", returnType, TRUE)
+
+  temp <- sf::st_sf(geometry = sf::st_sfc(line))
+  temp <- sf::st_set_crs(temp, glue::glue("EPSG:{epsg}"))
+  temp <- sf::st_set_crs(temp, "EPSG:4326")
+  geometry <- temp$geometry
+
+  sh <- tryCatch(
+    {
+      sh <- sf_geojson(temp)
+      sh <- sh[[1]]
+    }, error=function(cond)
+    {
+      stop("ValueError: geometry must be a valid simple features geometry")
+    }
+    )
+
+  body <- list("timestampIds" = timestampIds, "geometry" = geometry, "approximate" = approximate, "returnType" = returnType)
+  r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/analyse"), body, token)
+  r <- httr:content(r)
+  return(r)
 }
 
 #' @export
@@ -155,4 +250,76 @@ path.raster.timestamp.add <- function(pathId, token, description = NULL, date = 
   return(httr::content(apiManager_post(glue::glue("/path/{pathId}/raster/timestamp"), body, token)))
 }
 
+#' @export
+path.raster.timestamp.edit <- function(pathId, timestampId, token, date = NULL, description = NULL)
+{
+  token <- validString("token", token, TRUE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  description <- validString("description", description, FALSE)
+  date <- validDateRange("date", date, FALSE)
 
+  body = list("date" = date, "description" = description)
+  r <- apiManager_patch(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}"), body, token)
+  r <- httr::content(r)
+  return(r)
+}
+
+#' @export
+path.raster.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
+{
+  token <- validString("token", token, FALSE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+
+  r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/bounds"), NULL, token)
+  r <- httr::content(r)
+  r <- st_sf(id = 0, properties = list(), geometry = r)
+  return(r)
+}
+
+#' @export
+path.raster.timestamp.activate <- function(pathId, timestampId, token)
+{
+  token <- validString("token", token, TRUE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+
+  r <- apiManager_post(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/activate"), NULL, token)
+  r <- httr::content(r)
+  return(r)
+}
+
+#' @export
+path.raster.timestamp.deactivate <- function(pathId, timestampId, token)
+{
+  token <- validString("token", token, TRUE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+
+  r <- apiManager_post(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/deactivate"), NULL, token)
+  r <- httr::content(r)
+  return(r)
+}
+
+#' @export
+path.raster.timestamp.trash <- function(pathId, timestampId, token)
+{
+  token <- validString("token", token, TRUE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+
+  body = list("trashed" = TRUE)
+  r <- apiManager_put(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/trashed"), body, token)
+}
+
+#' @export
+path.raster.timestamp.recover <- function(pathId, timestampId, token)
+{
+  token <- validString("token", token, TRUE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+
+  body = list("trashed" = FALSE)
+  r <- apiManager_put(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/trashed"), body, token)
+}
