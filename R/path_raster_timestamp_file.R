@@ -39,36 +39,6 @@ path.raster.timestamp.file.get <- function(pathId, timestampId, token, pageStart
 }
 
 #' @export
-path.raster.timestamp.file.get <- function(pathId, timestampId, token, pageStart = NULL, listAll = TRUE)
-{
-  token <- validString("token", token, TRUE)
-  pathId <- validUuid("pathId", pathId, TRUE)
-  timestampId <- validUuid("timestampId", timestampId, TRUE)
-  pageStart <- validUuid("pageStart", pageStart, FALSE)
-
-  f <- function(body)
-  {
-    r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/file"), body, token)
-    r <- httr::content(r)
-    for (i in seq(1, length(r[["result"]])))
-    {
-      if ("info" %in% names(r[["result"]][[i]]) & "bounds" %in% names(r[["result"]][[i]][["info"]]) & !is.null(r[["result"]][[i]][["info"]][["bounds"]]))
-      {
-        points <- c()
-        for (coords in r[["result"]][[i]][["info"]][["bounds"]]$coordinates)
-          for (p in coords)
-            points <- rbind(points, c(p[[1]], p[[2]]))
-        r[["result"]][[i]][["info"]][["bounds"]] <- sf::st_sf(sf::st_sfc(sf::st_polygon(list(points))))
-      }
-    }
-    return(r)
-  }
-
-  r <- recurse(f, list("pageStart" = pageStart), listAll)
-  return(r)
-}
-
-#' @export
 path.raster.timestamp.file.trash <- function(pathId, timestampId, fileId, token)
 {
   token <- validString("token", token, TRUE)
