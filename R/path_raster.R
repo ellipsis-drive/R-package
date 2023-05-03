@@ -13,6 +13,20 @@ path.raster.add <- function(name, token, parentId = NULL, publicAccess = NULL, m
 }
 
 #' @export
+path.raster.editBand <- function(pathId, bandNumber, name, token)
+{
+  token <- validString("token", token, TRUE)
+  pathId <- validUuid("pathId", pathId, TRUE)
+  bandNumber <- validInt("bandNumber", bandNumber, TRUE)
+  name <- validString("name", name, TRUE)
+
+  body = list("name" = name)
+  r <- apiManager_put(glue::glue("/path/{pathId}/raster/band/{bandNumber}/name"), body, token)
+  r <- httr::content(r)
+  return(r)
+}
+
+#' @export
 path.raster.edit <- function(pathId, token, interpolation = NULL, includesTransparent = NULL)
 {
   token <- validString("token", token, TRUE)
