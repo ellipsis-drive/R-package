@@ -148,6 +148,23 @@ validBoundCrsCombination <- function(name, value, required)
   return(list(bounds, crs))
 }
 
+validImage <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  if (!is.matrix(value) || !is.array(value))
+    stop(glue::glue("Value error: {name} must be of type array or matrix"))
+
+  if (length(dim(value)) != 2 && length(dim(value)) != 3)
+    stop(glue::glue("Value error: {name} must be of type array or matrix with either 2 or 3 dimensions"))
+
+  if (length(dim(value)) == 3 && dim(value)[[3]] != 3 && dim(value)[[3]] != 1)
+    stop(glue::glue("Value error: {name} must have either 1 or 3 bands"))
+
+  return(value)
+}
+
 validArray <- function(name, value, required)
 {
   if (!required & is.null(value))
