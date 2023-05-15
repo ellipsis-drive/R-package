@@ -165,6 +165,17 @@ validImage <- function(name, value, required)
   return(value)
 }
 
+validDataframe <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  if (!is.data.frame(value))
+    stop(glue::glue("Value error: {name} must be a data frame"))
+
+  return(value)
+}
+
 validArray <- function(name, value, required)
 {
   if (!required & is.null(value))
