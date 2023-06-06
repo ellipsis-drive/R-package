@@ -1,5 +1,5 @@
 #' @export
-path.vector.timestamp.manageLevels <- function(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
+path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
 {
   levelOfDetail1 <- validGeoSeries("levelOfDetail1", levelOfDetail1, FALSE)
   levelOfDetail2 <- validGeoSeries("levelOfDetail2", levelOfDetail2, FALSE)
@@ -78,7 +78,7 @@ path.vector.timestamp.manageLevels <- function(levelOfDetail1, levelOfDetail2, l
 
 #' @export
 #' Maybe use aslist (we want to combine geometries I guess...)
-path.vector.timestamp.zipLevels <- function(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
+path.vector.timestamp.feature.zipLevels <- function(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
 {
   if (!is.null(levelOfDetail5))
     levels <- mapply(list, levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
@@ -94,7 +94,7 @@ path.vector.timestamp.zipLevels <- function(levelOfDetail1, levelOfDetail2, leve
 }
 
 #' @export
-path.vector.timestamp.add <- function(pathId, timestampId, features, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
+path.vector.timestamp.feature.add <- function(pathId, timestampId, features, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId < validUuid("timestampId", timestampId, TRUE)
@@ -150,7 +150,7 @@ path.vector.timestamp.add <- function(pathId, timestampId, features, token, show
 }
 
 #' @export
-path.vector.timestamp.edit <- function(pathId, timestampId, featureIds, features = NULL, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
+path.vector.timestamp.feature.edit <- function(pathId, timestampId, featureIds, features = NULL, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId < validUuid("timestampId", timestampId, TRUE)
@@ -192,7 +192,7 @@ path.vector.timestamp.edit <- function(pathId, timestampId, featureIds, features
   return(r)
 }
 
-path.vector.timestamp.trash <- function(pathId, timestampId, featureIds, token, showProgress = TRUE)
+path.vector.timestamp.feature.trash <- function(pathId, timestampId, featureIds, token, showProgress = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId < validUuid("timestampId", timestampId, TRUE)
@@ -205,7 +205,7 @@ path.vector.timestamp.trash <- function(pathId, timestampId, featureIds, token, 
   return(r)
 }
 
-path.vector.timestamp.recover <- function(pathId, timestampId, featureIds, token, showProgress = TRUE)
+path.vector.timestamp.feature.recover <- function(pathId, timestampId, featureIds, token, showProgress = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId < validUuid("timestampId", timestampId, TRUE)
