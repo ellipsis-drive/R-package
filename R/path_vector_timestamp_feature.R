@@ -103,7 +103,7 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
   showProgress <- validBool("showProgress", showProgress, TRUE)
   cores <- validInt("cores", cores, TRUE)
 
-  levels <- list[levelOfDetal1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5] <- path.vector.timestamp.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
+  levels <- list[levelOfDetal1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5] <- path.vector.timestamp.feature.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
   levelOfDetail1 <- levels[[1]]
   levelOfDetail2 <- levels[[2]]
   levelOfDetail3 <- levels[[3]]
@@ -138,7 +138,7 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
   }
   # Parallelize later?
 
-  levels <- path.vector.timestamp.zipLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
+  levels <- path.vector.timestamp.feature.zipLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
   if (!is.null(levels))
   {
     featuresBody <- list("feature" = feature, "levelsOfDetail" = levels)
@@ -150,7 +150,7 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
 }
 
 #' @export
-path.vector.timestamp.feature.edit <- function(pathId, timestampId, featureIds, features = NULL, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
+path.vector.timestamp.feature.feature.edit <- function(pathId, timestampId, featureIds, features = NULL, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId < validUuid("timestampId", timestampId, TRUE)
@@ -160,7 +160,7 @@ path.vector.timestamp.feature.edit <- function(pathId, timestampId, featureIds, 
   cores <- validInt("cores", cores, TRUE)
   featureIds <- validUuidArray("featureIds", featureIds, TRUE)
 
-  levels <- list[levelOfDetal1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5] <- path.vector.timestamp.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
+  levels <- list[levelOfDetal1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5] <- path.vector.timestamp.feature.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
   levelOfDetail1 <- levels[[1]]
   levelOfDetail2 <- levels[[2]]
   levelOfDetail3 <- levels[[3]]
@@ -170,7 +170,7 @@ path.vector.timestamp.feature.edit <- function(pathId, timestampId, featureIds, 
   if (!is.null(features) & length(features) != length(featureIds))
     stop(glue::glue("featureIds must be of same length as the simple features dataframe"))
 
-  levels <- path.vector.timestamp.zipLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
+  levels <- path.vector.timestamp.feature.zipLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
   changes = list()
   if (is.null(levels))
   {
@@ -218,7 +218,7 @@ path.vector.timestamp.feature.recover <- function(pathId, timestampId, featureId
   return(r)
 }
 
-path.vector.timestamp.versions <- function(pathId, timestampId, featureId, token = NULL, pageStart = NULL, listAll = TRUE)
+path.vector.timestamp.feature.versions <- function(pathId, timestampId, featureId, token = NULL, pageStart = NULL, listAll = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId < validUuid("timestampId", timestampId, TRUE)
