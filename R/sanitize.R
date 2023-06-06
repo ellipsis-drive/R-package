@@ -176,6 +176,60 @@ validDataframe <- function(name, value, required)
   return(value)
 }
 
+validGeoSeries <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  value <- tryCatch(
+    {
+      value <- sf::st_sf(st_sfc(value))
+    },
+    error = function(cond)
+    {
+      stop(glue::glue("Value error: {name} must be a valid list of geometries"))
+    }
+  )
+  value <- validSimplefeature(name, value, TRUE, TRUE)
+  return(value)
+}
+
+validSimplefeature <- function(name, value, required, custom = FALSE, cores = 1)
+{
+  if (!required & is.null(value))
+    return(NULL)
+
+  if (!custom & class(value)[[2]] != "data.frame")
+    stop(glue::glue("Value error: {name} must be a simple features dataframe"))
+
+  if (is.na(st_crs(value)) & min(st_bbox(value)["xmin"]) > -180 & max(st_bbox(value)[["xmax"]] < 180 & min(st_bbox(value)[["ymin"]]) > -90 & max(st_bbox(value)[["ymax"]])))
+  {
+    print(glue::glue("assuming WGS84 coordinates for {name}"))
+    value <- st_set_crs(value, "epsg:4326")
+  }
+  else if (is.na(st_crs(value)))
+  {
+    stop(glue::glue("Value error: Please provide crs for {name}"))
+  }
+  else
+  {
+    value <- st_transform(value, 4326)
+  }
+  if ("id" %in% colnames(as.data.frame(value)))
+    value[["id"]] <- NULL
+  if (!is.null(value[["userId"]]))
+    value[["userId"]] <- NULL
+  if (!is.null(value[["attribution"]]))
+    value[["atribution"]] <- NULL
+  if (!is.null(value[["radius"]]))
+    value[["radius"]] <- NULL
+  if (!is.null(value[[color]]))
+    value[[color]] <- NULL
+
+  return(value)
+
+}
+
 validArray <- function(name, value, required)
 {
   if (!required & is.null(value))
