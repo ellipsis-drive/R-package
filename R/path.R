@@ -92,7 +92,14 @@ convertPath <- function(path)
   return(path)
 }
 
-#' @export
+#' Update the metadata of a path
+#' @param pathId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @param attribution Optional (string)
+#' @param description Optional (string)
+#' @param properties Optional (object)
+#' @return content of the http patch request
+#' @roxygen_header1
 path.editMetaData <- function(pathId, token, description = NULL, attribution = NULL, licenseString = NULL, properties = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -109,7 +116,12 @@ path.editMetaData <- function(pathId, token, description = NULL, attribution = N
   ), token)))
 }
 
-#' @export
+#' Rename a path
+#' @param pathId Mandatory (uuid)
+#' @param token Optional (string)
+#' @param name Optional (string)
+#' @return Content of the http put request
+#' @roxygen_header1
 path.rename <- function(pathId, name, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -122,6 +134,11 @@ path.rename <- function(pathId, name, token)
 }
 
 #' @export
+#' Moves paths to a different folder
+#' @param pathIds Mandatory (array of uuids)
+#' @param token Optional (string)
+#' @param parentId Optional (uuid)
+#' @roxygen_header1
 path.move <- function(pathIds, parentId, token)
 {
   token <- validString("token", token, FALSE)
@@ -135,6 +152,10 @@ path.move <- function(pathIds, parentId, token)
 }
 
 #' @export
+#' Place path in trash
+#' @param pathId Mandatory (uuid)
+#' @param token Optional (string)
+#' @roxygen_header1
 path.trash <- function(pathId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -145,7 +166,11 @@ path.trash <- function(pathId, token)
   ), token))
 }
 
-#' export
+#' @export
+#' Recover a path
+#' @param pathId Mandatory (uuid)
+#' @param token Optional (string)
+#' @roxygen_header1
 path.recover <- function(pathId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -156,7 +181,12 @@ path.recover <- function(pathId, token)
   ), token))
 }
 
-#' export
+#' @export
+#' Delete a path
+#' @param pathId Mandatory (uuid)
+#' @param token Optional (string)
+#' @param recursive Optional (logical)
+#' @roxygen_header1
 path.delete <- function(pathId, token, recursive = FALSE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -185,7 +215,13 @@ path.delete <- function(pathId, token, recursive = FALSE)
     apiManager_delete(glue::glue("/path/{pathId}"), NULL, token)
 }
 
-#' export
+#' @export
+#' Update the public access of a path
+#' @param pathId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @param access Optional (named list)
+#' @param hidden Optional (logical)
+#' @roxygen_header1
 path.editPublicAccess <- function(pathId, token, accessLevel = NULL, hidden = NULL, processingUnits = NULL, geoFence = NULL)
 {
   pathId <- validUuid('pathId', pathId, TRUE)
@@ -199,7 +235,11 @@ path.editPublicAccess <- function(pathId, token, accessLevel = NULL, hidden = NU
   return(apiManager_patch(glue::glue("/path/{pathId}/publicAccess"), body, token))
 }
 
-#' export
+#' @export
+#' Add path to favorites
+#' @param pathId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @roxygen_header1
 path.favorite <- function(pathId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -210,7 +250,11 @@ path.favorite <- function(pathId, token)
   return(apiManager_put(glue::glue("/path/{pathId}/favorite"), body, token))
 }
 
-#' export
+#' @export
+#' Removes path from favorites
+#' @param pathId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @roxygen_header1
 path.unfavorite <- function(pathId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
