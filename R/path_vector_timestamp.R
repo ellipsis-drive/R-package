@@ -84,7 +84,155 @@ path.vector.timestamp.getBounds(pathId, timestampId, token = NULL)
   token <- validString("token", token, FALSE)
 
   r <- httr::content(apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/bounds"), NULL, token))
+  r <- st_combine(st_sf(id = 0, properties = list(), geometry = r))
+  return(r)
+}
 
-  r <- list("id" = 0, "properties" = list(), "geometry" = r)
+#' @export
+path.vector.timestamp.getChanges <- function(pathId, timestampId, token = NULL, pageStart = NULL, listAll = FALSE)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  token <- validString("token", token, FALSE)
+  listAll <- validBool("listAll", listAll, TRUE)
+  pageStart <- validObject("pageStart", pageStart, FALSE)
+  actions <- validObject("actions", actions, FALSE)
+  body <- list("pageStart" = pageStart)
+  f <- function(body)
+  {
+    r <- apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/changelog"), body, token)
+    return(httr::content(r))
+  }
+
+  r <- recurse(f, listAll, body)
+  temp_list = list()
+
+  for (x in r[["result"]])
+  {
+    temp_list <- append(temp_list, list(x, "date" = stringToDate(x[["date"]])))
+  }
+  r[["result"]] <- temp_list
+
+  return(r)
+}
+
+#' @export
+path.vector.timestamp.getFeaturesByIds <- function(pathId, timestampId, featureIds, token = NULL, showProgress = NULL)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  token <- validString("token", token, FALSE)
+  featureIds <- validUuidArray("featureIds", featureIds, TRUE)
+  showProgress <- validBool("showProgress", showProgress, TRUE)
+
+  body <- list("geometryIds" = featureIds)
+  r <- apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/featureByIds"), body, token)
+  r <- httr::content(r)
+  sh <- st_as_sf(r[["result"]])
+  return(r)
+}
+
+#' @export
+path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, extent, propertyFilter = NULL, token = NULL, listAll = TRUE, epsg = 4326, cordinateBuffer = NULL)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  token <- validString("token", token, FALSE)
+  extent <- validBounds("extent", extent, TRUE)
+  propertyFilter <- validObject("propertyFilter", propertyFilter, FALSE)
+  listAll <- validBool("listAll", listAll, TRUE)
+  pageStart <- validObject("pageStart", pageStart, FALSE)
+  coordinateBuffer <- validDouble("coordinateBuffer", coordinateBuffer, FALSE)
+
+  if (is.null(coordinateBuffer))
+  {
+    info <- path.get(pathId, token)
+    ts <- list()
+    for (x in info[["vector"]][["timestamp"]])
+    {
+      if (x[["id"]] == "timestampId")
+      {
+        ts <- append(ts, list(x))
+      }
+    }
+    if (length(ts) == 0)
+      stop("ValueError: Given timestampId does not exist")
+    t <- ts[[1]]
+    zoom <- t[["zoom"]]
+    coordinateBuffer <- .5*360/ 2 ** zoom
+  }
+
+  p <- st_polygon(list(extent[["xMin"]], extent[["xMax"]], extent[["yMin"]], extent[["yMax"]]))
+  p <- st_sf(p)
+
+  res <- getActualExtent(extent[["xMin"]], extent[["xMax"]], extent[["yMin"]], extent[["yMax"]], glue::glue("EPSG:{epsg}"))
+  if (res[["status"]] == 400)
+    stop("ValueError: Invalid epsg and extent combination")
+
+  extent <- res[["message"]]
+
+  extent[["xMin"]] <- min(-180, extent[["xMin"]] - coordinateBuffer)
+  extent[["xMax"]] <- max(180, extent[["xMax"]] + coordinateBuffer)
+  extent[["yMin"]] <- min(-85, extent[["yMin"]] - coordinateBuffer)
+  extent[["yMax"]] <- max(85, extent[["yMax"]] + coordinateBuffer)
+
+  p <- tryCatch(
+    {
+      p <- st_set_crs(p, epsg)
+    },
+    error = function(cond)
+    {
+      stop("ValueError: Invalid crs given")
+    }
+  )
+
+  extent <- st_bbox(p)
+  extent <- list("xMin" = extent[["xmin"]], "xMax" = extent[["xmax"]], "yMin" = extent[["ymin"]], "yMax" = extent[["ymax"]])
+
+  body <- list("pageStart" = pageStart, "propertyFilter" = propertyFilter, "extent" = extent)
+  f <- function(body)
+  {
+    return(httr::content(apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/featuresByExtent"), body, token)))
+  }
+
+  r <- recurs(f, listAll, "features")
+
+  sh <- st_as_sf(r[["result"]][["features"]])
+
+  if (dim(sh[[1]]) == 0)
+  {
+    r[["result"]] <- sh
+    return(r)
+  }
+
+  bounds <- st_bbox(sh)
+  px <- (bounds[["xmin"]] + bounds[["xmax"]]) / 2
+  py <- (bounds[["ymin"]] + bounds[["ymax"]]) / 2
+  sh <- sh[st_within(sh, st_as_sfc(st_bbox(c(extent['xMin'], extent['yMin'], extent['xMax'], extent['yMax']))))]
+  sh <- st_set_crs(sh, epsg)
+  r[["result"]] <- sh
+  return(r)
+}
+
+path.vector.timestamp.listFeatures <- function(pathId, timestampId, token = NULL, listAll = TRUE, pageStart = NULL)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  token <- validString("token", token, FALSE)
+  listAll <- validBool("listAll", listall, TRUE)
+  pageStart <- validObject("pageStart", pageStart, FALSE)
+
+  body <- list("pageStart" = pageStart)
+
+  f <- function(body)
+  {
+    return(httr::content(apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/listFeatures"), body, token)))
+  }
+
+  r <- recurs(f, body, listAll, "features")
+
+  sh <- st_as_sf(r[["result"]][["features"]])
+  sh <- st_set_crs(sh, 4326)
+  r[["result"]] <- sh
   return(r)
 }

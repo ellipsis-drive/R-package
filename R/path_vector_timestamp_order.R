@@ -34,3 +34,4 @@ path.vector.timestamp.order.download <- function(orderId, filePath, token)
 
   apiManager_download(glue::glue("/path/vector/timestamp/order/{orderId}/data"), filePath, token)
 }
+
