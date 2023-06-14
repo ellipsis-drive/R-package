@@ -4,7 +4,7 @@
 #' @param token Mandatory (string)
 #' @param pageStart Optional (uuid)
 #' @param listAll Optional (logical) default TRUE
-#' @return
+#' @return ...
 #' @export
 path.usage.getActiveUsers <- function(pathId, token, listAl = TRUE, pageStart = NULL)
 {
@@ -28,7 +28,7 @@ path.usage.getActiveUsers <- function(pathId, token, listAl = TRUE, pageStart = 
 #' @param pathId Mandatory (uuid)
 #' @param userId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.usage.getUsage <- function(pathId, userId, token)
 {
@@ -44,7 +44,7 @@ path.usage.getUsage <- function(pathId, userId, token)
 #' @param pathId Mandatory (uuid)
 #' @param token Mandatory (string)
 #' @param loggedIn Optional (logical) default TRUE
-#' @return
+#' @return ...
 #' @export
 path.usage.getAggregatedUsage <- function(pathId, loggedIn = TRUE, token)
 {

@@ -4,7 +4,7 @@
 #' @param pageStart Optional (uuid) from where to start the listing
 #' @param listAll Optional (logical) default TRUE, whether to get all results or only the first page
 #' @param token Optional (string)
-#' @return
+#' @return ...
 #' @export
 path.folder.listFolder <- function(pathId, pathTypes = NULL, pageStart = NULL, listAll = TRUE, includeTrashed = FALSE, token = NULL)
 {
@@ -36,7 +36,7 @@ path.folder.listFolder <- function(pathId, pathTypes = NULL, pageStart = NULL, l
 #' @param parentId Optional (uuid) id of the folder to place the new folder in
 #' @param publicAccess (named list) named list describing the public access of the folder
 #' @param metadata (named list) named list describing the metadata of the folder
-#' @return
+#' @return ...
 #' @export
 path.folder.add <- function(name, token, parentId = NULL, publicAccess = NULL, metadata = NULL)
 {

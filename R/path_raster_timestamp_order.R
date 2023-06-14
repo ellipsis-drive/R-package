@@ -1,6 +1,6 @@
 #' Retrieve information on all your raster downloads
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.order.get <- function(token)
 {
@@ -37,7 +37,7 @@ path.raster.timestamp.order.add <- function(pathId, timestampId, extent = NULL, 
 #' @param orderId Mandatory (uuid)
 #' @param filePath Mandatory (string)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.order.download <- function(orderId, filePath, token)
 {

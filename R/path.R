@@ -1,4 +1,3 @@
-#' @export
 #' Search for a path to a folder
 #'
 #' @param pathTypes a list with strings used to indicate the file types included in the search
@@ -6,8 +5,8 @@
 #' @param text a string indicating ...
 #' @param active a boolean indicating ...
 #' @param userId a uuid referencing the ...
-#' @param ....
 #' @return A name value list containing information about the folder
+#' @export
 path.search <- function(pathTypes = c("raster", "vector", "file", "folder"), root = NULL, text = NULL, active = NULL, userId = NULL, pageStart = NULL, hashtag = NULL, extent = NULL, resolution = NULL, date = NULL, listAll = FALSE, token = NULL)
 {
   token <- validString("token", token, FALSE)
@@ -99,6 +98,7 @@ convertPath <- function(path)
 #' @param description Optional (string)
 #' @param properties Optional (object)
 #' @return content of the http patch request
+#' @export
 path.editMetaData <- function(pathId, token, description = NULL, attribution = NULL, licenseString = NULL, properties = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -120,6 +120,7 @@ path.editMetaData <- function(pathId, token, description = NULL, attribution = N
 #' @param token Optional (string)
 #' @param name Optional (string)
 #' @return Content of the http put request
+#' @export
 path.rename <- function(pathId, name, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -131,12 +132,12 @@ path.rename <- function(pathId, name, token)
   ), token)))
 }
 
-#' @export
 #' Moves paths to a different folder
 #' @param pathIds Mandatory (array of uuids)
 #' @param token Optional (string)
 #' @param parentId Optional (uuid)
-#' @return
+#' @return ...
+#' @export
 path.move <- function(pathIds, parentId, token)
 {
   token <- validString("token", token, FALSE)
@@ -149,11 +150,11 @@ path.move <- function(pathIds, parentId, token)
   ), token)))
 }
 
-#' @export
 #' Place path in trash
 #' @param pathId Mandatory (uuid)
 #' @param token Optional (string)
-#' @return
+#' @return ...
+#' @export
 path.trash <- function(pathId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -164,11 +165,11 @@ path.trash <- function(pathId, token)
   ), token))
 }
 
-#' @export
 #' Recover a path
 #' @param pathId Mandatory (uuid)
 #' @param token Optional (string)
-#' @return
+#' @return ...
+#' @export
 path.recover <- function(pathId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -179,12 +180,12 @@ path.recover <- function(pathId, token)
   ), token))
 }
 
-#' @export
 #' Delete a path
 #' @param pathId Mandatory (uuid)
 #' @param token Optional (string)
 #' @param recursive Optional (logical)
-#' @return
+#' @return ...
+#' @export
 path.delete <- function(pathId, token, recursive = FALSE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -213,13 +214,13 @@ path.delete <- function(pathId, token, recursive = FALSE)
     apiManager_delete(glue::glue("/path/{pathId}"), NULL, token)
 }
 
-#' @export
 #' Update the public access of a path
 #' @param pathId Mandatory (uuid)
 #' @param token Mandatory (string)
 #' @param access Optional (named list)
 #' @param hidden Optional (logical)
-#' @return
+#' @return ...
+#' @export
 path.editPublicAccess <- function(pathId, token, accessLevel = NULL, hidden = NULL, processingUnits = NULL, geoFence = NULL)
 {
   pathId <- validUuid('pathId', pathId, TRUE)
@@ -233,11 +234,11 @@ path.editPublicAccess <- function(pathId, token, accessLevel = NULL, hidden = NU
   return(apiManager_patch(glue::glue("/path/{pathId}/publicAccess"), body, token))
 }
 
-#' @export
 #' Add path to favorites
 #' @param pathId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
+#' @export
 path.favorite <- function(pathId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -248,11 +249,11 @@ path.favorite <- function(pathId, token)
   return(apiManager_put(glue::glue("/path/{pathId}/favorite"), body, token))
 }
 
-#' @export
 #' Removes path from favorites
 #' @param pathId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
+#' @export
 path.unfavorite <- function(pathId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)

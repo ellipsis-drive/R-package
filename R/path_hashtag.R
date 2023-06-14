@@ -2,7 +2,7 @@
 #' @param pathId Mandatory (uuid) the id of the map to add the hashtag to
 #' @param hashtag Mandatory (string) the hashtag to add
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.hashtag.add <-function(pathId, hashtag, token)
 {
@@ -19,7 +19,7 @@ path.hashtag.add <-function(pathId, hashtag, token)
 #' @param pathId Mandatory (uuid) the id of the map to remove the hashtag from
 #' @param hashtag Mandatory (string) the hashtag to remove
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.hashtag.delete <- function(pathId, hashtag, token)
 {
@@ -31,7 +31,7 @@ path.hashtag.delete <- function(pathId, hashtag, token)
 
 #' Retrieves all existing hashtags that contain the given string
 #' @param hashtag Mandatory (string) the string to search for
-#' @return
+#' @return ...
 #' @export
 path.hashtag.search <- function()
 {

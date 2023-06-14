@@ -5,7 +5,7 @@
 #' @param userId Semi-Mandatory, at least one required (uuid) user id to send the invite to
 #' @param email Semi-Mandatory at least one required (string) email of the user to send the invite to
 #' @param sendMail Optional (logical) default FALSE
-#' @return
+#' @return ...
 #' @export
 path.invite.send <- function(pathId, access, token, userId = NULL, email = NULL, sendMail = FALSE)
 {
@@ -28,7 +28,7 @@ path.invite.send <- function(pathId, access, token, userId = NULL, email = NULL,
 #' @param pathId Mandatory (uuid) the id of the map or folder
 #' @param inviteId Mandatory (uuid) the id of the invite you wish to revoke
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.invite.revoke <- function(pathId, inviteId, token)
 {
@@ -42,7 +42,7 @@ path.invite.revoke <- function(pathId, inviteId, token)
 #' @param pathId Mandatory (uuid) the id of the map or folder
 #' @param inviteId Mandatory (uuid) the id of the invite you wish to accept
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.invite.accept <- function(pathId, inviteId, token)
 {
@@ -59,7 +59,7 @@ path.invite.accept <- function(pathId, inviteId, token)
 #' @param pathId Mandatory (uuid) the id of the map or folder
 #' @param inviteId Mandatory (uuid) the id of the invite you wish to accept
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.invite.decline <- function(pathId, inviteId, token)
 {
@@ -74,7 +74,7 @@ path.invite.decline <- function(pathId, inviteId, token)
 
 #' Retrieve pending invites
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.invite.getYourInvites <- function(token)
 {
@@ -85,7 +85,7 @@ path.invite.getYourInvites <- function(token)
 #' Retrieve pending invites to a specific map
 #' @param pathId Mandatory (uuid) the id of the block or folder
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.invite.getPathInvites <- function(pathId, token)
 {

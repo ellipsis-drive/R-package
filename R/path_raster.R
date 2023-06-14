@@ -4,7 +4,7 @@
 #' @param parentId Optional (uuid) id of the folder to place the raster in
 #' @param publicAccess Optional (named list) named list describing the raster's public access
 #' @param metadata Optional (named list) named list describing the raster's metadata
-#' @return
+#' @return ...
 #' @export
 path.raster.add <- function(name, token, parentId = NULL, publicAccess = NULL, metadata = NULL)
 {
@@ -24,7 +24,7 @@ path.raster.add <- function(name, token, parentId = NULL, publicAccess = NULL, m
 #' @param token Mandatory (string)
 #' @param bandNumber Mandatory (integer)
 #' @param name Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.editBand <- function(pathId, bandNumber, name, token)
 {
@@ -44,7 +44,7 @@ path.raster.editBand <- function(pathId, bandNumber, name, token)
 #' @param token Mandatory (string)
 #' @param interpolation Optional (string)
 #' @param includesTransparent Optional (logical) default FALSE
-#' @return
+#' @return ...
 #' @export
 path.raster.edit <- function(pathId, token, interpolation = NULL, includesTransparent = FALSE)
 {

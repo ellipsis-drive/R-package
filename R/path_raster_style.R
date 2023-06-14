@@ -4,7 +4,7 @@
 #' @param parameters Mandatory (object) See https://docs.ellipsis-drive.com/developers/api-v3/path-raster/styles/add-style for how to format the paramters
 #' @param token Mandatory (string)
 #' @param default Optional (logical) default TRUE
-#' @return
+#' @return ...
 #' @export
 path.raster.style.add <- function(pathId, name, method, parameters, token, default = TRUE)
 {
@@ -23,7 +23,7 @@ path.raster.style.add <- function(pathId, name, method, parameters, token, defau
 #' @param pathId Mandatory (uuid)
 #' @param styleId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.style.delete <- function(pathId, styleId, token)
 {
@@ -41,7 +41,7 @@ path.raster.style.delete <- function(pathId, styleId, token)
 #' @param method Optional (string)
 #' @param parameters Optional (object)
 #' @param default Optional (logical) default = TRUE
-#' @return
+#' @return ...
 #' @export
 path.raster.style.edit <- function(pathId, styleId, method, parameters, default = TRUE)
 {

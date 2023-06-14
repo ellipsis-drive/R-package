@@ -250,7 +250,7 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
 #' @param approximate Optional (logical) default TRUE
 #' @param token Optional (string)
 #' @param returnType Optional (string) either "all" or "statistics", default "all"
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, returnType = "all", approximate = TRUE, token = NULL, epsg = 4326)
 {
@@ -287,7 +287,7 @@ path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, return
 #' @param pathId Mandatory (uuid)
 #' @param date Optional (named list) named list containing properties "to" and "from" both of type date
 #' @param description Optional (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.add <- function(pathId, token, description = NULL, date = list("from" = Sys.time(), "to" = Sys.time()))
 {
@@ -305,7 +305,7 @@ path.raster.timestamp.add <- function(pathId, token, description = NULL, date = 
 #' @param token Mandatory (string)
 #' @param date Optional (named list) with properties "to" and "from" both of type date
 #' @param description Optional (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.edit <- function(pathId, timestampId, token, date = NULL, description = NULL)
 {
@@ -343,7 +343,7 @@ path.raster.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
 #' @param token Mandatory (string)
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.activate <- function(pathId, timestampId, token)
 {
@@ -360,7 +360,7 @@ path.raster.timestamp.activate <- function(pathId, timestampId, token)
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.deactivate <- function(pathId, timestampId, token)
 {
@@ -377,7 +377,7 @@ path.raster.timestamp.deactivate <- function(pathId, timestampId, token)
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.trash <- function(pathId, timestampId, token)
 {
@@ -393,7 +393,7 @@ path.raster.timestamp.trash <- function(pathId, timestampId, token)
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.recover <- function(pathId, timestampId, token)
 {

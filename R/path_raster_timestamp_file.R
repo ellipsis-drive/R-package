@@ -6,7 +6,7 @@
 #' @param noDataValue Optional (double)
 #' @param epsg Optional (int)
 #' @param fileFormat Optional (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.file.add <- function(pathId, timestampId, filePath, token, fileFormat, epsg = NULL, noDataValue = NULL)
 {
@@ -30,7 +30,7 @@ path.raster.timestamp.file.add <- function(pathId, timestampId, filePath, token,
 #' @param token Mandatory (string)
 #' @param pageStart Optional (uuid)
 #' @param listAll Optional (logical) default TRUE
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.file.get <- function(pathId, timestampId, token, pageStart = NULL, listAll = TRUE)
 {
@@ -59,7 +59,7 @@ path.raster.timestamp.file.get <- function(pathId, timestampId, token, pageStart
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
 #' @param fileId Mandatory (uuid)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.file.trash <- function(pathId, timestampId, fileId, token)
 {
@@ -77,7 +77,7 @@ path.raster.timestamp.file.trash <- function(pathId, timestampId, fileId, token)
 #' @param timestampId Mandatory (uuid)
 #' @param fileId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.file.recover <- function(pathId, timestampId, fileId, token)
 {
@@ -95,7 +95,7 @@ path.raster.timestamp.file.recover <- function(pathId, timestampId, fileId, toke
 #' @param timestampId Mandatory (uuid)
 #' @param fileId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.file.delete <- function(pathId, timestampId, fileId, token)
 {
@@ -114,7 +114,7 @@ path.raster.timestamp.file.delete <- function(pathId, timestampId, fileId, token
 #' @param fileId Mandatory (uuid)
 #' @param token Mandatory (string)
 #' @param filePath Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.raster.timestamp.file.download <- function(pathId, timestampId, fileId, filePath, token)
 {

@@ -2,7 +2,7 @@
 #' @param pathId Mandatory (uuid) id of the folder
 #' @param filePath Mandatory (string) location to download file to
 #' @param token Optional (string)
-#' @return
+#' @return ...
 #' @export
 path.file.download <- function(pathId, filePath, token = NULL)
 {
@@ -19,7 +19,7 @@ path.file.download <- function(pathId, filePath, token = NULL)
 #' @param parentId Optional (uuid) id of folder to place file in
 #' @param publicAccess Optional (named list) named list desctibing public access of the file
 #' @param metadata Optional (named list) named list describing metadata of the file
-#' @return
+#' @return ...
 #' @export
 path.file.add <- function(filePath, token, parentId = NULL, publicAccess = NULL, metadata = NULL)
 {
