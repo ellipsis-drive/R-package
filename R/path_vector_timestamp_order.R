@@ -1,5 +1,5 @@
 #' @export
-#' Get order of a vector timestamp
+#' Retrieve information on all your vector downloads
 #' @param token Mandatory (string)
 #' @roxygen_header1
 path.vector.timestamp.order.get <- function(token)
@@ -10,12 +10,13 @@ path.vector.timestamp.order.get <- function(token)
 }
 
 #' @export
-#' Add order to a vector timestamp
+#' Order a download
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
 #' @param extent Optional (named list) with names xMin, xMax, yMin, and yMax
 #' @param uploadId Optional (uuid)
+#' @return the orderId (uuid)
 #' @roxygen_header1
 path.vector.timestamp.order.add <- function(pathId, timestampId, token, extent = NULL, uploadId = NULL)
 {
@@ -33,7 +34,7 @@ path.vector.timestamp.order.add <- function(pathId, timestampId, token, extent =
 }
 
 #' @export
-#' Download the order file of a vector timestamp for a given orderId
+#' Download the ordered file
 #' @param orderId Mandatory (uuid)
 #' @param filePath Mandatory (string) path to local file system where file will be saved
 #' @param token Mandatory (string)
