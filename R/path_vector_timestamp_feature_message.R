@@ -1,4 +1,15 @@
 #' @export
+#' Get all messages of a feature
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param token Optional (string)
+#' @param messageIds Optional (list, array, or vector of uuids)
+#' @param userId Optional (uuid)
+#' @param extent Optional (named list) with properties xMin, xMax, yMin, yMax
+#' @param pageStart Optional (uuid)
+#' @param listAll Optional (logical) default FALSE
+#' @param deleted Optional (logical) default FALSE
+#' @roxygen_header1
 path.vector.timestamp.feature.message.get <- function(pathId, timestampId, featureIds = NULL, userId = NULL, messageIds = NULL, listAll = TRUE, deleted = FALSE, extent = NULL, pageStart = NULL, token = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -35,6 +46,13 @@ path.vector.timestamp.feature.message.get <- function(pathId, timestampId, featu
 
 
 #' @export
+#' Get the image of a message
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param messageId Mandatory (uuid)
+#' @param token Optional (string)
+#' @return Depending on img_type (jpeg, png, raw bytes)
+#' @roxygen_header1
 path.vector.timestamp.feature.message.getImage <- function(pathId, timestampId, messageId, token = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -70,6 +88,14 @@ path.vector.timestamp.feature.message.getImage <- function(pathId, timestampId, 
 
 
 #' @export
+#' Add message to a feature
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param featureId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @param text Optional (string)
+#' @param image Optional (array, matrix)
+#' @roxygen_header1
 path.vector.timestamp.feature.message.add <- function(pathId, timestampId, featureId, token, text = NULL, image = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -96,6 +122,12 @@ path.vector.timestamp.feature.message.add <- function(pathId, timestampId, featu
 }
 
 #' @export
+#' Move message of a feature to the trash
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param messageId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @roxygen_header1
 path.vector.timestamp.feature.message.trash <- function(pathId, timestampId, messageId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -108,6 +140,12 @@ path.vector.timestamp.feature.message.trash <- function(pathId, timestampId, mes
 }
 
 #' @export
+#' Recover message of a feature from the trash
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param messageId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @roxygen_header1
 path.vector.timestamp.feature.message.recover <- function(pathId, timestampId, messageId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
