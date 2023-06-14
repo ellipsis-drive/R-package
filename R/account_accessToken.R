@@ -45,7 +45,7 @@ account.accessToken.get <- function(token, pageStart = NULL, listAll = TRUE)
   body <- list("pageStart" = pageStart)
   f <- function(body)
   {
-    return(httr::content(apiManager_get("/account/security/accessToken"), body, token))
+    return(httr::content(apiManager_get("/account/security/accessToken", body, token)))
   }
 
   r <- recurse(f, body, listAll)
