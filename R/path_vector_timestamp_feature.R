@@ -1,4 +1,3 @@
-#' @export
 path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
 {
   levelOfDetail1 <- validGeoSeries("levelOfDetail1", levelOfDetail1, FALSE)
@@ -76,7 +75,6 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
   return(list(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5))
 }
 
-#' @export
 #' Maybe use aslist (we want to combine geometries I guess...)
 path.vector.timestamp.feature.zipLevels <- function(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
 {
@@ -94,6 +92,17 @@ path.vector.timestamp.feature.zipLevels <- function(levelOfDetail1, levelOfDetai
 }
 
 #' @export
+#' Add a feature to a vector timestamp
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param features Mandatory (simple features data frame (sf))
+#' @param token Mandatory (string)
+#' @param levelOfDetail1 Optional (a list of sf geometries)
+#' @param levelOfDetail2 Optional (a list of sf geometries)
+#' @param levelOfDetail3 Optional (a list of sf geometries)
+#' @param levelOfDetail4 Optional (a list of sf geometries)
+#' @param levelOfDetail5 Optional (a list of sf geometries)
+#' @roxygen_header1
 path.vector.timestamp.feature.add <- function(pathId, timestampId, features, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -150,6 +159,18 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
 }
 
 #' @export
+#' Edit features of a vector timestamp
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param featureIds Mandatory (array or list of uuids)
+#' @param token Mandatory (string)
+#' @param features Optional (simple features data frame (sf))
+#' @param levelOfDetail1 Optional (a list of sf geometries)
+#' @param levelOfDetail2 Optional (a list of sf geometries)
+#' @param levelOfDetail3 Optional (a list of sf geometries)
+#' @param levelOfDetail4 Optional (a list of sf geometries)
+#' @param levelOfDetail5 Optional (a list of sf geometries)
+#' @roxygen_header1
 path.vector.timestamp.feature.feature.edit <- function(pathId, timestampId, featureIds, features = NULL, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -192,6 +213,13 @@ path.vector.timestamp.feature.feature.edit <- function(pathId, timestampId, feat
   return(r)
 }
 
+#' @export
+#' Move a feature of a vector timestamp to the trash
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param featureIds Mandatory (vector, list or array of uuids)
+#' @param token Mandatory (string)
+#' @roxygen_header1
 path.vector.timestamp.feature.trash <- function(pathId, timestampId, featureIds, token, showProgress = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -205,6 +233,13 @@ path.vector.timestamp.feature.trash <- function(pathId, timestampId, featureIds,
   return(r)
 }
 
+#' @export
+#' Recover a feature of a vector timestamp
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param featureIds Mandatory (vector, list, or array of uuids)
+#' @param token Mandatory (string)
+#' @roxygen_header1
 path.vector.timestamp.feature.recover <- function(pathId, timestampId, featureIds, token, showProgress = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -218,6 +253,16 @@ path.vector.timestamp.feature.recover <- function(pathId, timestampId, featureId
   return(r)
 }
 
+#' @export
+#' Get version data of a feature of a vector timestamp
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param featureId Mandatory (uuid)
+#' @param token Optional (string)
+#' @param listAll Optional (logical)
+#' @param pageStart Optional (uuid)
+#' @return a named list with a result property containing the version data of the feature (simple feature data frame (sf))
+#' @roxygen_header1
 path.vector.timestamp.feature.versions <- function(pathId, timestampId, featureId, token = NULL, pageStart = NULL, listAll = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -252,7 +297,7 @@ path.vector.timestamp.feature.versions <- function(pathId, timestampId, featureI
     userIds <- append(userIds, list(x[["user"]][["id"]]))
 
   # Hopefully this works (otherwise look at other instance of from features)
-  sh <- features
+  sh <- st_as_sf(features)
   sh[["username"]] <- usernames
   sh[["userId"]] <- userIds
   sh[["dates"]] <- dates
