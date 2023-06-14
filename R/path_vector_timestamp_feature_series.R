@@ -220,7 +220,7 @@ path.vector.timestamp.feature.series.recover <- function(pathId, timestampId, fe
 #' @param pageStart Optional (uuid)
 #' @param token Optional (string)
 #' @roxygen_header1
-path.vector.timestamp.feature.series.changelog(pathId, timestampId, featureId, listAll = FALSE, actions = NULL, userId = NULL, pageStart = NULL, token = NULL)
+path.vector.timestamp.feature.series.changelog <- function(pathId, timestampId, featureId, listAll = FALSE, actions = NULL, userId = NULL, pageStart = NULL, token = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId <- validUuid("timestampId", timestampId, TRUE)

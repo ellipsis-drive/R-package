@@ -120,7 +120,7 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
   levelOfDetail5 <- levels[[5]]
 
   firstTime <- httr::content(apiManager_get(glue::glue("/path/{pathId}"), NULL, token))
-  if (!"vector" $in$ names(firstTime))
+  if (!"vector" %in% names(firstTime))
     stop("Can only add features if path is of type vector")
   firstTime <- length(firstTime[["vector"]][["properties"]]) == 0
 

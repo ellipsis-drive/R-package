@@ -26,7 +26,7 @@ path.vector.add <- function(name, token, parentId = NULL, publicAccess = NULL, m
 #' @param propertyFilter Mandatory (list) a list of named lists describing the filter
 #' @param token Mandatory (string) your token
 #' @roxygen_header1
-path.vector.editFilter(pathId, propertyFilter, token)
+path.vector.editFilter <- function(pathId, propertyFilter, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   token <- validString("token", token, TRUE)

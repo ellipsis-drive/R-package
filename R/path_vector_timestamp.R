@@ -121,7 +121,7 @@ path.vector.timestamp.deactivate <- function(pathId, timestampId, token)
 #' @param token Optional (string)
 #' @return a simple feature sf object
 #' @roxygen_header1
-path.vector.timestamp.getBounds(pathId, timestampId, token = NULL)
+path.vector.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId <- validUuid("timestampId", timestampId, TRUE)

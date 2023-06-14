@@ -46,7 +46,7 @@ path.usage.getUsage <- function(pathId, userId, token)
 #' @param token Mandatory (string)
 #' @param loggedIn Optional (logical) default TRUE
 #' @roxygen_header1
-path.usage.getAggregatedUsage(pathId, loggedIn = TRUE, token)
+path.usage.getAggregatedUsage <- function(pathId, loggedIn = TRUE, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   loggedIn <- validBool("loggedIn", loggedIn, TRUE)

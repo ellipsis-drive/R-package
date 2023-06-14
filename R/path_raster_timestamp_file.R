@@ -79,7 +79,7 @@ path.raster.timestamp.file.trash <- function(pathId, timestampId, fileId, token)
 #' @param fileId Mandatory (uuid)
 #' @param token Mandatory (string)
 #' @roxygen_header1
-path.raster.timestamp.file.recover(pathId, timestampId, fileId, token)
+path.raster.timestamp.file.recover <- function(pathId, timestampId, fileId, token)
 {
   token <- validString("token", token, TRUE)
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -97,7 +97,7 @@ path.raster.timestamp.file.recover(pathId, timestampId, fileId, token)
 #' @param fileId Mandatory (uuid)
 #' @param token Mandatory (string)
 #' @roxygen_header1
-path.raster.timestamp.file.delete(pathId, timestampId, fileId, token)
+path.raster.timestamp.file.delete <- function(pathId, timestampId, fileId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId <- validUuid("timestampId", timestampId, TRUE)
@@ -117,7 +117,7 @@ path.raster.timestamp.file.delete(pathId, timestampId, fileId, token)
 #' @param token Mandatory (string)
 #' @param filePath Mandatory (string)
 #' @roxygen_header1
-path.raster.timestamp.file.download(pathId, timestampId, fileId, filePath, token)
+path.raster.timestamp.file.download <- function(pathId, timestampId, fileId, filePath, token)
 {
   token <- validString("token", token, TRUE)
   pathId <- validUuid("pathId", pathId, TRUE)
