@@ -12,7 +12,6 @@
 #' @param password a string representing the password
 #' @param validFor an integer indicating how long the token is valid
 #' @return a string representing the login token
-#' @roxygen_header1
 #' @export
 account.logIn <- function(username, password, validFor = NULL)
 {

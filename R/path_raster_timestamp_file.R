@@ -1,4 +1,3 @@
-#' @export
 #' Upload a raster file
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
@@ -7,7 +6,8 @@
 #' @param noDataValue Optional (double)
 #' @param epsg Optional (int)
 #' @param fileFormat Optional (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.raster.timestamp.file.add <- function(pathId, timestampId, filePath, token, fileFormat, epsg = NULL, noDataValue = NULL)
 {
   token <- validString("token", token, TRUE)
@@ -24,14 +24,14 @@ path.raster.timestamp.file.add <- function(pathId, timestampId, filePath, token,
   return(apiManager_upload(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/file"), filePath, body, token))
 }
 
-#' @export
 #' Get all uploads for a given timestamp
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
 #' @param pageStart Optional (uuid)
 #' @param listAll Optional (logical) default TRUE
-#' @roxygen_header1
+#' @return
+#' @export
 path.raster.timestamp.file.get <- function(pathId, timestampId, token, pageStart = NULL, listAll = TRUE)
 {
   token <- validString("token", token, TRUE)
@@ -54,13 +54,13 @@ path.raster.timestamp.file.get <- function(pathId, timestampId, token, pageStart
   return(r)
 }
 
-#' @export
 #' Move an uploaded raster file to the trash
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
 #' @param fileId Mandatory (uuid)
-#' @roxygen_header1
+#' @return
+#' @export
 path.raster.timestamp.file.trash <- function(pathId, timestampId, fileId, token)
 {
   token <- validString("token", token, TRUE)
@@ -72,13 +72,13 @@ path.raster.timestamp.file.trash <- function(pathId, timestampId, fileId, token)
   return(httr::content(r))
 }
 
-#' @export
 #' Recover an uploaded raster file from trash
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param fileId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.raster.timestamp.file.recover <- function(pathId, timestampId, fileId, token)
 {
   token <- validString("token", token, TRUE)
@@ -90,13 +90,13 @@ path.raster.timestamp.file.recover <- function(pathId, timestampId, fileId, toke
   return(httr::content(r))
 }
 
-#' @export
 #' Delete a given upload
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param fileId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.raster.timestamp.file.delete <- function(pathId, timestampId, fileId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -108,15 +108,14 @@ path.raster.timestamp.file.delete <- function(pathId, timestampId, fileId, token
   return(r)
 }
 
-
-#' @export
 #' Donwload a previously uploaded raster file
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param fileId Mandatory (uuid)
 #' @param token Mandatory (string)
 #' @param filePath Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.raster.timestamp.file.download <- function(pathId, timestampId, fileId, filePath, token)
 {
   token <- validString("token", token, TRUE)

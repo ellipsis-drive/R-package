@@ -77,7 +77,8 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
 {
   # Forward declaration
   res <- NULL
-  body <- filterNULL(body)
+  if (!is.null(body))
+    body <- purrr::discard(body, is.null)
   if (!is.null(body) & (!is.list(body) | (!all_names(body) & sum(names(list) != "", na.rm=TRUE) == 0)))
     stop("ValueError: body of an API call must be of type dict or NULL")
 

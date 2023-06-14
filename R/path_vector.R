@@ -1,11 +1,11 @@
-#' @export
 #' Adds a vector
 #' @param name Mandatory (string) name for the folder
 #' @param token Mandatory (string) your token
 #' @param parentId Optional (uuid) id of folder to place new folder in
 #' @param publicAccess Optional (named list) list describing the public access of the folder
 #' @param metadata Optional (named list) list describing metadata of the folder
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.add <- function(name, token, parentId = NULL, publicAccess = NULL, metadata = NULL)
 {
   name <- validString("name", name, TRUE)
@@ -20,12 +20,12 @@ path.vector.add <- function(name, token, parentId = NULL, publicAccess = NULL, m
   return(httr::content(r))
 }
 
-#' @export
 #' Adds indices to a vector so that you can filter on properties
 #' @param pathId Mandatory (uuid) id of the vector to edit
 #' @param propertyFilter Mandatory (list) a list of named lists describing the filter
 #' @param token Mandatory (string) your token
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.editFilter <- function(pathId, propertyFilter, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)

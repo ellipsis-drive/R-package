@@ -1,10 +1,10 @@
-#' @export
 #' Adds a vector timestamp
 #' @param pathId Mandatory (uuid)
 #' @param token Mandatory (string) your token
 #' @param date Optional (named list with names to and from both of type date)
 #' @param description Optional (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.add <- function(pathId, token, properties = NULL, description = NULL, date = list("from" = Sys.time(), "to" = Sys.time()))
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -18,14 +18,14 @@ path.vector.timestamp.add <- function(pathId, token, properties = NULL, descript
   return(r)
 }
 
-#' @export
 #' Edits a vector timestamp
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string) your token
 #' @param date Optional (named list with names to and from both of type date)
 #' @param description Optional (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.edit <- function(pathId, timestampId, token, description = NULL, date = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -39,12 +39,12 @@ path.vector.timestamp.edit <- function(pathId, timestampId, token, description =
   return(r)
 }
 
-#' @export
 #' Adds a vector timestamp to the trash
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.trash <- function(pathId, timestampId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -54,12 +54,12 @@ path.vector.timestamp.trash <- function(pathId, timestampId, token)
   r <- httr::content(apiManager_put(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/trashed"), body, token))
 }
 
-#' @export
 #' Recovers a vector timestamp
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.recover <- function(pathId, timestampId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -69,12 +69,12 @@ path.vector.timestamp.recover <- function(pathId, timestampId, token)
   r <- httr::content(apiManager_put(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/trashed"), body, token))
 }
 
-#' @export
 #' Delete a vector timestamp
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.delete <- function(pathId, timestampId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -84,12 +84,12 @@ path.vector.timestamp.delete <- function(pathId, timestampId, token)
   return(httr::content(r))
 }
 
-#' @export
 #' Activate a timestamp
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.activate <- function(pathId, timestampId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -99,12 +99,12 @@ path.vector.timestamp.activate <- function(pathId, timestampId, token)
   return(httr::content(r))
 }
 
-#' @export
 #' Deactivate a timestamp
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.deactivate <- function(pathId, timestampId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -114,13 +114,12 @@ path.vector.timestamp.deactivate <- function(pathId, timestampId, token)
   return(httr::content(r))
 }
 
-#' @export
 #' Get the bounds of a vector timestamp
 #' @param pathId Mandatory (uuid)
 #' @param timestapmId Mandatory (uuid)
 #' @param token Optional (string)
 #' @return a simple feature sf object
-#' @roxygen_header1
+#' @export
 path.vector.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -132,7 +131,6 @@ path.vector.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
   return(r)
 }
 
-#' @export
 #' Get the changelog of a vector timestamp
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
@@ -140,7 +138,8 @@ path.vector.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
 #' @param token Optional (string)
 #' @param actions Optional (object)
 #' @param pageStart optional (object)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.getChanges <- function(pathId, timestampId, token = NULL, pageStart = NULL, listAll = FALSE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -168,7 +167,6 @@ path.vector.timestamp.getChanges <- function(pathId, timestampId, token = NULL, 
   return(r)
 }
 
-#' @export
 #' Get features of a vector timestamp by the id of the features
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
@@ -176,7 +174,7 @@ path.vector.timestamp.getChanges <- function(pathId, timestampId, token = NULL, 
 #' @param showProgress Mandatory (logical)
 #' @param token Mandatory (string)
 #' @return a simple features 'sf' object containing the features as a geometry
-#' @roxygen_header1
+#' @export
 path.vector.timestamp.getFeaturesByIds <- function(pathId, timestampId, featureIds, token = NULL, showProgress = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -192,7 +190,6 @@ path.vector.timestamp.getFeaturesByIds <- function(pathId, timestampId, featureI
   return(r)
 }
 
-#' @export
 #' Get features of a vector timestamp by the extent of the features
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
@@ -202,7 +199,7 @@ path.vector.timestamp.getFeaturesByIds <- function(pathId, timestampId, featureI
 #' @param pageStart Optional (object)
 #' @param listAll Optional (logical) whether to list all results (default TRUE)
 #' @return a simple features 'sf' object containing the features as a geometry
-#' @roxygen_header1
+#' @export
 path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, extent, propertyFilter = NULL, token = NULL, listAll = TRUE, epsg = 4326, cordinateBuffer = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -284,13 +281,12 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
   return(r)
 }
 
-#' @export
 #' List available features of a vector timestamp
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Optional (string)
 #' @return a simple features 'sf' object containing the features as a geometry
-#' @roxygen_header1
+#' @export
 path.vector.timestamp.listFeatures <- function(pathId, timestampId, token = NULL, listAll = TRUE, pageStart = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)

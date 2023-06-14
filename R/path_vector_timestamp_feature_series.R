@@ -1,4 +1,3 @@
-#' @export
 #' Get series of a vector timestamp feature
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
@@ -11,7 +10,7 @@
 #' @param listAll Optional (logical)
 #' @param token Optional (string)
 #' @return (data.frame) containing the series
-#' @roxygen_header1
+#' @export
 path.vector.timestamp.feature.series.get <- function(pathId, timestampId, featureId, pageStart = NULL, dateTo = NULL, userId = NULL, seriesProperty = NULL, deleted = FALSE, listAll = TRUE, token = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -46,13 +45,13 @@ path.vector.timestamp.feature.series.get <- function(pathId, timestampId, featur
   return(r)
 }
 
-#' @export
 #' Get info about series of a vector timestamp feature
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param featureId Mandatory (uuid)
 #' @param token Optional (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.feature.series.info <- function(pathId, timestampId, featureId, token = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -68,14 +67,14 @@ path.vector.timestamp.feature.series.info <- function(pathId, timestampId, featu
   return(r)
 }
 
-#' @export
 #' Add series to a vector timestamp feature
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param featureId Mandatory (uuid)
 #' @param seriesData Mandatory (data.frame)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.feature.series.add <- function(pathId, timestampId, featureId, seriesData, token, showProgress = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -149,14 +148,14 @@ path.vector.timestamp.feature.series.add <- function(pathId, timestampId, featur
   return(r_total)
 }
 
-#' @export
 #' Move series of a vector timestamp feature to the trash
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param featureId Mandatory (uuid)
 #' @param seriesIds Mandatory (array, list, or vector of uuids)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.feature.series.trash <- function(pathId, timestampId, featureId, seriesIds, token, showProgress = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -179,14 +178,14 @@ path.vector.timestamp.feature.series.trash <- function(pathId, timestampId, feat
   }
 }
 
-#' @export
 #' Recover series of a vector timestamp feature from the trash
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param featureId Mandatory (uuid)
 #' @param seriesIds Mandatory (array, vector, or list of uuids)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.feature.series.recover <- function(pathId, timestampId, featureId, seriesIds, token, showProgress = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -209,7 +208,6 @@ path.vector.timestamp.feature.series.recover <- function(pathId, timestampId, fe
   }
 }
 
-#' @export
 #' Get changelog of series of a vector timestamp feature
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
@@ -219,7 +217,8 @@ path.vector.timestamp.feature.series.recover <- function(pathId, timestampId, fe
 #' @param userId Optional (uuid)
 #' @param pageStart Optional (uuid)
 #' @param token Optional (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.feature.series.changelog <- function(pathId, timestampId, featureId, listAll = FALSE, actions = NULL, userId = NULL, pageStart = NULL, token = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)

@@ -1,7 +1,7 @@
-#' @export
 #' Retrieve information on all your vector downloads
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.order.get <- function(token)
 {
   token <- validString("token", token, TRUE)
@@ -9,7 +9,6 @@ path.vector.timestamp.order.get <- function(token)
   return(r)
 }
 
-#' @export
 #' Order a download
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
@@ -17,7 +16,7 @@ path.vector.timestamp.order.get <- function(token)
 #' @param extent Optional (named list) with names xMin, xMax, yMin, and yMax
 #' @param uploadId Optional (uuid)
 #' @return the orderId (uuid)
-#' @roxygen_header1
+#' @export
 path.vector.timestamp.order.add <- function(pathId, timestampId, token, extent = NULL, uploadId = NULL)
 {
   token <- validString("token", token, TRUE)
@@ -33,12 +32,12 @@ path.vector.timestamp.order.add <- function(pathId, timestampId, token, extent =
   return(r)
 }
 
-#' @export
 #' Download the ordered file
 #' @param orderId Mandatory (uuid)
 #' @param filePath Mandatory (string) path to local file system where file will be saved
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.timestamp.order.download <- function(orderId, filePath, token)
 {
   token <- validString("token", token, TRUE)

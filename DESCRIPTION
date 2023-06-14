@@ -21,7 +21,8 @@ Import:
   sp,
   jsonlite,
   recolorize,
-  geojsonsf
+  geojsonsf,
+  purrr
 RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)

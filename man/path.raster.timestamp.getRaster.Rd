@@ -2,7 +2,7 @@
 % Please edit documentation in R/path_raster_timestamp.R
 \name{path.raster.timestamp.getRaster}
 \alias{path.raster.timestamp.getRaster}
-\title{Service we deliver: We return an R raster object}
+\title{Get a Raster}
 \usage{
 path.raster.timestamp.getRaster(
   pathId,
@@ -15,6 +15,20 @@ path.raster.timestamp.getRaster(
   epsg = 3857
 )
 }
+\arguments{
+\item{pathId}{Mandatory (uuid)}
+
+\item{timestampId}{Mandatory (uuid)}
+
+\item{extent}{Mandatory (named list) named list with properties xMin, xMax, yMin, yMax of type double}
+
+\item{style}{Optional (uuid or named list describing a style ) If no style given raw data is returned. Also see https://docs.ellipsis-drive.com/developers/api-v3/path-raster/styles/add-style}
+
+\item{token}{Optional (string)}
+}
+\value{
+An R Raster object containing the raster
+}
 \description{
-Service we deliver: We return an R raster object
+Get a Raster
 }

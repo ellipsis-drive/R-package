@@ -1,4 +1,3 @@
-#' @export
 #' Add style to a vector
 #' @param pathId Mandatory (uuid)
 #' @param name Mandatory (string)
@@ -6,7 +5,8 @@
 #' @param parameter Mandatory (object) see https://docs.ellipsis-drive.com/developers/api-v3/path-vector/styles/add-style on how to format the parameters
 #' @param token Mandatory (string)
 #' @param default Optional (logical) default TRUE
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.style.add <- function(pathId, name, method, parameters, token, default = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -23,7 +23,6 @@ path.vector.style.add <- function(pathId, name, method, parameters, token, defau
   return(httr::content(r))
 }
 
-#' @export
 #' Edit the style of a vector
 #' @param pathId Mandatory (uuid)
 #' @param styleId Mandatory (uuid)
@@ -31,7 +30,8 @@ path.vector.style.add <- function(pathId, name, method, parameters, token, defau
 #' @param method Optional (string)
 #' @param parameters Optional (object)
 #' @param default Optional (logical) default TRUE
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.style.edit <- function(pathId, styleId, token, name = NULL, method = NULL, parameters = NULL, default = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -48,12 +48,12 @@ path.vector.style.edit <- function(pathId, styleId, token, name = NULL, method =
   return(httr::content(r))
 }
 
-#' @export
 #' Delete the style for a given vector
 #' @param pathId Mandatory (uuid)
 #' @param styleId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.vector.style.delete <- function(pathId, styleId, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)

@@ -1,7 +1,7 @@
-#' @export
 #' Retrieve information on all your raster downloads
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.raster.timestamp.order.get <- function(token)
 {
   token <- validString("token", token, TRUE)
@@ -10,7 +10,6 @@ path.raster.timestamp.order.get <- function(token)
   return(r)
 }
 
-#' @export
 #' Order a download
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
@@ -18,7 +17,7 @@ path.raster.timestamp.order.get <- function(token)
 #' @param extent Mandatory (named list) with properties xMin, xMax, yMin, yMax of type double
 #' @param epsg Optional (int) default 4326
 #' @return the id of the order (uuid)
-#' @roxygen_header1
+#' @export
 path.raster.timestamp.order.add <- function(pathId, timestampId, extent = NULL, epsg = 4326)
 {
   token <- validString("token", token, TRUE)
@@ -34,12 +33,12 @@ path.raster.timestamp.order.add <- function(pathId, timestampId, extent = NULL, 
 
 }
 
-#' @export
 #' Download the ordered file
 #' @param orderId Mandatory (uuid)
 #' @param filePath Mandatory (string)
 #' @param token Mandatory (string)
-#' @roxygen_header1
+#' @return
+#' @export
 path.raster.timestamp.order.download <- function(orderId, filePath, token)
 {
   token <- validString("token", token, TRUE)
