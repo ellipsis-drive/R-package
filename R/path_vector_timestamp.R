@@ -265,7 +265,7 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
     return(httr::content(apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/featuresByExtent"), body, token)))
   }
 
-  r <- recurs(f, listAll, "features")
+  r <- recurse(f, listAll, "features")
 
   sh <- sf::st_as_sf(r[["result"]][["features"]])
 

@@ -138,6 +138,7 @@ path.rename <- function(pathId, name, token)
 #' @param pathIds Mandatory (array of uuids)
 #' @param token Optional (string)
 #' @param parentId Optional (uuid)
+#' @return
 #' @roxygen_header1
 path.move <- function(pathIds, parentId, token)
 {
@@ -155,6 +156,7 @@ path.move <- function(pathIds, parentId, token)
 #' Place path in trash
 #' @param pathId Mandatory (uuid)
 #' @param token Optional (string)
+#' @return
 #' @roxygen_header1
 path.trash <- function(pathId, token)
 {
@@ -170,6 +172,7 @@ path.trash <- function(pathId, token)
 #' Recover a path
 #' @param pathId Mandatory (uuid)
 #' @param token Optional (string)
+#' @return
 #' @roxygen_header1
 path.recover <- function(pathId, token)
 {
@@ -186,6 +189,7 @@ path.recover <- function(pathId, token)
 #' @param pathId Mandatory (uuid)
 #' @param token Optional (string)
 #' @param recursive Optional (logical)
+#' @return
 #' @roxygen_header1
 path.delete <- function(pathId, token, recursive = FALSE)
 {
@@ -221,6 +225,7 @@ path.delete <- function(pathId, token, recursive = FALSE)
 #' @param token Mandatory (string)
 #' @param access Optional (named list)
 #' @param hidden Optional (logical)
+#' @return
 #' @roxygen_header1
 path.editPublicAccess <- function(pathId, token, accessLevel = NULL, hidden = NULL, processingUnits = NULL, geoFence = NULL)
 {
@@ -239,6 +244,7 @@ path.editPublicAccess <- function(pathId, token, accessLevel = NULL, hidden = NU
 #' Add path to favorites
 #' @param pathId Mandatory (uuid)
 #' @param token Mandatory (string)
+#' @return
 #' @roxygen_header1
 path.favorite <- function(pathId, token)
 {
@@ -254,6 +260,7 @@ path.favorite <- function(pathId, token)
 #' Removes path from favorites
 #' @param pathId Mandatory (uuid)
 #' @param token Mandatory (string)
+#' @return
 #' @roxygen_header1
 path.unfavorite <- function(pathId, token)
 {
