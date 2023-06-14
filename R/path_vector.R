@@ -21,6 +21,11 @@ path.vector.add <- function(name, token, parentId = NULL, publicAccess = NULL, m
 }
 
 #' @export
+#' Adds indices to a vector so that you can filter on properties
+#' @param pathId Mandatory (uuid) id of the vector to edit
+#' @param propertyFilter Mandatory (list) a list of named lists describing the filter
+#' @param token Mandatory (string) your token
+#' @roxygen_header1
 path.vector.editFilter(pathId, propertyFilter, token)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
