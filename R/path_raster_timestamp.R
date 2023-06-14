@@ -2,12 +2,34 @@
 
 #' Service we deliver: We return an R raster object
 #' @export
-path.raster.timestamp.getDonwsampledRaster <- function(pathId, timestampId, extent, width, height, epsg=3857, style = NULL, token = NULL)
+#' Get a downsampled raster
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param extent Mandatory (named list) a named list with properties xMin, xMax, yMin, yMax of type double
+#' @param width Mandatory (int)
+#' @param height Mandatory (int)
+#' @param style Optional (uuid or named list describing a style ) If no style given raw data is returned. Also see https://docs.ellipsis-drive.com/developers/api-v3/path-raster/styles/add-style
+#' @param epsg Optional (int) default 3857 (webmercator)
+#' @param token Optional (string)
+#' @return Named list with property "raster" of type R raster object containing the downsampled raster
+#' @roxygen_header1
+path.raster.timestamp.getDownsampledRaster <- function(pathId, timestampId, extent, width, height, epsg=3857, style = NULL, token = NULL)
 {
   return(path.raster.timestamp.getSampledRaster(pathId, timestampId, extent, width, height, epsg, style, token))
 }
 
 #' @export
+#' Get a downsampled raster
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param extent Mandatory (named list) a named list with properties xMin, xMax, yMin, yMax of type double
+#' @param width Mandatory (int)
+#' @param height Mandatory (int)
+#' @param style Optional (uuid or named list describing a style ) If no style given raw data is returned. Also see https://docs.ellipsis-drive.com/developers/api-v3/path-raster/styles/add-style
+#' @param epsg Optional (int) default 3857 (webmercator)
+#' @param token Optional (string)
+#' @return Named list with property "raster" of type R raster object containing the downsampled raster
+#' @roxygen_header1
 path.raster.timestamp.getSampledRaster <- function(pathId, timestampId, extent, width, height, epsg = 3857, style = NULL, token = NULL)
 {
   bounds <- extent
@@ -39,6 +61,15 @@ path.raster.timestamp.getSampledRaster <- function(pathId, timestampId, extent, 
 }
 
 #' @export
+#' Request to obtain the raster value for each point along a line
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param line Mandatory (sf geometry) of type line in WGS84
+#' @param asRaster Optional (logical) default FALSE, if TRUE, an R raster object is returned instead of a matrix
+#' @param epsg Optional (int) default 4326
+#' @param token Optional (string)
+#' @return A named list with a "raster" property of type Raster, or Matrix depending on asRaster parameter containing the raster for points along a line
+#' @roxygen_header1
 getValuesAlongLine <- function(pathId, timestampId, line, token = NULL, epsg = 4326, asRaster = FALSE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -67,6 +98,14 @@ getValuesAlongLine <- function(pathId, timestampId, line, token = NULL, epsg = 4
 }
 
 #' @export
+#' Get a Raster
+#' @param extent Mandatory (named list) named list with properties xMin, xMax, yMin, yMax of type double
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param token Optional (string)
+#' @param style Optional (uuid or named list describing a style ) If no style given raw data is returned. Also see https://docs.ellipsis-drive.com/developers/api-v3/path-raster/styles/add-style
+#' @return An R Raster object containing the raster
+#' @roxygen_header1
 path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style = NULL, threads = 1, token = NULL, showProgress = TRUE, epsg = 3857)
 {
   bounds <- extent
@@ -209,6 +248,14 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
 }
 
 #' @export
+#' Request to obtain pixel values within a certain geometry
+#' @param pathId Mandatory (uuid)
+#' @param timestampIds Mandatory (vector, list, or array of uuids)
+#' @param geometry Mandatory (simple feature geometry) in WGS84
+#' @param approximate Optional (logical) default TRUE
+#' @param token Optional (string)
+#' @param returnType Optional (string) either "all" or "statistics", default "all"
+#' @roxygen_header1
 path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, returnType = "all", approximate = TRUE, token = null, epsg = 4326)
 {
   token <- validString("token", token, FALSE)
@@ -240,6 +287,12 @@ path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, return
 }
 
 #' @export
+#' Add a timestamp to a raster
+#' @param token Mandatory (string)
+#' @param pathId Mandatory (uuid)
+#' @param date Optional (named list) named list containing properties "to" and "from" both of type date
+#' @param description Optional (string)
+#' @roxygen_header1
 path.raster.timestamp.add <- function(pathId, token, description = NULL, date = list("from" = Sys.time(), "to" = Sys.time()))
 {
   token <- validString("token", token, TRUE)
@@ -266,6 +319,12 @@ path.raster.timestamp.edit <- function(pathId, timestampId, token, date = NULL, 
 }
 
 #' @export
+#' Request to obtain the aggregated data for a certain geometry
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param token Optional (string)
+#' @return simple feature dataframe (sf) containing the bounds
+#' @roxygen_header1
 path.raster.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
 {
   token <- validString("token", token, FALSE)
@@ -279,6 +338,11 @@ path.raster.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
 }
 
 #' @export
+#' Activate a timestamp
+#' @param token Mandatory (string)
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @roxygen_header1
 path.raster.timestamp.activate <- function(pathId, timestampId, token)
 {
   token <- validString("token", token, TRUE)
@@ -291,6 +355,11 @@ path.raster.timestamp.activate <- function(pathId, timestampId, token)
 }
 
 #' @export
+#' Deactivate a given timestamp
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @roxygen_header1
 path.raster.timestamp.deactivate <- function(pathId, timestampId, token)
 {
   token <- validString("token", token, TRUE)
@@ -303,6 +372,11 @@ path.raster.timestamp.deactivate <- function(pathId, timestampId, token)
 }
 
 #' @export
+#' Move a given timestamp to the trash
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @roxygen_header1
 path.raster.timestamp.trash <- function(pathId, timestampId, token)
 {
   token <- validString("token", token, TRUE)
@@ -314,6 +388,11 @@ path.raster.timestamp.trash <- function(pathId, timestampId, token)
 }
 
 #' @export
+#' Recover a given timestamp from the trash
+#' @param pathId Mandatory (uuid)
+#' @param timestampId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @roxygen_header1
 path.raster.timestamp.recover <- function(pathId, timestampId, token)
 {
   token <- validString("token", token, TRUE)
