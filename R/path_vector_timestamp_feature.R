@@ -1,4 +1,4 @@
-path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
+path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
 {
   features_size <- dim(features)[[1]]
   levelOfDetail1 <- validGeoSeries("levelOfDetail1", levelOfDetail1, FALSE)
@@ -6,6 +6,7 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
   levelOfDetail3 <- validGeoSeries("levelOfDetail3", levelOfDetail3, FALSE)
   levelOfDetail4 <- validGeoSeries("levelOfDetail4", levelOfDetail4, FALSE)
   levelOfDetail5 <- validGeoSeries("levelOfDetail5", levelOfDetail5, FALSE)
+  features <- validSimplefeature("features", features, TRUE)
 
   if (!is.null(levelOfDetail1) & length(levelOfDetail1) != features_size)
     stop(glue::glue("ValueError: levelOfDetail1 must have same length as number of rows in features"))
@@ -32,7 +33,7 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
     temp = list()
     for (x in levelOfDetail1[["features"]])
     {
-      temp <- append(temp, st_geometry(x))
+      temp <- append(temp, sf::st_geometry(x))
     }
     levelOfDetail1 <- array(unlist(temp))
   }
@@ -41,7 +42,7 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
     temp = list()
     for (x in levelOfDetail2[["features"]])
     {
-      temp <- append(temp, st_geometry(x))
+      temp <- append(temp, sf::st_geometry(x))
     }
     levelOfDetail2 <- array(unlist(temp))
   }
@@ -50,7 +51,7 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
     temp = list()
     for (x in levelOfDetail3[["features"]])
     {
-      temp <- append(temp, st_geometry(x))
+      temp <- append(temp, sf::st_geometry(x))
     }
     levelOfDetail3 <- array(unlist(temp))
   }
@@ -59,7 +60,7 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
     temp = list()
     for (x in levelOfDetail4[["features"]])
     {
-      temp <- append(temp, st_geometry(x))
+      temp <- append(temp, sf::st_geometry(x))
     }
     levelOfDetail4 <- array(unlist(temp))
   }
@@ -113,7 +114,7 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
   showProgress <- validBool("showProgress", showProgress, TRUE)
   cores <- validInt("cores", cores, TRUE)
 
-  levels <- list[levelOfDetal1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5] <- path.vector.timestamp.feature.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
+  levels <- list[levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5] <- path.vector.timestamp.feature.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
   levelOfDetail1 <- levels[[1]]
   levelOfDetail2 <- levels[[2]]
   levelOfDetail3 <- levels[[3]]

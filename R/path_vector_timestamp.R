@@ -188,7 +188,7 @@ path.vector.timestamp.getFeaturesByIds <- function(pathId, timestampId, featureI
   body <- list("geometryIds" = featureIds)
   r <- apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/featureByIds"), body, token)
   r <- httr::content(r)
-  sh <- st_as_sf(r[["result"]])
+  sh <- sf::st_as_sf(r[["result"]])
   return(r)
 }
 
@@ -248,7 +248,7 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
 
   p <- tryCatch(
     {
-      p <- st_set_crs(p, epsg)
+      p <- sf::st_set_crs(p, epsg)
     },
     error = function(cond)
     {
@@ -256,7 +256,7 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
     }
   )
 
-  extent <- st_bbox(p)
+  extent <- sf::st_bbox(p)
   extent <- list("xMin" = extent[["xmin"]], "xMax" = extent[["xmax"]], "yMin" = extent[["ymin"]], "yMax" = extent[["ymax"]])
 
   body <- list("pageStart" = pageStart, "propertyFilter" = propertyFilter, "extent" = extent)

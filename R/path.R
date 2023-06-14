@@ -198,7 +198,7 @@ path.delete <- function(pathId, token, recursive = FALSE)
     info <- path.get(pathId, token)
     if (info[["type"]] == "folder")
     {
-      folders <- path.folder.listFolder(pathId = pathId, includeTrashed=True, pathTypes=list("folder"), token=token)[['result']]
+      folders <- path.folder.listFolder(pathId = pathId, includeTrashed=TRUE, pathTypes=list("folder"), token=token)[['result']]
       for (f in folders)
       {
         path.delete(f[["id"]], token, TRUE)

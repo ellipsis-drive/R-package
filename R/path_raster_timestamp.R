@@ -333,7 +333,7 @@ path.raster.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
 
   r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/bounds"), NULL, token)
   r <- httr::content(r)
-  r <- st_sf(id = 0, properties = list(), geometry = r)
+  r <- sf::st_sf(id = 0, properties = list(), geometry = r)
   return(r)
 }
 

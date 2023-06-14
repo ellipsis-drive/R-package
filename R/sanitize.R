@@ -103,7 +103,7 @@ validSFGeometry <- function(name, value, required)
   if (!required & is.null(value))
     return(NULL)
 
-  if (!is(value, "sfg"))
+  if (class(value)[[3]] != "sfg")
     stop(glue::glue("ValueError: {name} must be a simple feature geometry"))
   return(value)
 }
