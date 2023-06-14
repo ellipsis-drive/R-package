@@ -24,6 +24,9 @@ path.vector.timestamp.feature.series.trash(
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Move series of a vector timestamp feature to the trash
 }

@@ -23,6 +23,9 @@ path.vector.add(
 
 \item{metadata}{Optional (named list) list describing metadata of the folder}
 }
+\value{
+...
+}
 \description{
 Adds a vector
 }

@@ -13,6 +13,9 @@ path.vector.timestamp.recover(pathId, timestampId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Recovers a vector timestamp
 }

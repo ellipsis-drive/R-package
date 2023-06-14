@@ -37,6 +37,9 @@ path.vector.timestamp.feature.add(
 
 \item{levelOfDetail5}{Optional (a list of sf geometries)}
 }
+\value{
+...
+}
 \description{
 Add a feature to a vector timestamp
 }

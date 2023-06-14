@@ -23,6 +23,9 @@ path.raster.timestamp.file.download(
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Donwload a previously uploaded raster file
 }

@@ -13,6 +13,9 @@ path.vector.featureProperty.recover(pathId, featurePropertyId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Recover a feature property for a given vector
 }

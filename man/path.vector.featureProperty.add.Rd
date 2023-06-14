@@ -28,6 +28,9 @@ path.vector.featureProperty.add(
 
 \item{featureProperty}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Add a feature property to a given vector
 }

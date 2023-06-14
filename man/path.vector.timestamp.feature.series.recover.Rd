@@ -24,6 +24,9 @@ path.vector.timestamp.feature.series.recover(
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Recover series of a vector timestamp feature from the trash
 }

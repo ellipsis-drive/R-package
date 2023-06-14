@@ -3,7 +3,7 @@
 #' @param token Mandatory (string) your token
 #' @param date Optional (named list with names to and from both of type date)
 #' @param description Optional (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.add <- function(pathId, token, properties = NULL, description = NULL, date = list("from" = Sys.time(), "to" = Sys.time()))
 {
@@ -24,7 +24,7 @@ path.vector.timestamp.add <- function(pathId, token, properties = NULL, descript
 #' @param token Mandatory (string) your token
 #' @param date Optional (named list with names to and from both of type date)
 #' @param description Optional (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.edit <- function(pathId, timestampId, token, description = NULL, date = NULL)
 {
@@ -43,7 +43,7 @@ path.vector.timestamp.edit <- function(pathId, timestampId, token, description =
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.trash <- function(pathId, timestampId, token)
 {
@@ -58,7 +58,7 @@ path.vector.timestamp.trash <- function(pathId, timestampId, token)
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.recover <- function(pathId, timestampId, token)
 {
@@ -73,7 +73,7 @@ path.vector.timestamp.recover <- function(pathId, timestampId, token)
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.delete <- function(pathId, timestampId, token)
 {
@@ -88,7 +88,7 @@ path.vector.timestamp.delete <- function(pathId, timestampId, token)
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.activate <- function(pathId, timestampId, token)
 {
@@ -103,7 +103,7 @@ path.vector.timestamp.activate <- function(pathId, timestampId, token)
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.deactivate <- function(pathId, timestampId, token)
 {
@@ -138,7 +138,7 @@ path.vector.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
 #' @param token Optional (string)
 #' @param actions Optional (object)
 #' @param pageStart optional (object)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.getChanges <- function(pathId, timestampId, token = NULL, pageStart = NULL, listAll = FALSE)
 {

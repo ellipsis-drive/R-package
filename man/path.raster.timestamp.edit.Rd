@@ -23,6 +23,9 @@ path.raster.timestamp.edit(
 
 \item{description}{Optional (string)}
 }
+\value{
+...
+}
 \description{
 Edit a timestamp of a raster map
 }

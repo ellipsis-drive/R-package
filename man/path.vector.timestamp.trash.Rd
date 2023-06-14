@@ -13,6 +13,9 @@ path.vector.timestamp.trash(pathId, timestampId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Adds a vector timestamp to the trash
 }

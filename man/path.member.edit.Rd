@@ -15,6 +15,9 @@ path.member.edit(pathId, userId, access, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Edits permissions of a user on a given path
 }

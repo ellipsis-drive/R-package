@@ -13,6 +13,9 @@ path.raster.timestamp.recover(pathId, timestampId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Recover a given timestamp from the trash
 }

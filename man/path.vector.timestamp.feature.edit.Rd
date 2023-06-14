@@ -40,6 +40,9 @@ path.vector.timestamp.feature.edit(
 
 \item{levelOfDetail5}{Optional (a list of sf geometries)}
 }
+\value{
+...
+}
 \description{
 Edit features of a vector timestamp
 }

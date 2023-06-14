@@ -20,6 +20,9 @@ path.vector.timestamp.feature.series.info(
 
 \item{token}{Optional (string)}
 }
+\value{
+...
+}
 \description{
 Get info about series of a vector timestamp feature
 }

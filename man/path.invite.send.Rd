@@ -26,6 +26,9 @@ path.invite.send(
 
 \item{sendMail}{Optional (logical) default FALSE}
 }
+\value{
+...
+}
 \description{
 Invites someone to a path. They will need to accept before they are added
 }

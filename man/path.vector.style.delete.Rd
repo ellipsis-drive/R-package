@@ -13,6 +13,9 @@ path.vector.style.delete(pathId, styleId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Delete the style for a given vector
 }

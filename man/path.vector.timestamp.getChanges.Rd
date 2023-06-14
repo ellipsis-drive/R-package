@@ -25,6 +25,9 @@ path.vector.timestamp.getChanges(
 
 \item{actions}{Optional (object)}
 }
+\value{
+...
+}
 \description{
 Get the changelog of a vector timestamp
 }

@@ -23,6 +23,9 @@ path.raster.add(
 
 \item{metadata}{Optional (named list) named list describing the raster's metadata}
 }
+\value{
+...
+}
 \description{
 Add a raster
 }

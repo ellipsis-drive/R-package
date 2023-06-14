@@ -27,6 +27,9 @@ path.raster.timestamp.analyse(
 
 \item{token}{Optional (string)}
 }
+\value{
+...
+}
 \description{
 Request to obtain pixel values within a certain geometry
 }

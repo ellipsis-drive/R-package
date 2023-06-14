@@ -19,6 +19,9 @@ path.vector.style.add(pathId, name, method, parameters, token, default = TRUE)
 
 \item{parameter}{Mandatory (object) see https://docs.ellipsis-drive.com/developers/api-v3/path-vector/styles/add-style on how to format the parameters}
 }
+\value{
+...
+}
 \description{
 Add style to a vector
 }

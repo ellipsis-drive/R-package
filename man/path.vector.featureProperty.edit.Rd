@@ -25,6 +25,9 @@ path.vector.featureProperty.edit(
 
 \item{timestampId}{Mandatory (uuid)}
 }
+\value{
+...
+}
 \description{
 Edit the feature property for a given vector
 }

@@ -13,6 +13,9 @@ path.raster.style.delete(pathId, styleId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Delete a raster style
 }

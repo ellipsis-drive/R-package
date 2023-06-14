@@ -23,6 +23,9 @@ path.vector.timestamp.edit(
 
 \item{date}{Optional (named list with names to and from both of type date)}
 }
+\value{
+...
+}
 \description{
 Edits a vector timestamp
 }

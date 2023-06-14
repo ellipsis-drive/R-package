@@ -17,6 +17,9 @@ path.usage.getActiveUsers(pathId, token, listAl = TRUE, pageStart = NULL)
 
 \item{listAll}{Optional (logical) default TRUE}
 }
+\value{
+...
+}
 \description{
 Get users that used the given path
 }

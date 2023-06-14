@@ -13,6 +13,9 @@ path.invite.revoke(pathId, inviteId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Revoke a sent invitation
 }

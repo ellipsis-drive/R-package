@@ -27,6 +27,9 @@ path.vector.style.edit(
 
 \item{default}{Optional (logical) default TRUE}
 }
+\value{
+...
+}
 \description{
 Edit the style of a vector
 }

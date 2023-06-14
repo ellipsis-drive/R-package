@@ -13,6 +13,9 @@ path.invite.decline(pathId, inviteId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Decline an invite to a map or a folder
 }

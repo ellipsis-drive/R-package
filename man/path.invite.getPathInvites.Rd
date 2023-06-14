@@ -11,6 +11,9 @@ path.invite.getPathInvites(pathId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Retrieve pending invites to a specific map
 }

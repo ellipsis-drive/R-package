@@ -17,6 +17,9 @@ path.raster.style.add(pathId, name, method, parameters, token, default = TRUE)
 
 \item{default}{Optional (logical) default TRUE}
 }
+\value{
+...
+}
 \description{
 Adds a raster style
 }

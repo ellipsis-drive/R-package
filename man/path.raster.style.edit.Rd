@@ -19,6 +19,9 @@ path.raster.style.edit(pathId, styleId, method, parameters, default = TRUE)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Edit a raster style
 }

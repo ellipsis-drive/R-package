@@ -20,6 +20,9 @@ path.raster.edit(
 
 \item{includesTransparent}{Optional (logical) default FALSE}
 }
+\value{
+...
+}
 \description{
 Edit raster map attributes
 }

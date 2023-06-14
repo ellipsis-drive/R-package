@@ -13,6 +13,9 @@ path.hashtag.delete(pathId, hashtag, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Delete a hashtag from a given path
 }

@@ -24,6 +24,9 @@ path.folder.listFolder(
 
 \item{token}{Optional (string)}
 }
+\value{
+...
+}
 \description{
 List the contents of a folder
 }

@@ -15,6 +15,9 @@ path.raster.editBand(pathId, bandNumber, name, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Change the name of a band
 }

@@ -24,6 +24,9 @@ path.vector.timestamp.feature.series.add(
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Add series to a vector timestamp feature
 }

@@ -13,6 +13,9 @@ path.raster.timestamp.activate(pathId, timestampId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Activate a timestamp
 }

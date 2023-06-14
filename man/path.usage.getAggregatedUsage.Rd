@@ -13,6 +13,9 @@ path.usage.getAggregatedUsage(pathId, loggedIn = TRUE, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Get aggregated usage history
 }

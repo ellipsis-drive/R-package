@@ -1,6 +1,6 @@
 #' Retrieve information on all your vector downloads
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.order.get <- function(token)
 {
@@ -36,7 +36,7 @@ path.vector.timestamp.order.add <- function(pathId, timestampId, token, extent =
 #' @param orderId Mandatory (uuid)
 #' @param filePath Mandatory (string) path to local file system where file will be saved
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.order.download <- function(orderId, filePath, token)
 {

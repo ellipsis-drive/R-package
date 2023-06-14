@@ -13,6 +13,9 @@ path.file.download(pathId, filePath, token = NULL)
 
 \item{token}{Optional (string)}
 }
+\value{
+...
+}
 \description{
 Downloads a file
 }

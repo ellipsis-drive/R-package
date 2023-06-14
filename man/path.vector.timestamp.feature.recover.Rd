@@ -21,6 +21,9 @@ path.vector.timestamp.feature.recover(
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Recover a feature of a vector timestamp
 }

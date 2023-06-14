@@ -20,6 +20,9 @@ path.raster.timestamp.add(
 
 \item{date}{Optional (named list) named list containing properties "to" and "from" both of type date}
 }
+\value{
+...
+}
 \description{
 Add a timestamp to a raster
 }

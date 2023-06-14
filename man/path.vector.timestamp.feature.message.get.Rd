@@ -36,6 +36,9 @@ path.vector.timestamp.feature.message.get(
 
 \item{token}{Optional (string)}
 }
+\value{
+...
+}
 \description{
 Get all messages of a feature
 }

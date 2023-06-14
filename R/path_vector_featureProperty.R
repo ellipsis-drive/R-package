@@ -6,7 +6,7 @@
 #' @param token Mandatory (string)
 #' @param private Optional (logical) default FALSE
 #' @param required Optional (logical) default FALSE
-#' @return
+#' @return ...
 #' @export
 path.vector.featureProperty.add <- function(pathId, name, featurePropertyType, token, private = FALSE, required = FALSE)
 {
@@ -30,7 +30,7 @@ path.vector.featureProperty.add <- function(pathId, name, featurePropertyType, t
 #' @param token Mandatory (string)
 #' @param private Optional (logical) default FALSE
 #' @param required Optional (logical) default FALSE
-#' @return
+#' @return ...
 #' @export
 path.vector.featureProperty.edit <- function(pathId, featurePropertyId, token, private = FALSE, required = FALSE)
 {
@@ -50,7 +50,7 @@ path.vector.featureProperty.edit <- function(pathId, featurePropertyId, token, p
 #' @param pathId Mandatory (uuid)
 #' @param featurePropertyId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.featureProperty.trash <- function(pathId, featurePropertyId, token)
 {
@@ -67,7 +67,7 @@ path.vector.featureProperty.trash <- function(pathId, featurePropertyId, token)
 #' @param pathId Mandatory (uuid)
 #' @param featurePropertyId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.featureProperty.recover <- function(pathId, featurePropertyId, token)
 {

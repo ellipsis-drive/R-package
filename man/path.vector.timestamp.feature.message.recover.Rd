@@ -20,6 +20,9 @@ path.vector.timestamp.feature.message.recover(
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Recover message of a feature from the trash
 }

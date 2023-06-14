@@ -13,6 +13,9 @@ path.usage.getUsage(pathId, userId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Get usage history of a specific user for a given path
 }

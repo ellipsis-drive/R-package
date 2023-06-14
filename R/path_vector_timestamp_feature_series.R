@@ -50,7 +50,7 @@ path.vector.timestamp.feature.series.get <- function(pathId, timestampId, featur
 #' @param timestampId Mandatory (uuid)
 #' @param featureId Mandatory (uuid)
 #' @param token Optional (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.series.info <- function(pathId, timestampId, featureId, token = NULL)
 {
@@ -73,7 +73,7 @@ path.vector.timestamp.feature.series.info <- function(pathId, timestampId, featu
 #' @param featureId Mandatory (uuid)
 #' @param seriesData Mandatory (data.frame)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.series.add <- function(pathId, timestampId, featureId, seriesData, token, showProgress = TRUE)
 {
@@ -154,7 +154,7 @@ path.vector.timestamp.feature.series.add <- function(pathId, timestampId, featur
 #' @param featureId Mandatory (uuid)
 #' @param seriesIds Mandatory (array, list, or vector of uuids)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.series.trash <- function(pathId, timestampId, featureId, seriesIds, token, showProgress = TRUE)
 {
@@ -184,7 +184,7 @@ path.vector.timestamp.feature.series.trash <- function(pathId, timestampId, feat
 #' @param featureId Mandatory (uuid)
 #' @param seriesIds Mandatory (array, vector, or list of uuids)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.series.recover <- function(pathId, timestampId, featureId, seriesIds, token, showProgress = TRUE)
 {
@@ -217,7 +217,7 @@ path.vector.timestamp.feature.series.recover <- function(pathId, timestampId, fe
 #' @param userId Optional (uuid)
 #' @param pageStart Optional (uuid)
 #' @param token Optional (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.series.changelog <- function(pathId, timestampId, featureId, listAll = FALSE, actions = NULL, userId = NULL, pageStart = NULL, token = NULL)
 {

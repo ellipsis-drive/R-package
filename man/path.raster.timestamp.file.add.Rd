@@ -29,6 +29,9 @@ path.raster.timestamp.file.add(
 
 \item{noDataValue}{Optional (double)}
 }
+\value{
+...
+}
 \description{
 Upload a raster file
 }

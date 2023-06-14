@@ -9,6 +9,9 @@ path.vector.timestamp.order.get(token)
 \arguments{
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Retrieve information on all your vector downloads
 }

@@ -13,6 +13,9 @@ path.hashtag.add(pathId, hashtag, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Adds a hashtag to a map
 }

@@ -13,6 +13,9 @@ path.raster.timestamp.deactivate(pathId, timestampId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Deactivate a given timestamp
 }

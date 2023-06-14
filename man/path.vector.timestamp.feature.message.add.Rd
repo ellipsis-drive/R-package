@@ -26,6 +26,9 @@ path.vector.timestamp.feature.message.add(
 
 \item{image}{Optional (array, matrix)}
 }
+\value{
+...
+}
 \description{
 Add message to a feature
 }

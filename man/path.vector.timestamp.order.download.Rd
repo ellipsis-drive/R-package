@@ -13,6 +13,9 @@ path.vector.timestamp.order.download(orderId, filePath, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Download the ordered file
 }

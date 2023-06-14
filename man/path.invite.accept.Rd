@@ -13,6 +13,9 @@ path.invite.accept(pathId, inviteId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Accept an invite to a map or a folder
 }

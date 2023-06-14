@@ -103,7 +103,7 @@ path.vector.timestamp.feature.zipLevels <- function(levelOfDetail1, levelOfDetai
 #' @param levelOfDetail3 Optional (a list of sf geometries)
 #' @param levelOfDetail4 Optional (a list of sf geometries)
 #' @param levelOfDetail5 Optional (a list of sf geometries)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.add <- function(pathId, timestampId, features, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
 {
@@ -171,7 +171,7 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
 #' @param levelOfDetail3 Optional (a list of sf geometries)
 #' @param levelOfDetail4 Optional (a list of sf geometries)
 #' @param levelOfDetail5 Optional (a list of sf geometries)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.edit <- function(pathId, timestampId, featureIds, features = NULL, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
 {
@@ -220,7 +220,7 @@ path.vector.timestamp.feature.edit <- function(pathId, timestampId, featureIds, 
 #' @param timestampId Mandatory (uuid)
 #' @param featureIds Mandatory (vector, list or array of uuids)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.trash <- function(pathId, timestampId, featureIds, token, showProgress = TRUE)
 {
@@ -240,7 +240,7 @@ path.vector.timestamp.feature.trash <- function(pathId, timestampId, featureIds,
 #' @param timestampId Mandatory (uuid)
 #' @param featureIds Mandatory (vector, list, or array of uuids)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.recover <- function(pathId, timestampId, featureIds, token, showProgress = TRUE)
 {

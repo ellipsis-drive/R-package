@@ -15,6 +15,9 @@ path.raster.timestamp.file.recover(pathId, timestampId, fileId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Recover an uploaded raster file from trash
 }

@@ -5,7 +5,7 @@
 #' @param parameter Mandatory (object) see https://docs.ellipsis-drive.com/developers/api-v3/path-vector/styles/add-style on how to format the parameters
 #' @param token Mandatory (string)
 #' @param default Optional (logical) default TRUE
-#' @return
+#' @return ...
 #' @export
 path.vector.style.add <- function(pathId, name, method, parameters, token, default = TRUE)
 {
@@ -30,7 +30,7 @@ path.vector.style.add <- function(pathId, name, method, parameters, token, defau
 #' @param method Optional (string)
 #' @param parameters Optional (object)
 #' @param default Optional (logical) default TRUE
-#' @return
+#' @return ...
 #' @export
 path.vector.style.edit <- function(pathId, styleId, token, name = NULL, method = NULL, parameters = NULL, default = NULL)
 {
@@ -52,7 +52,7 @@ path.vector.style.edit <- function(pathId, styleId, token, name = NULL, method =
 #' @param pathId Mandatory (uuid)
 #' @param styleId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.style.delete <- function(pathId, styleId, token)
 {

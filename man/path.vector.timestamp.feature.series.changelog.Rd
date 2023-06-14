@@ -32,6 +32,9 @@ path.vector.timestamp.feature.series.changelog(
 
 \item{token}{Optional (string)}
 }
+\value{
+...
+}
 \description{
 Get changelog of series of a vector timestamp feature
 }

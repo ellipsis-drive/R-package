@@ -13,6 +13,9 @@ path.raster.timestamp.trash(pathId, timestampId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Move a given timestamp to the trash
 }

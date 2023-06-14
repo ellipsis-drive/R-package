@@ -23,6 +23,9 @@ path.raster.timestamp.file.get(
 
 \item{listAll}{Optional (logical) default TRUE}
 }
+\value{
+...
+}
 \description{
 Get all uploads for a given timestamp
 }

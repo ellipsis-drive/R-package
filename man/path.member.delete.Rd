@@ -13,6 +13,9 @@ path.member.delete(pathId, userId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Removes a member from a path
 }

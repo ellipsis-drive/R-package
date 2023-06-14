@@ -13,6 +13,9 @@ path.member.get(pathId, token = NULL, memberType = list("inherited", "direct"))
 
 \item{memberType}{Optional (array, vector, or list of strings) can contain "inherited" and "direct"}
 }
+\value{
+...
+}
 \description{
 Retrieves the users a path has been shared with
 }

@@ -9,6 +9,9 @@ path.raster.timestamp.order.get(token)
 \arguments{
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Retrieve information on all your raster downloads
 }

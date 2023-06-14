@@ -15,6 +15,9 @@ path.raster.timestamp.file.trash(pathId, timestampId, fileId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Move an uploaded raster file to the trash
 }

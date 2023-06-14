@@ -9,6 +9,9 @@ path.invite.getYourInvites(token)
 \arguments{
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Retrieve pending invites
 }

@@ -9,6 +9,9 @@ path.hashtag.search()
 \arguments{
 \item{hashtag}{Mandatory (string) the string to search for}
 }
+\value{
+...
+}
 \description{
 Retrieves all existing hashtags that contain the given string
 }

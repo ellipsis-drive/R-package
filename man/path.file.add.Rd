@@ -23,6 +23,9 @@ path.file.add(
 
 \item{metadata}{Optional (named list) named list describing metadata of the file}
 }
+\value{
+...
+}
 \description{
 Adds a file
 }

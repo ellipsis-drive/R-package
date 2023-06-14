@@ -15,6 +15,9 @@ account.accessToken.create(description, accessList, token, validFor = NULL)
 
 \item{list}{Mandatory (list, vector) a list of named lists. Each named list must contain the properties pathId and accessLevel}
 }
+\value{
+...
+}
 \description{
 Create an access token
 }

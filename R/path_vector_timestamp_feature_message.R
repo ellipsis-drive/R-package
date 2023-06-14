@@ -8,7 +8,7 @@
 #' @param pageStart Optional (uuid)
 #' @param listAll Optional (logical) default FALSE
 #' @param deleted Optional (logical) default FALSE
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.message.get <- function(pathId, timestampId, featureIds = NULL, userId = NULL, messageIds = NULL, listAll = TRUE, deleted = FALSE, extent = NULL, pageStart = NULL, token = NULL)
 {
@@ -93,7 +93,7 @@ path.vector.timestamp.feature.message.getImage <- function(pathId, timestampId, 
 #' @param token Mandatory (string)
 #' @param text Optional (string)
 #' @param image Optional (array, matrix)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.message.add <- function(pathId, timestampId, featureId, token, text = NULL, image = NULL)
 {
@@ -125,7 +125,7 @@ path.vector.timestamp.feature.message.add <- function(pathId, timestampId, featu
 #' @param timestampId Mandatory (uuid)
 #' @param messageId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.message.trash <- function(pathId, timestampId, messageId, token)
 {
@@ -143,7 +143,7 @@ path.vector.timestamp.feature.message.trash <- function(pathId, timestampId, mes
 #' @param timestampId Mandatory (uuid)
 #' @param messageId Mandatory (uuid)
 #' @param token Mandatory (string)
-#' @return
+#' @return ...
 #' @export
 path.vector.timestamp.feature.message.recover <- function(pathId, timestampId, messageId, token)
 {

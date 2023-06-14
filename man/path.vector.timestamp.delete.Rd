@@ -13,6 +13,9 @@ path.vector.timestamp.delete(pathId, timestampId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Delete a vector timestamp
 }

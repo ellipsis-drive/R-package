@@ -13,6 +13,9 @@ path.vector.featureProperty.trash(pathId, featurePropertyId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Move a feature property for a given vector to the trash
 }

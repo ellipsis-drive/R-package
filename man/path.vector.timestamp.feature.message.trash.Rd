@@ -20,6 +20,9 @@ path.vector.timestamp.feature.message.trash(
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Move message of a feature to the trash
 }

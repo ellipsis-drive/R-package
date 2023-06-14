@@ -13,6 +13,9 @@ path.vector.editFilter(pathId, propertyFilter, token)
 
 \item{token}{Mandatory (string) your token}
 }
+\value{
+...
+}
 \description{
 Adds indices to a vector so that you can filter on properties
 }

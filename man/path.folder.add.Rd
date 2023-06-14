@@ -23,6 +23,9 @@ path.folder.add(
 
 \item{metadata}{(named list) named list describing the metadata of the folder}
 }
+\value{
+...
+}
 \description{
 Adds a folder
 }

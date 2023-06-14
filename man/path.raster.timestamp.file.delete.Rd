@@ -15,6 +15,9 @@ path.raster.timestamp.file.delete(pathId, timestampId, fileId, token)
 
 \item{token}{Mandatory (string)}
 }
+\value{
+...
+}
 \description{
 Delete a given upload
 }
