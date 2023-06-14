@@ -1,20 +1,21 @@
 path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
 {
+  features_size <- dim(features)[[1]]
   levelOfDetail1 <- validGeoSeries("levelOfDetail1", levelOfDetail1, FALSE)
   levelOfDetail2 <- validGeoSeries("levelOfDetail2", levelOfDetail2, FALSE)
   levelOfDetail3 <- validGeoSeries("levelOfDetail3", levelOfDetail3, FALSE)
   levelOfDetail4 <- validGeoSeries("levelOfDetail4", levelOfDetail4, FALSE)
   levelOfDetail5 <- validGeoSeries("levelOfDetail5", levelOfDetail5, FALSE)
 
-  if (!is.null(levelOfDetail1) & length(levelOfDetail1) != length(features))
+  if (!is.null(levelOfDetail1) & length(levelOfDetail1) != features_size)
     stop(glue::glue("ValueError: levelOfDetail1 must have same length as number of rows in features"))
-  if (!is.null(levelOfDetail2) & length(levelOfDetail2) != length(features))
+  if (!is.null(levelOfDetail2) & length(levelOfDetail2) != features_size)
     stop(glue::glue("ValueError: levelOfDetail2 must have same length as number of rows in features"))
-  if (!is.null(levelOfDetail3) & length(levelOfDetail3) != length(features))
+  if (!is.null(levelOfDetail3) & length(levelOfDetail3) != features_size)
     stop(glue::glue("ValueError: levelOfDetail3 must have same length as number of rows in features"))
-  if (!is.null(levelOfDetail4) & length(levelOfDetail4) != length(features))
+  if (!is.null(levelOfDetail4) & length(levelOfDetail4) != features_size)
     stop(glue::glue("ValueError: levelOfDetail4 must have same length as number of rows in features"))
-  if (!is.null(levelOfDetail5) & length(levelOfDetail5) != length(features))
+  if (!is.null(levelOfDetail5) & length(levelOfDetail5) != features_size)
     stop(glue::glue("ValueError: levelOfDetail5 must have same length as number of rows in features"))
 
   if (!is.null(levelOfDetail2) & is.null(levelOfDetail1))
@@ -31,7 +32,7 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
     temp = list()
     for (x in levelOfDetail1[["features"]])
     {
-      temp = list.append(temp, st_geometry(x))
+      temp <- append(temp, st_geometry(x))
     }
     levelOfDetail1 <- array(unlist(temp))
   }
@@ -40,7 +41,7 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
     temp = list()
     for (x in levelOfDetail2[["features"]])
     {
-      temp = list.append(temp, st_geometry(x))
+      temp <- append(temp, st_geometry(x))
     }
     levelOfDetail2 <- array(unlist(temp))
   }
@@ -49,7 +50,7 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
     temp = list()
     for (x in levelOfDetail3[["features"]])
     {
-      temp = list.append(temp, st_geometry(x))
+      temp <- append(temp, st_geometry(x))
     }
     levelOfDetail3 <- array(unlist(temp))
   }
@@ -58,7 +59,7 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
     temp = list()
     for (x in levelOfDetail4[["features"]])
     {
-      temp = list.append(temp, st_geometry(x))
+      temp <- append(temp, st_geometry(x))
     }
     levelOfDetail4 <- array(unlist(temp))
   }
@@ -67,7 +68,7 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
     temp = list()
     for (x in levelOfDetail5[["features"]])
     {
-      temp = list.append(temp, st_geometry(x))
+      temp <- append(temp, sf::st_geometry(x))
     }
     levelOfDetail5 <- array(unlist(temp))
   }
@@ -150,7 +151,7 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
   levels <- path.vector.timestamp.feature.zipLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
   if (!is.null(levels))
   {
-    featuresBody <- list("feature" = feature, "levelsOfDetail" = levels)
+    featuresBody <- list("feature" = features, "levelsOfDetail" = levels)
     body <- list("feature" = featuresBody)
     r <- httr::content(apiManager_post(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature"), body, token))
 
@@ -171,7 +172,7 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
 #' @param levelOfDetail4 Optional (a list of sf geometries)
 #' @param levelOfDetail5 Optional (a list of sf geometries)
 #' @roxygen_header1
-path.vector.timestamp.feature.feature.edit <- function(pathId, timestampId, featureIds, features = NULL, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
+path.vector.timestamp.feature.edit <- function(pathId, timestampId, featureIds, features = NULL, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId < validUuid("timestampId", timestampId, TRUE)
@@ -181,7 +182,7 @@ path.vector.timestamp.feature.feature.edit <- function(pathId, timestampId, feat
   cores <- validInt("cores", cores, TRUE)
   featureIds <- validUuidArray("featureIds", featureIds, TRUE)
 
-  levels <- list[levelOfDetal1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5] <- path.vector.timestamp.feature.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
+  levels <- list[levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5] <- path.vector.timestamp.feature.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
   levelOfDetail1 <- levels[[1]]
   levelOfDetail2 <- levels[[2]]
   levelOfDetail3 <- levels[[3]]
@@ -195,16 +196,16 @@ path.vector.timestamp.feature.feature.edit <- function(pathId, timestampId, feat
   changes = list()
   if (is.null(levels))
   {
-    for (i in seq_along(featureIds, features))
+    for (x in mapply(featureIds, features))
     {
-      changes = append(changes, list("featureId" = featureIds[[i]], "newProperties" = features[[i]][["properties"]], "newGeometry" = st_geometry(features[[i]])))
+      changes <- append(changes, list("featureId" = x[[1]], "newProperties" = x[[2]][["properties"]], "newGeometry" = x[[2]][["geometry"]]))
     }
   }
   else
   {
-    for (i in seq_along(featureIds, features))
+    for (x in mapply(featureIds, features))
     {
-      changes = append(changes, list("featureId" = featureIds[[i]], "levelsOfDetail" = levels,"newProperties" = features[[i]][["properties"]], "newGeometry" = st_geometry(features[[i]])))
+      changes <- append(changes, list("featureId" = x[[1]], "levelsOfDetail" = levels, "newProperties" = x[[2]][["properties"]], "newGeometry" = x[[2]][["geometry"]]))
     }
   }
 
@@ -297,7 +298,7 @@ path.vector.timestamp.feature.versions <- function(pathId, timestampId, featureI
     userIds <- append(userIds, list(x[["user"]][["id"]]))
 
   # Hopefully this works (otherwise look at other instance of from features)
-  sh <- st_as_sf(features)
+  sh <- sf::st_as_sf(features)
   sh[["username"]] <- usernames
   sh[["userId"]] <- userIds
   sh[["dates"]] <- dates

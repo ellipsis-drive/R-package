@@ -78,7 +78,7 @@ getValuesAlongLine <- function(pathId, timestampId, line, token = NULL, epsg = 4
   line <- validSFGeometry("line", line, TRUE)
   asRaster <- validBool("asRaster", asRaster, TRUE)
 
-  if(!is(line, "LINESTRING"))
+  if(class(line)[[2]] != "LINESTRING")
     stop("ValueError: line must be a LINESTRING simple feature geometry")
 
   temp <- sf::st_sf(geometry = sf::st_sfc(line))
@@ -88,11 +88,11 @@ getValuesAlongLine <- function(pathId, timestampId, line, token = NULL, epsg = 4
   extent <- list("xMin" = sf::st_bbox(temp)[["xmin"]], "yMin" = sf::st_bbox(temp)[["ymin"]], "xMax" = sf::st_bbox(temp)[["xmax"]], "yMax" = sf::st_bbox(temp)[["ymax"]])
   size <- 1000
 
-  r <- getSampledRaster(pathId = pathId, timestampId = timestampId, extent = extent, width = size, height = size, epsg = 4326)
+  r <- path.raster.timestamp.getSampledRaster(pathId = pathId, timestampId = timestampId, extent = extent, width = size, height = size, epsg = 4326)
   raster <- r[["raster"]]
 
   # Maybe first store raster in memory???
-  values <- sampleRandom(raster, size = 1000, asRaster = asRaster)
+  values <- raster::sampleRandom(raster, size = 1000, asRaster = asRaster)
 
   return(values)
 }
@@ -256,7 +256,7 @@ path.raster.timestamp.getRaster <- function(pathId, timestampId, extent, style =
 #' @param token Optional (string)
 #' @param returnType Optional (string) either "all" or "statistics", default "all"
 #' @roxygen_header1
-path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, returnType = "all", approximate = TRUE, token = null, epsg = 4326)
+path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, returnType = "all", approximate = TRUE, token = NULL, epsg = 4326)
 {
   token <- validString("token", token, FALSE)
   pathId <- validUuid("pathId", pathId, TRUE)
@@ -265,14 +265,14 @@ path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, return
   geometry <- validSFGeometry("geometry", geometry, TRUE)
   returnType <- validString("returnType", returnType, TRUE)
 
-  temp <- sf::st_sf(geometry = sf::st_sfc(line))
+  temp <- sf::st_sf(geometry = sf::st_sfc(geometry))
   temp <- sf::st_set_crs(temp, glue::glue("EPSG:{epsg}"))
   temp <- sf::st_set_crs(temp, "EPSG:4326")
   geometry <- temp$geometry
 
   sh <- tryCatch(
     {
-      sh <- sf_geojson(temp)
+      sh <- geojsonsf::sf_geojson(temp)
       sh <- sh[[1]]
     }, error=function(cond)
     {
@@ -282,7 +282,7 @@ path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, return
 
   body <- list("timestampIds" = timestampIds, "geometry" = geometry, "approximate" = approximate, "returnType" = returnType)
   r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/analyse"), body, token)
-  r <- httr:content(r)
+  r <- httr::content(r)
   return(r)
 }
 

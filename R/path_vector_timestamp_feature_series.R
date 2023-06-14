@@ -17,7 +17,7 @@ path.vector.timestamp.feature.series.get <- function(pathId, timestampId, featur
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId <- validUuid("timestampId", timestampId, TRUE)
   featureId <- validUuid("featureId", featureId, TRUE)
-  pageStart <- valudUuid("pageStart", pageStart, FALSE)
+  pageStart <- validUuid("pageStart", pageStart, FALSE)
   dateTo <- validDate("dateTo", dateTo, FALSE)
   userId <- validUuid("userId", userId, FALSE)
   seriesProperty <- validString("seriesProperty", seriesProperty, FALSE)
@@ -85,7 +85,7 @@ path.vector.timestamp.feature.series.add <- function(pathId, timestampId, featur
   seriesData <- validDataframe("seriesData", seriesData, TRUE)
   showProgress <- validBool("showProgress", showProgress, TRUE)
 
-  if ("date" %in% colnames(d))
+  if ("date" %in% colnames(seriesData))
   {
     is.date <- function(x) inherits(x, "Date")
     checks <- sapply(as.Date(seriesData[["date"]]), is.date)
@@ -93,7 +93,7 @@ path.vector.timestamp.feature.series.add <- function(pathId, timestampId, featur
     {
       seriesData[["date"]] <- as.POSIXct(as.Date(seriesData[["date"]]), format = '%d%b%Y:%H:%M:%S')
       dates <- toString(seriesData[["date"]])
-      seriesData <- seriesDatas[ ,  !names(df) %in% c("date")]
+      seriesData <- seriesData[ ,  !names(seriesData) %in% c("date")]
     }
     else
     {

@@ -132,7 +132,7 @@ validBoundCrsCombination <- function(name, value, required)
     stop(glue::glue("ValueError: crs must be of type string"))
 
   target_tile <- sf::st_polygon(x = c(c(bounds[["xMin"]], bounds[["yMin"]]), c(bounds[["xMin"]], bounds[["yMax"]]), c(bounds[["xMax"]], bounds[["yMax"]]), c(bounds[["xMax"]], bounds[["yMin"]])))
-  sh <- sf::st_sf(geometry = target_file)
+  sh <- sf::st_sf(geometry = target_tile)
 
   d <- tryCatch(
     {
@@ -176,6 +176,16 @@ validDataframe <- function(name, value, required)
   return(value)
 }
 
+validList <- function(name, value, required)
+{
+  if (!required & is.null(value))
+    return(NULL)
+  if (!is.list(value) || !is.vector(value))
+    stop(glue::glue("ValueError: {name} must be a vector or a list"))
+
+  return(value)
+}
+
 validGeoSeries <- function(name, value, required)
 {
   if (!required & is.null(value))
@@ -183,7 +193,7 @@ validGeoSeries <- function(name, value, required)
 
   value <- tryCatch(
     {
-      value <- sf::st_sf(st_sfc(value))
+      value <- sf::st_sf(sf::st_sfc(value))
     },
     error = function(cond)
     {
@@ -202,18 +212,18 @@ validSimplefeature <- function(name, value, required, custom = FALSE, cores = 1)
   if (!custom & class(value)[[2]] != "data.frame")
     stop(glue::glue("Value error: {name} must be a simple features dataframe"))
 
-  if (is.na(st_crs(value)) & min(st_bbox(value)["xmin"]) > -180 & max(st_bbox(value)[["xmax"]] < 180 & min(st_bbox(value)[["ymin"]]) > -90 & max(st_bbox(value)[["ymax"]])))
+  if (is.na(sf::st_crs(value)) & min(sf::st_bbox(value)["xmin"]) > -180 & max(sf::st_bbox(value)[["xmax"]] < 180 & min(sf::st_bbox(value)[["ymin"]]) > -90 & max(sf::st_bbox(value)[["ymax"]])))
   {
     print(glue::glue("assuming WGS84 coordinates for {name}"))
-    value <- st_set_crs(value, "epsg:4326")
+    value <- sf::st_set_crs(value, "epsg:4326")
   }
-  else if (is.na(st_crs(value)))
+  else if (is.na(sf::st_crs(value)))
   {
     stop(glue::glue("Value error: Please provide crs for {name}"))
   }
   else
   {
-    value <- st_transform(value, 4326)
+    value <- sf::st_transform(value, 4326)
   }
   if ("id" %in% colnames(as.data.frame(value)))
     value[["id"]] <- NULL
@@ -223,8 +233,8 @@ validSimplefeature <- function(name, value, required, custom = FALSE, cores = 1)
     value[["atribution"]] <- NULL
   if (!is.null(value[["radius"]]))
     value[["radius"]] <- NULL
-  if (!is.null(value[[color]]))
-    value[[color]] <- NULL
+  if (!is.null(value[["color"]]))
+    value[["color"]] <- NULL
 
   return(value)
 

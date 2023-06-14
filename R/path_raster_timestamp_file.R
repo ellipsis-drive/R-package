@@ -45,7 +45,7 @@ path.raster.timestamp.file.get <- function(pathId, timestampId, token, pageStart
     for (i in seq(lengths(r[["result"]])))
     {
       if (!is.null(r[["result"]][[i]][["info"]] & !is.null(r[["result"]][[i]][["info"]][["bounds"]])))
-          r[["result"]][[i]][["info"]][["bounds"]] <- st_combine(st_sf(id = 0, properties = list(), geometry = r[["result"]][[i]][["info"]][["bounds"]]))
+          r[["result"]][[i]][["info"]][["bounds"]] <- sf::st_combine(sf::st_sf(id = 0, properties = list(), geometry = r[["result"]][[i]][["info"]][["bounds"]]))
     }
     return(r)
   }

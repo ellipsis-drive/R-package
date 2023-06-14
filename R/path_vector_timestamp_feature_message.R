@@ -62,7 +62,7 @@ path.vector.timestamp.feature.message.getImage <- function(pathId, timestampId, 
 
   r <- apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature/message/{messageId}/image"), NULL, token, FALSE)
   img_type <- httr::http_type(r)
-  image_data <- httr::content(r)
+  img_data <- httr::content(r)
 
   if (httr::status_code(r) != 200)
   {

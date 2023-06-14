@@ -196,14 +196,14 @@ path.delete <- function(pathId, token, recursive = FALSE)
   if (recursive)
   {
     info <- path.get(pathId, token)
-    if (info[["type"]] == folder)
+    if (info[["type"]] == "folder")
     {
       folders <- path.folder.listFolder(pathId = pathId, includeTrashed=True, pathTypes=list("folder"), token=token)[['result']]
       for (f in folders)
       {
         path.delete(f[["id"]], token, TRUE)
       }
-      maps <- path.folder.listFolder(pathId=pathId, pathTypes=list('raster','vector','file'), includeTrashed=True, token=token)[['result']]
+      maps <- path.folder.listFolder(pathId=pathId, pathTypes=list('raster','vector','file'), includeTrashed=TRUE, token=token)[['result']]
       for (m in maps)
       {
         path.delete(m[["id"]], token, TRUE)
