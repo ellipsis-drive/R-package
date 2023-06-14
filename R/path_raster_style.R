@@ -1,4 +1,11 @@
 #' @export
+#' Adds a raster style
+#' @param pathId Mandatory (uuid)
+#' @param method Mandatory (string)
+#' @param parameters Mandatory (object) See https://docs.ellipsis-drive.com/developers/api-v3/path-raster/styles/add-style for how to format the paramters
+#' @param token Mandatory (string)
+#' @param default Optional (logical) default TRUE
+#' @roxygen_header1
 path.raster.style.add <- function(pathId, name, method, parameters, token, default = TRUE)
 {
   token <- validString("token", token, TRUE)
@@ -13,6 +20,11 @@ path.raster.style.add <- function(pathId, name, method, parameters, token, defau
 }
 
 #' @export
+#' Delete a raster style
+#' @param pathId Mandatory (uuid)
+#' @param styleId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @roxygen_header1
 path.raster.style.delete <- function(pathId, styleId, token)
 {
   token <- validString("token", token, TRUE)
@@ -23,7 +35,15 @@ path.raster.style.delete <- function(pathId, styleId, token)
 }
 
 #' @export
-path.raster.style.edit <- function(pathId, styleId, method, parameters)
+#' Edit a raster style
+#' @param pathId Mandatory (uuid)
+#' @param styleId Mandatory (uuid)
+#' @param token Mandatory (string)
+#' @param method Optional (string)
+#' @param parameters Optional (object)
+#' @param default Optional (logical) default = TRUE
+#' @roxygen_header1
+path.raster.style.edit <- function(pathId, styleId, method, parameters, default = TRUE)
 {
   token <- validString("token", token, TRUE)
   pathId <- validUuid("pathId", pathId, TRUE)
