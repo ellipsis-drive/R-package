@@ -11,7 +11,9 @@ jsonDumps <- function(value)
 }
 
 isSingleString <- function(input) {
-  is.character(input) & length(input) == 1
+  if (is.character(input) & length(input) == 1)
+    return(TRUE)
+  return(FALSE)
 }
 
 recurse <- function(f, body, listAll, extraKey = NULL)
@@ -30,7 +32,7 @@ recurse <- function(f, body, listAll, extraKey = NULL)
       if (is.null(extraKey))
         r[["result"]] <- uPaste(r[["result"]], r_new[["result"]])
       else
-        r[["result"]][[extraKey]] = uPaste(r[["result"]][[extraKey]], r_new[["result"]][[extraKey]])
+        r[["result"]][[extraKey]] <- uPaste(r[["result"]][[extraKey]], r_new[["result"]][[extraKey]])
     }
     r[["nextPageStart"]] <- NULL
   }
@@ -146,4 +148,50 @@ affineFromBounds <- function(west, south, east, north, width, height)
   affine_T <- matrix(c(1, 0, west, 0, 1, north, 0, 0, 1), nrow = 3, ncol = 3, byrow = TRUE)
   affine_S <- matrix(c((east - west) / width, 0, 0, 0, (south - north) / height, 0, 0, 0, 1), nrow = 3, ncol = 3, byrow = TRUE)
   return(affine_T %*% affine_S)
+}
+
+#' @export
+util.plotRaster <- function(raster)
+{
+  print(raster)
+  plot(raster)
+}
+
+reprojectRaster <- function(r, sourceExtent, targetExtent, targetWidth, targetHeight, sourceEpsg, targetEpsg, interpolation = "nearest") {
+
+  targetExtent <- raster::extent(targetExtent[["xMin"]], targetExtent[["xMax"]], targetExtent[["yMin"]], targetExtent[["yMax"]])
+  targetCrs <- sp::CRS(paste0("+init=epsg:", targetEpsg))
+  sourceExtent <- raster::extent(sourceExtent[["xMin"]], sourceExtent[["xMax"]], sourceExtent[["yMin"]], sourceExtent[["yMax"]])
+  sourceCrs <- sp::CRS(paste0("+init=epsg:", sourceEpsg))
+
+  if (!interpolation %in% c("nearest", "bilinear")) {
+    stop("interpolation must be one of nearest or bilinear")
+  }
+
+  if (length(dim(r)) != 3) {
+    stop("r must be 3 dimensional")
+  }
+
+  if (interpolation != "nearest" && interpolation != "linear") {
+    stop("interpolation must be either nearest or linear")
+  }
+
+  src_transform <- sourceExtent
+  dst_transform <- targetExtent
+  destination <- array(0, dim = c(dim(r)[[3]], targetHeight, targetWidth))
+
+  if (interpolation == "nearest") {
+    resampling <- "ngb"
+  } else {
+    resampling <- "bilinear"
+  }
+  print(r)
+  for (i in 1:dim(r)[[3]]) {
+    print(targetExtent)
+    destination[,,i] <- raster::projectRaster(r[[i]], crs = as.character(targetCrs), method = resampling,
+                                      res = c(targetWidth, targetHeight), ext = targetExtent)$data
+  }
+
+  result <- list(raster = destination, transform = dst_transform, extent = targetExtent, epsg = targetEpsg)
+  return(result)
 }

@@ -4,23 +4,16 @@
 \alias{path.editPublicAccess}
 \title{Update the public access of a path}
 \usage{
-path.editPublicAccess(
-  pathId,
-  token,
-  accessLevel = NULL,
-  hidden = NULL,
-  processingUnits = NULL,
-  geoFence = NULL
-)
+path.editPublicAccess(pathId, token, access = NULL, hidden = NULL)
 }
 \arguments{
 \item{pathId}{Mandatory (uuid)}
 
 \item{token}{Mandatory (string)}
 
-\item{hidden}{Optional (logical)}
-
 \item{access}{Optional (named list)}
+
+\item{hidden}{Optional (logical)}
 }
 \value{
 ...

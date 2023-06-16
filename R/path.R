@@ -142,6 +142,7 @@ path.move <- function(pathIds, parentId, token)
 {
   token <- validString("token", token, FALSE)
   pathIds <- validUuidArray("pathIds", pathIds, TRUE)
+  print(pathIds)
   parentId <- validUuid("parentId", parentId, FALSE)
 
   return(httr::content(apiManager_put("/path/parentId", list(
@@ -221,16 +222,14 @@ path.delete <- function(pathId, token, recursive = FALSE)
 #' @param hidden Optional (logical)
 #' @return ...
 #' @export
-path.editPublicAccess <- function(pathId, token, accessLevel = NULL, hidden = NULL, processingUnits = NULL, geoFence = NULL)
+path.editPublicAccess <- function(pathId, token, access = NULL, hidden = NULL)
 {
   pathId <- validUuid('pathId', pathId, TRUE)
   token <- validString('token', token, FALSE)
-  geoFence <- validObject('geoFence', geoFence, FALSE)
-  accessLevel <- validInt('accessLevel', accessLevel, FALSE)
-  processingUnits <- validInt('processingUnits', processingUnits, FALSE)
+  access <- validObject('access', access, FALSE)
   hidden <- validBool('hidden', hidden, FALSE)
-  body = list('accessLevel' = accessLevel, 'processingUnits' = processingUnits, 'geoFence' = geoFence, 'hidden'= hidden)
-
+  body <- access
+  body[["hidden"]] <- hidden
   return(apiManager_patch(glue::glue("/path/{pathId}/publicAccess"), body, token))
 }
 

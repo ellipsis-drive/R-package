@@ -139,6 +139,7 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
   return(res)
 }
 
+
 apiManager_upload <- function(url, filePath, body, token, key = "data")
 {
   body <- filterNULL(body)
@@ -149,12 +150,11 @@ apiManager_upload <- function(url, filePath, body, token, key = "data")
   {
     body[[k]] <- toString(body[[k]])
   }
-  body[["filedata"]] <- httr::upload_file(filePath)
-  print(body[["filedata"]])
+  body[["data"]] <- httr::upload_file(filePath)
 
   token <- paste("bearer", token)
 
-  res <- httr::POST(uPaste(baseUrl, url), body = body, httr::add_headers("Content-Type" = "multipart/form-data", Authorization = token))
+  res <- httr::POST(uPaste(baseUrl, url), body = body, httr::add_headers("Content-Type" = "multipart/form-data", Authorization = token), encode = "multipart")
   errorMessage <- httr::content(res, as="text")
   if (httr::status_code(res) != 200)
     stop(glue::glue("ValueError: {errorMessage}"))

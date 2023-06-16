@@ -72,14 +72,8 @@ validUuidArray <- function(name, value, required)
   if (!required & is.null(value))
     return(NULL)
 
-  value <- tryCatch(
-    {
-      value <- list(value)
-    },
-    error=function(cond)
-    {
-      stop(glue::glue("Value error: {name} must be an iterable"))
-    })
+  if (!is.list(value) || !is.vector(value))
+    stop("ValueError: {name} must be an iterable of uuids")
 
   for (Uuid in value)
   {
@@ -345,12 +339,8 @@ validStringArray <- function(name, value, required)
     })
 
 
-  for (x in value)
-  {
-    if (!isSingleString(x))
-      stop(glue::glue("Value error: {name} must be of type string"))
-  }
-
+  if (any(!sapply(value, is.character)) == FALSE)
+    stop(glue::glue("ValueError: {name} must be an iterable of strings"))
   return(value)
 }
 

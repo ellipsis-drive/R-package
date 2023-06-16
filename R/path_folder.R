@@ -14,7 +14,6 @@ path.folder.listFolder <- function(pathId, pathTypes = NULL, pageStart = NULL, l
   listAll <- validBool("listAll", listAll, FALSE)
   includeTrashed <- validBool("includeTrashed", includeTrashed, TRUE)
   pathTypes <- validObject("pathTypes", pathTypes, FALSE)
-
   if (is.null(pathTypes))
     pathTypes = list("folder", "raster", "vector", "file")
 

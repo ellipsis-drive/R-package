@@ -42,10 +42,16 @@ path.raster.timestamp.file.get <- function(pathId, timestampId, token, pageStart
   f <- function(body)
   {
     r <- httr::content(apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/file"), NULL, token))
-    for (i in seq(lengths(r[["result"]])))
+    for (i in seq(length(r[["result"]])))
     {
-      if (!is.null(r[["result"]][[i]][["info"]] & !is.null(r[["result"]][[i]][["info"]][["bounds"]])))
-          r[["result"]][[i]][["info"]][["bounds"]] <- sf::st_combine(sf::st_sf(id = 0, properties = list(), geometry = r[["result"]][[i]][["info"]][["bounds"]]))
+      if (!is.null(r[["result"]][[i]][["info"]]) & "bounds" %in% names(r[["result"]][[i]][["info"]]) & class(r[["result"]][[i]][["info"]][["bounds"]]) != "NULL")
+      {
+        coordinates <- unlist(r[["result"]][[i]][["info"]][["bounds"]][["coordinates"]][[1]], recursive = FALSE)
+        matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+        geometry <- sf::st_polygon(list(matrix_coordinates))
+        sf_object <- sf::st_sf(id = 0, geometry = sf::st_sfc(geometry))
+        r$result[[i]]$info$bounds <- sf_object
+      }
     }
     return(r)
   }

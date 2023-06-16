@@ -22,7 +22,8 @@ Import:
   jsonlite,
   recolorize,
   geojsonsf,
-  purrr
+  purrr,
+  rgeos
 RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)

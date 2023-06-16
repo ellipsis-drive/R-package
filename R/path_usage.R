@@ -6,7 +6,7 @@
 #' @param listAll Optional (logical) default TRUE
 #' @return ...
 #' @export
-path.usage.getActiveUsers <- function(pathId, token, listAl = TRUE, pageStart = NULL)
+path.usage.getActiveUsers <- function(pathId, token, listAll = TRUE, pageStart = NULL)
 {
   pageStart <- validUuid("pageStart", pageStart, FALSE)
   token <- validString("token", token, TRUE)
