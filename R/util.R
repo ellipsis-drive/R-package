@@ -151,10 +151,25 @@ affineFromBounds <- function(west, south, east, north, width, height)
 }
 
 #' @export
-util.plotRaster <- function(raster)
+util.plotRaster <- function(stack_obj)
 {
-  print(raster)
-  plot(raster)
+  # Assuming you have a raster stack object named 'stack_obj' with values between 0 and 1
+
+  # Get the number of layers in the raster stack
+  num_layers <- raster::nlayers(stack_obj)
+
+  # Initialize an empty raster stack to store the normalized values
+  normalized_stack <- raster::stack()
+
+  # Loop through each layer of the raster stack
+  for (i in 1:num_layers) {
+    layer <- stack_obj[[i]]  # Get the current layer
+    normalized_layer <- layer * 255  # Scale the values to the range of 0 to 255
+    normalized_stack <- raster::addLayer(normalized_stack, normalized_layer)  # Add the normalized layer to the stack
+  }
+
+  # Plot the normalized raster stack using plotRGB()
+  raster::plotRGB(normalized_stack)
 }
 
 reprojectRaster <- function(r, sourceExtent, targetExtent, targetWidth, targetHeight, sourceEpsg, targetEpsg, interpolation = "nearest") {

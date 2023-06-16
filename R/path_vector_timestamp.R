@@ -30,9 +30,9 @@ path.vector.timestamp.edit <- function(pathId, timestampId, token, description =
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   token <- validString("token", token, TRUE)
-  properties <- validObject("properties", properties, FALSE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
   description <- validString("description", description, FALSE)
-  date <- validDateRange("date", date, TRUE)
+  date <- validDateRange("date", date, FALSE)
 
   body <- list("date" = date, "description" = description)
   r <- httr::content(apiManager_patch(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}"), body, token))

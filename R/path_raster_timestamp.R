@@ -37,10 +37,8 @@ path.raster.timestamp.getSampledRaster <- function(pathId, timestampId, extent, 
   bounds <- validBounds("bounds", bounds, TRUE)
   style <- validObject("style", style, FALSE)
   epsg <- validInt("epsg", epsg, TRUE)
-
-  body <- list("pathId" = pathId, "timestampId" = timestampId, "extent" = bounds, "width" = width, "height" = height, "style" = style, "epsg" = epsg)
-
-  r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/rasterByExtent"), body, token, crash = FALSE)
+  body <- list('pathId'=pathId, 'timestampId'=timestampId, 'extent'=list("xMin" = bounds[["xMin"]], "xMax" = bounds[["xMax"]], "yMin" = bounds[["yMin"]], "yMax" = bounds[["yMax"]]), 'width'=width, 'height'=height, 'style'=style, 'epsg'=epsg)
+  r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/rasterByExtent"), body, token, crash = TRUE)
   if (httr::status_code(r) != 200)
   {
     message <- httr::http_status(r)[["message"]]
@@ -257,15 +255,14 @@ path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, return
   token <- validString("token", token, FALSE)
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampIds <- validUuidArray("timestampIds", timestampIds, TRUE)
+
   approximate <- validBool("approximate", approximate, TRUE)
   geometry <- validSFGeometry("geometry", geometry, TRUE)
   returnType <- validString("returnType", returnType, TRUE)
-
-  temp <- sf::st_sf(geometry = sf::st_sfc(geometry))
-  temp <- sf::st_set_crs(temp, glue::glue("EPSG:{epsg}"))
-  temp <- sf::st_set_crs(temp, "EPSG:4326")
-  geometry <- temp$geometry
-
+  temp <- geometry
+  geometry <- sf::st_set_crs(geometry, glue::glue("EPSG:{epsg}"))
+  geometry <- sf::st_set_crs(geometry, "EPSG:4326")
+  geometry <- geometry$geometry
   sh <- tryCatch(
     {
       sh <- geojsonsf::sf_geojson(temp)
@@ -335,8 +332,11 @@ path.raster.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
 
   r <- apiManager_get(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/bounds"), NULL, token)
   r <- httr::content(r)
-  r <- sf::st_sf(id = 0, properties = list(), geometry = r)
-  return(r)
+  coordinates <- unlist(r[["coordinates"]][[1]], recursive = FALSE)
+  matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+  geometry <- sf::st_polygon(list(matrix_coordinates))
+  sf_object <- sf::st_sf(id = 0, geometry = sf::st_sfc(geometry))
+  return(sf_object)
 }
 
 #' Activate a timestamp

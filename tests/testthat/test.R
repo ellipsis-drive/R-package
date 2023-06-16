@@ -10,276 +10,275 @@ folderId = '34fe8f32-d5f1-4442-92a5-eb7afcfdf767'
 
 
 
-##account
-demo_token = EDPackage::account.logIn("demo_user", "demo_user")
-
-EDPackage::account.listRoot('myDrive', pathTypes = list('raster'), token = demo_token)
-
-EDPackage::account.listRoot('sharedWithMe',pathTypes = list('folder'), token = demo_token)
-
-r_raster = EDPackage::path.search(pathTypes = list('raster'), token=token);
-
-r_vector = EDPackage::path.search(pathTypes = list('vector'), token=token);
-
-
-
-###files
-filePath = 'C:/Users/ROCVA/Downloads/0.tif'
-# pathId = EDPackage::path.file.add(filePath, demo_token)[['id']]
+# ##account
+# demo_token = EDPackage::account.logIn("demo_user", "demo_user")
+#
+# EDPackage::account.listRoot('myDrive', pathTypes = list('raster'), token = demo_token)
+#
+# EDPackage::account.listRoot('sharedWithMe',pathTypes = list('folder'), token = demo_token)
+#
+# r_raster = EDPackage::path.search(pathTypes = list('raster'), token=token);
+#
+# r_vector = EDPackage::path.search(pathTypes = list('vector'), token=token);
+#
+#
+#
+# ###files
+# filePath = 'C:/Users/spamb/Downloads/0.tif'
+# # pathId = EDPackage::path.file.add(filePath, demo_token)[['id']]
+# # Sys.sleep(10)
+# # EDPackage::path.file.download(pathId = pathId, filePath =  'C:/Users/spamb/Downloads/out.tif')
+# # EDPackage::path.trash(pathId, demo_token)
+# # EDPackage::path.delete(pathId, demo_token)
+#
+#
+# ##user
+#
+# result = EDPackage::user.search('bstarkenburg')
+# daanId <- list()
+# for (x in result)
+# {
+#   if (x[["username"]] == "bstarkenburg")
+#     daanId <- append(daanId, x)
+# }
+#
+# daanId = daanId[[1]]
+# EDPackage::user.get(daanId)
+#
+# result = EDPackage::user.search('demo_user')
+# demoId <- list()
+# for (x in result)
+# {
+#   if (x[["username"]] == "demo_user")
+#     demoId <- append(daanId, x)
+# }
+#
+# demoId = demoId[[1]]
+#
+# ##path
+# rasterInfo = EDPackage::path.get('34fe8f32-d5f1-4442-92a5-eb7afcfdf767', token)
+#
+# info = EDPackage::path.get(folderId, token)
+#
+# folderId = info[['id']]
+# maps = EDPackage::path.folder.listFolder(folderId, pathTypes=list('raster', 'vector'), token = token, listAll = TRUE)
+# folders = EDPackage::path.folder.listFolder(folderId, pathTypes=list('folder'), token = token, listAll = TRUE)
+#
+# # mapId = list()
+# # for (m in maps[["result"]])
+# # {
+# #   if (!m[["trashed"]][[1]][["id"]])
+# #     mapId <- append(mapId, m)
+# # }
+# # print(mapId)
+# #mapId <- mapId[[1]]
+#
+# #crash
+#
+#
+# #EDPackage::path.editMetadata(pathId = mapId, token = token, description = 'test')
+#
+# addedFolderId = EDPackage::path.folder.add(  'test', token = token, parentId = folderId)[['id']]
+#
+# EDPackage::path.trash(addedFolderId, token)
+# EDPackage::path.recover(addedFolderId, token)
+#
+# addedRasterId = EDPackage::path.raster.add(  'test2', token = token, parentId = folderId)[['id']]
+#
+# # Daan case
+# #EDPackage::path.move(list(addedRasterId), addedFolderId, token)
+#
+#
+# EDPackage::path.trash(addedFolderId, token)
+# # Daan case 2, apimanager zegt dat includeTrashed false is terwijl true
+# #EDPackage::path.delete(pathId = addedFolderId, token = token, recursive = TRUE)
+#
+#
+# #EDPackage::path.editPublicAccess(pathId = folderId, token = token, access=list('accessLevel'=0), hidden = FALSE)
+# #EDPackage::path.editPublicAccess(pathId = folderId, token = token, access= list('accessLevel'=100), hidden = TRUE)
+#
+# EDPackage::path.favorite(folderId, token=token)
+# EDPackage::path.unfavorite(folderId, token=token)
+#
+# ###invites
+# # inviteId =  EDPackage::path.invite.send(pathId = folderId, token=token, userId = demoId, access = list('accessLevel'= 200, 'processingUnits'=10000))[['id']]
+# #
+# # EDPackage::path.invite.getPathInvites(folderId, demo_token)
+# #
+# #
+# # EDPackage::path.invite.getYourInvites(demo_token)
+# #
+# # EDPackage::path.invite.revoke(pathId = folderId, inviteId = inviteId, token = token)
+# #
+# #
+# # inviteId =  EDPackage::path.invite.send(pathId = folderId, token=token, userId = demoId, access = list('accessLevel'= 200, 'processingUnits':10000))[['id']]
+# #
+# # EDPackage::path.invite.decline(folderId, inviteId, demo_token)
+# #
+# #
+# # inviteId =  EDPackage::path.invite.send(pathId = folderId, token=token, userId = demoId, access = list('accessLevel'= 200, 'processingUnits'=10000))[['id']]
+# # EDPackage::path.invite.accept(folderId, inviteId, demo_token)
+#
+# ##members
+# # members = EDPackage::path.member.get(folderId, token, memberType = list('direct'))
+# #
+# #
+# # daanMemberId = list()
+# #
+# # for (m in members)
+# # {
+# #   print(m)
+# #   if (m[["user"]][["username"]] == "bstarkenburg")
+# #     daanMemberId <- append(daanMemberId, m)
+# # }
+# # print(glue::glue("daanmemberId: {daanMemberId}"))
+# # daanMemberId <- daanMemberId[[1]]
+# #
+# # EDPackage::path.member.edit(pathId = folderId, userId = daanMemberId, access = list('accessLevel' = 200) ,token = token)
+# #
+# # EDPackage::path.member.delete(folderId, daanMemberId, token)
+#
+# ##usage
+# pathId = '8a11c27b-74c3-4570-bcd0-64829f7cd311'
+#
+# users = EDPackage::path.usage.getActiveUsers(pathId = pathId, token = token, listAll=FALSE)
+# EDPackage::path.usage.getUsage(pathId = pathId, userId = users[['result']][[1]][['user']][['id']], token =token)
+# #EDPackage::path.usage.getAggregatedUsage(pathId = pathId, loggedIn = FALSE, token = token)
+# ##raster and uploads
+# mapId = EDPackage::path.raster.add( 'test', token, parentId = folderId)[['id']]
+#
+# # Daan case 3
+# # Crash want geen banden
+# #EDPackage::path.raster.edit(mapId, token, interpolation = 'nearest')
+#
+# timestampId = EDPackage::path.raster.timestamp.add(mapId, token)[['id']]
+#
+#
+# dateFrom = Sys.time()
+# dateTo = Sys.time()
+# EDPackage::path.raster.timestamp.edit(mapId, timestampId, token, description = 'hoi', date=list('from'=dateFrom, 'to'=dateTo))
+#
+# uploadId = EDPackage::path.raster.timestamp.file.add(pathId = mapId, timestampId = timestampId, filePath = filePath, fileFormat = 'tif', token = token,noDataValue = -1)[['id']]
 # Sys.sleep(10)
-# EDPackage::path.file.download(pathId = pathId, filePath =  'C:/Users/ROCVA/Downloads/out.tif')
-# EDPackage::path.trash(pathId, demo_token)
-# EDPackage::path.delete(pathId, demo_token)
-
-
-##user
-
-result = EDPackage::user.search('bstarkenburg')
-daanId <- list()
-for (x in result)
-{
-  if (x[["username"]] == "bstarkenburg")
-    daanId <- append(daanId, x)
-}
-
-daanId = daanId[[1]]
-EDPackage::user.get(daanId)
-
-result = EDPackage::user.search('demo_user')
-demoId <- list()
-for (x in result)
-{
-  if (x[["username"]] == "demo_user")
-    demoId <- append(daanId, x)
-}
-
-demoId = demoId[[1]]
-
-##path
-rasterInfo = EDPackage::path.get('34fe8f32-d5f1-4442-92a5-eb7afcfdf767', token)
-
-info = EDPackage::path.get(folderId, token)
-
-folderId = info[['id']]
-maps = EDPackage::path.folder.listFolder(folderId, pathTypes=list('raster', 'vector'), token = token, listAll = TRUE)
-folders = EDPackage::path.folder.listFolder(folderId, pathTypes=list('folder'), token = token, listAll = TRUE)
-
-# mapId = list()
-# for (m in maps[["result"]])
-# {
-#   if (!m[["trashed"]][[1]][["id"]])
-#     mapId <- append(mapId, m)
-# }
-# print(mapId)
-#mapId <- mapId[[1]]
-
-#crash
-
-
-#EDPackage::path.editMetadata(pathId = mapId, token = token, description = 'test')
-
-addedFolderId = EDPackage::path.folder.add(  'test', token = token, parentId = folderId)[['id']]
-
-EDPackage::path.trash(addedFolderId, token)
-EDPackage::path.recover(addedFolderId, token)
-
-addedRasterId = EDPackage::path.raster.add(  'test2', token = token, parentId = folderId)[['id']]
-
-# Daan case
-#EDPackage::path.move(list(addedRasterId), addedFolderId, token)
-
-
-EDPackage::path.trash(addedFolderId, token)
-# Daan case 2, apimanager zegt dat includeTrashed false is terwijl true
-#EDPackage::path.delete(pathId = addedFolderId, token = token, recursive = TRUE)
-
-
-#EDPackage::path.editPublicAccess(pathId = folderId, token = token, access=list('accessLevel'=0), hidden = FALSE)
-#EDPackage::path.editPublicAccess(pathId = folderId, token = token, access= list('accessLevel'=100), hidden = TRUE)
-
-EDPackage::path.favorite(folderId, token=token)
-EDPackage::path.unfavorite(folderId, token=token)
-
-###invites
-# inviteId =  EDPackage::path.invite.send(pathId = folderId, token=token, userId = demoId, access = list('accessLevel'= 200, 'processingUnits'=10000))[['id']]
+# EDPackage::path.raster.timestamp.file.download(pathId = mapId, timestampId = timestampId, fileId = uploadId, filePath = 'C:/Users/spamb/Downloads/out.tif', token = token)
 #
-# EDPackage::path.invite.getPathInvites(folderId, demo_token)
+# EDPackage::path.raster.timestamp.file.trash(pathId = mapId, timestampId = timestampId, fileId= uploadId, token = token)
+# EDPackage::path.raster.timestamp.file.recover(pathId = mapId, timestampId = timestampId, fileId= uploadId, token = token)
+# EDPackage::path.raster.timestamp.file.trash(pathId = mapId, timestampId = timestampId, fileId= uploadId, token = token)
+# EDPackage::path.raster.timestamp.file.delete(mapId, timestampId, uploadId, token)
+# uploadId = EDPackage::path.raster.timestamp.file.add(pathId = mapId, timestampId = timestampId, filePath=filePath, fileFormat='tif', token = token)[['id']]
+#
+# uploads = EDPackage::path.raster.timestamp.file.get(mapId, timestampId, token)
 #
 #
-# EDPackage::path.invite.getYourInvites(demo_token)
+# EDPackage::path.raster.timestamp.activate(mapId, timestampId, token)
 #
-# EDPackage::path.invite.revoke(pathId = folderId, inviteId = inviteId, token = token)
+# while (EDPackage::path.get(mapId, token)[['raster']][['timestamps']][[1]][['status']] != 'active')
+#   Sys.sleep(2)
+# print("here1")
+# EDPackage::path.raster.timestamp.deactivate(mapId, timestampId, token)
+# while (EDPackage::path.get(mapId, token)[['raster']][['timestamps']][[1]][['status']] != 'passive')
+#   Sys.sleep(2)
+# EDPackage::path.raster.timestamp.activate(mapId, timestampId, token)
+# print("here2")
+# info = EDPackage::path.get(mapId, token)
+# timestamp = info[['raster']][['timestamps']][[1]]
+# print("here3")
+# while (EDPackage::path.get(mapId, token)[['raster']][['timestamps']][[1]][['status']] != 'active')
+#   Sys.sleep(1)
+# print("here4")
+# info = EDPackage::path.get(mapId, token)
+# timestamp = info[['raster']][['timestamps']][[1]]
 #
 #
-# inviteId =  EDPackage::path.invite.send(pathId = folderId, token=token, userId = demoId, access = list('accessLevel'= 200, 'processingUnits':10000))[['id']]
-#
-# EDPackage::path.invite.decline(folderId, inviteId, demo_token)
+# EDPackage::path.raster.editBand(mapId, 1, 'hoi', token)
 #
 #
-# inviteId =  EDPackage::path.invite.send(pathId = folderId, token=token, userId = demoId, access = list('accessLevel'= 200, 'processingUnits'=10000))[['id']]
-# EDPackage::path.invite.accept(folderId, inviteId, demo_token)
-
-##members
-# members = EDPackage::path.member.get(folderId, token, memberType = list('direct'))
+# EDPackage::path.raster.timestamp.trash(mapId, timestampId, token)
+# EDPackage::path.raster.timestamp.recover(mapId, timestampId, token)
+# EDPackage::path.raster.timestamp.trash(mapId, timestampId, token)
+# #EDPackage::path.raster.timestamp.delete(mapId, timestampId, token)
+#
+# EDPackage::path.trash(mapId, token)
+# EDPackage::path.recover(mapId, token)
+# EDPackage::path.trash(mapId, token)
+# EDPackage::path.delete(mapId, token)
+#
+# ##raster information retrieval
+# mapId = '59caf510-bab7-44a8-b5ea-c522cfde4ad7'
+# timestampId = 'f25e120e-ca8f-451f-a5f4-33791db0f2c5'
 #
 #
-# daanMemberId = list()
+# styleId = EDPackage::path.get(mapId, token)[['raster']][['styles']][[1]][['id']]
 #
-# for (m in members)
-# {
-#   print(m)
-#   if (m[["user"]][["username"]] == "bstarkenburg")
-#     daanMemberId <- append(daanMemberId, m)
-# }
-# print(glue::glue("daanmemberId: {daanMemberId}"))
-# daanMemberId <- daanMemberId[[1]]
+# xMin  = 5.60286
+# yMin=  52.3031
+# xMax  = 5.60315
+# yMax  = 52.30339
 #
-# EDPackage::path.member.edit(pathId = folderId, userId = daanMemberId, access = list('accessLevel' = 200) ,token = token)
+# extent = list('xMin'=xMin,'yMin'=yMin,'xMax'=xMax,'yMax'=yMax )
 #
-# EDPackage::path.member.delete(folderId, daanMemberId, token)
-
-##usage
-pathId = '8a11c27b-74c3-4570-bcd0-64829f7cd311'
-
-users = EDPackage::path.usage.getActiveUsers(pathId = pathId, token = token, listAll=FALSE)
-EDPackage::path.usage.getUsage(pathId = pathId, userId = users[['result']][[1]][['user']][['id']], token =token)
-#EDPackage::path.usage.getAggregatedUsage(pathId = pathId, loggedIn = FALSE, token = token)
-##raster and uploads
-mapId = EDPackage::path.raster.add( 'test', token, parentId = folderId)[['id']]
-
-# Daan case 3
-# Crash want geen banden
-#EDPackage::path.raster.edit(mapId, token, interpolation = 'nearest')
-
-timestampId = EDPackage::path.raster.timestamp.add(mapId, token)[['id']]
-
-
-dateFrom = Sys.time()
-dateTo = Sys.time()
-EDPackage::path.raster.timestamp.edit(mapId, timestampId, token, description = 'hoi', date=list('from'=dateFrom, 'to'=dateTo))
-
-uploadId = EDPackage::path.raster.timestamp.file.add(pathId = mapId, timestampId = timestampId, filePath = filePath, fileFormat = 'tif', token = token,noDataValue = -1)[['id']]
-Sys.sleep(10)
-EDPackage::path.raster.timestamp.file.download(pathId = mapId, timestampId = timestampId, fileId = uploadId, filePath = 'C:/Users/ROCVA/Downloads/out.tif', token = token)
-
-EDPackage::path.raster.timestamp.file.trash(pathId = mapId, timestampId = timestampId, fileId= uploadId, token = token)
-EDPackage::path.raster.timestamp.file.recover(pathId = mapId, timestampId = timestampId, fileId= uploadId, token = token)
-EDPackage::path.raster.timestamp.file.trash(pathId = mapId, timestampId = timestampId, fileId= uploadId, token = token)
-EDPackage::path.raster.timestamp.file.delete(mapId, timestampId, uploadId, token)
-uploadId = EDPackage::path.raster.timestamp.file.add(pathId = mapId, timestampId = timestampId, filePath=filePath, fileFormat='tif', token = token)[['id']]
-
-uploads = EDPackage::path.raster.timestamp.file.get(mapId, timestampId, token)
-
-
-EDPackage::path.raster.timestamp.activate(mapId, timestampId, token)
-
-while (EDPackage::path.get(mapId, token)[['raster']][['timestamps']][[1]][['status']] != 'active')
-  Sys.sleep(2)
-print("here1")
-EDPackage::path.raster.timestamp.deactivate(mapId, timestampId, token)
-while (EDPackage::path.get(mapId, token)[['raster']][['timestamps']][[1]][['status']] != 'passive')
-  Sys.sleep(2)
-EDPackage::path.raster.timestamp.activate(mapId, timestampId, token)
-print("here2")
-info = EDPackage::path.get(mapId, token)
-timestamp = info[['raster']][['timestamps']][[1]]
-print("here3")
-while (EDPackage::path.get(mapId, token)[['raster']][['timestamps']][[1]][['status']] != 'active')
-  Sys.sleep(1)
-print("here4")
-info = EDPackage::path.get(mapId, token)
-timestamp = info[['raster']][['timestamps']][[1]]
-
-
-EDPackage::path.raster.editBand(mapId, 1, 'hoi', token)
-
-
-EDPackage::path.raster.timestamp.trash(mapId, timestampId, token)
-EDPackage::path.raster.timestamp.recover(mapId, timestampId, token)
-EDPackage::path.raster.timestamp.trash(mapId, timestampId, token)
-#EDPackage::path.raster.timestamp.delete(mapId, timestampId, token)
-
-EDPackage::path.trash(mapId, token)
-EDPackage::path.recover(mapId, token)
-EDPackage::path.trash(mapId, token)
-EDPackage::path.delete(mapId, token)
-
-##raster information retrieval
-mapId = '59caf510-bab7-44a8-b5ea-c522cfde4ad7'
-timestampId = 'f25e120e-ca8f-451f-a5f4-33791db0f2c5'
-
-
-styleId = EDPackage::path.get(mapId, token)[['raster']][['styles']][[1]][['id']]
-
-xMin  = 5.60286
-yMin=  52.3031
-xMax  = 5.60315
-yMax  = 52.30339
-
-extent = list('xMin'=xMin,'yMin'=yMin,'xMax'=xMax,'yMax'=yMax )
-
-result = EDPackage::path.raster.timestamp.getRaster(pathId = mapId, timestampId = timestampId, style=styleId, extent = extent, token = token, epsg = 4326)
-
-raster = result[['raster']]
-
-print("works")
-EDPackage::util.plotRaster(raster)
-
-r = EDPackage::path.raster.timestamp.getSampledRaster(pathId = mapId, timestampId=timestampId, style=styleId, extent = extent, width = 1024, height = 1024, epsg=4326, token = token)
-raster = r['raster']
-EDPackage::util.plotRaster(raster)
-
-
-bounds = EDPackage::path.raster.timestamp.getBounds(mapId, timestampId, token)
-
-data = EDPackage::path.raster.timestamp.analyse(mapId, list(timestampId), bounds, token=token, epsg = 4326)
+# result = EDPackage::path.raster.timestamp.getRaster(pathId = mapId, timestampId = timestampId, style=styleId, extent = extent, token = token, epsg = 4326)
+#
+# raster = result[['raster']]
+#
+# print("works")
+# EDPackage::util.plotRaster(raster)
+#
+# # Daan case 4 (extent not loaded)
+# #r = EDPackage::path.raster.timestamp.getSampledRaster(pathId = mapId, timestampId=timestampId, style=styleId, extent = extent, width = 1024, height = 1024, epsg=4326, token = token)
+# #raster = r[['raster']]
+# #EDPackage::util.plotRaster(raster)
+#
+#
+# bounds = EDPackage::path.raster.timestamp.getBounds(mapId, timestampId, token)
+#
+# data = EDPackage::path.raster.timestamp.analyse(mapId, list(timestampId), bounds, token=token, epsg = 4326)
 
 ###raster downloads
-mapId = '1eea3d2f-27b3-4874-b716-87852c3407c1'
-timestampId = "ba5b418a-a39e-4d84-9411-e23c096085a3"
-uploads = EDPackage::path.raster.timestamp.file.get(mapId, timestampId, token)
-uploadId = uploads[['result']][[1]][['id']]
-
-file_out = 'C:/Users/ROCVA/Downloads/out.tif'
-Sys.sleep(10)
-EDPackage::path.raster.timestamp.file.download(pathId = mapId, timestampId = timestampId, token = token, fileId = uploadId, filePath = file_out)
-os.remove(file_out)
-
-
-##from here
-pendinDownloads = EDPackage::path.raster.timestamp.order.get(token)
+# mapId = '1eea3d2f-27b3-4874-b716-87852c3407c1'
+# timestampId = "ba5b418a-a39e-4d84-9411-e23c096085a3"
+# uploads = EDPackage::path.raster.timestamp.file.get(mapId, timestampId, token)
+# uploadId = uploads[['result']][[1]][['id']]
+#
+# file_out = 'C:/Users/spamb/Downloads/out.tif'
+# Sys.sleep(10)
+# EDPackage::path.raster.timestamp.file.download(pathId = mapId, timestampId = timestampId, token = token, fileId = uploadId, filePath = file_out)
+#
+# ##from here
+# pendinDownloads = EDPackage::path.raster.timestamp.order.get(token)
 
 
 ####raster styling
-parameters = list("angle"=45,"bandNumber"=1,"alpha"=1)
-method = "hillShade"
-layerId = EDPackage::path.raster.style.add(mapId, 'hoi', method, parameters, token,  default = TRUE)[['id']]
-
-EDPackage::path.raster.style.edit(mapId, layerId, method= method, parameters = parameters,token = token, default = FALSE)
-EDPackage::path.raster.style.delete(mapId, layerId, token)
+# parameters = list("angle"=45,"bandNumber"=1,"alpha"=1)
+# method = "hillShade"
+# layerId = EDPackage::path.raster.style.add(mapId, 'hoi2', method, parameters, token,  default = TRUE)[['id']]
+#
+# EDPackage::path.raster.style.edit(mapId, layerId, method= method, token=token, parameters = parameters, default = FALSE)
+# EDPackage::path.raster.style.delete(mapId, layerId, token)
 
 
 
 ###vector layers
-mapId = EDPackage::path.vector.add( 'test3', token)[['id']]
-
-
-layerId = EDPackage::path.vector.timestamp.add(mapId,  token = token)[['id']]
-
-EDPackage::path.vector.timestamp.edit(mapId, layerId, token, description = 'adsfd')
-
-EDPackage::path.vector.timestamp.trash(mapId, layerId, token)
-EDPackage::path.vector.timestamp.recover(mapId, layerId, token)
-EDPackage::path.vector.timestamp.trash(mapId, layerId, token)
-EDPackage::path.vector.timestamp.delete(mapId, layerId, token)
-layerId = EDPackage::path.vector.timestamp.add(mapId, description = 'test', token = token)[['id']]
+# mapId = EDPackage::path.vector.add( 'test5', token)[['id']]
+#
+#
+# layerId = EDPackage::path.vector.timestamp.add(mapId,  token = token)[['id']]
+#
+# EDPackage::path.vector.timestamp.edit(mapId, layerId, token, description = 'adsfd')
+#
+# EDPackage::path.vector.timestamp.trash(mapId, layerId, token)
+# EDPackage::path.vector.timestamp.recover(mapId, layerId, token)
+# EDPackage::path.vector.timestamp.trash(mapId, layerId, token)
+# EDPackage::path.vector.timestamp.delete(mapId, layerId, token)
+# layerId = EDPackage::path.vector.timestamp.add(mapId, description = 'test', token = token)[['id']]
 
 
 ###vector uploads
-filePath = 'C:/Users/ROCVA/Downloads/test.zip'
+filePath = 'C:/Users/spamb/Downloads/test.zip'
 uploadId = EDPackage::path.vector.timestamp.file.add(pathId = mapId, timestampId = layerId, filePath = filePath, token = token, fileFormat = 'zip')[['id']]
 Sys.sleep(10)
-file_out = 'C:/Users/ROCVA/Downloads/out.zip'
+file_out = 'C:/Users/spamb/Downloads/out.zip'
 EDPackage::path.vector.timestamp.file.download(pathId = mapId, timestampId = layerId, fileId = uploadId, filePath = file_out, token = token)
 os.remove(file_out)
 
@@ -417,7 +416,7 @@ date = Sys.time()
 #   Sys.sleep(1)
 # order = EDPackage::path.vector.timestamp.order.get(token)[[1]]
 #
-# file_out = 'C:/Users/ROCVA/Downloads/out.zip'
+# file_out = 'C:/Users/spamb/Downloads/out.zip'
 # EDPackage::path.vector.timestamp.order.download(orderId, file_out, token)
 # EDPackage::path.trash(mapId, token)
 # EDPackage::path.delete(mapId, token)

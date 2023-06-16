@@ -23,7 +23,8 @@ Import:
   recolorize,
   geojsonsf,
   purrr,
-  rgeos
+  rgeos,
+  urltools
 RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)
