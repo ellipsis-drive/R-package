@@ -4,18 +4,18 @@
 \alias{path.usage.getActiveUsers}
 \title{Get users that used the given path}
 \usage{
-path.usage.getActiveUsers(pathId, token, listAl = TRUE, pageStart = NULL)
+path.usage.getActiveUsers(pathId, token, listAll = TRUE, pageStart = NULL)
 }
 \arguments{
 \item{pathId}{Mandatory (uuid)}
 
 \item{token}{Mandatory (string)}
 
+\item{listAll}{Optional (logical) default TRUE}
+
 \item{pageStart}{Optional (uuid)}
 
 \item{hashtag}{Mandatory (string), the hashtag to add}
-
-\item{listAll}{Optional (logical) default TRUE}
 }
 \value{
 ...

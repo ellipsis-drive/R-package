@@ -2,7 +2,7 @@
 path.vector.timestamp.file.add <- function(pathId, timestampId, filePath, token, fileFormat, epsg = NULL, dateColumns = NULL, datePatterns = NULL, method = "simplify", fastUpload = TRUE)
 {
   token <- validString('token', token, TRUE)
-  pathId <- validUuid("pathId", pathId, TURE)
+  pathId <- validUuid("pathId", pathId, TRUE)
   timestampId <- validUuid("timestampId", timestampId, TRUE)
   filePath <- validString("filePath", filePath, TRUE)
   epsg <- validInt("epsg", epsg, FALSE)
@@ -22,7 +22,8 @@ path.vector.timestamp.file.add <- function(pathId, timestampId, filePath, token,
 
   body <- list("name" = fileName, "epsg" = epsg, "format" = fileFormat, "dateColumns" = dateColumns, "datePatterns" = datePatterns, "fastUpload" = fastUpload)
   r <- apiManager_upload(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/file"), filePath, body, token)
-  return(httr::content(r))
+  print(r)
+  return(r)
 }
 
 #' @export
@@ -37,7 +38,7 @@ path.vector.timestamp.file.get <- function(pathId, timestampId, token, pageStart
   body <- list("pageStart" = pageStart)
   f <- function(body)
   {
-    r <- apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}"), body, token)
+    r <- httr::content(apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/upload"), body, token))
 
     for (i in seq(length(r[["result"]])))
     {

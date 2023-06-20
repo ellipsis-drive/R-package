@@ -24,7 +24,8 @@ Import:
   geojsonsf,
   purrr,
   rgeos,
-  urltools
+  urltools,
+  reticulate
 RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)

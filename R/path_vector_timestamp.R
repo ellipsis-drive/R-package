@@ -127,8 +127,11 @@ path.vector.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
   token <- validString("token", token, FALSE)
 
   r <- httr::content(apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/bounds"), NULL, token))
-  r <- sf::st_combine(sf::st_sf(id = 0, properties = list(), geometry = r))
-  return(r)
+  coordinates <- unlist(r[["coordinates"]][[1]], recursive = FALSE)
+  matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+  geometry <- sf::st_polygon(list(matrix_coordinates))
+  sf_object <- sf::st_sf(id = 0, geometry = sf::st_sfc(geometry))
+  return(sf_object)
 }
 
 #' Get the changelog of a vector timestamp
@@ -140,7 +143,7 @@ path.vector.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
 #' @param pageStart optional (object)
 #' @return ...
 #' @export
-path.vector.timestamp.getChanges <- function(pathId, timestampId, token = NULL, pageStart = NULL, listAll = FALSE)
+path.vector.timestamp.getChanges <- function(pathId, timestampId, token = NULL, pageStart = NULL, listAll = FALSE, actions = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId <- validUuid("timestampId", timestampId, TRUE)
@@ -152,10 +155,13 @@ path.vector.timestamp.getChanges <- function(pathId, timestampId, token = NULL, 
   f <- function(body)
   {
     r <- apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/changelog"), body, token)
-    return(httr::content(r))
+    r <- httr::content(r, as = "parsed")
+
+    return(r)
   }
 
-  r <- recurse(f, listAll, body)
+  r <- recurse(f, body, listAll)
+
   temp_list = list()
 
   for (x in r[["result"]])
@@ -175,7 +181,7 @@ path.vector.timestamp.getChanges <- function(pathId, timestampId, token = NULL, 
 #' @param token Mandatory (string)
 #' @return a simple features 'sf' object containing the features as a geometry
 #' @export
-path.vector.timestamp.getFeaturesByIds <- function(pathId, timestampId, featureIds, token = NULL, showProgress = NULL)
+path.vector.timestamp.getFeaturesByIds <- function(pathId, timestampId, featureIds, token = NULL, showProgress = FALSE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId <- validUuid("timestampId", timestampId, TRUE)
@@ -183,10 +189,43 @@ path.vector.timestamp.getFeaturesByIds <- function(pathId, timestampId, featureI
   featureIds <- validUuidArray("featureIds", featureIds, TRUE)
   showProgress <- validBool("showProgress", showProgress, TRUE)
 
-  body <- list("geometryIds" = featureIds)
-  r <- apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/featureByIds"), body, token)
-  r <- httr::content(r)
-  sh <- sf::st_as_sf(r[["result"]])
+  id_chunks = chunks(featureIds, 10)
+  r <- list("size" = 0, "result" = list(), "nextPageStart" = NULL)
+
+  pandas <- reticulate::import("pandas")
+  for (ids in id_chunks)
+  {
+    body <- list("geometryIds" = ids)
+    r_new <- apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/featuresByIds"), body, token)
+    r_new <- httr::content(r_new)
+    r[["result"]] <- append(r[["result"]], r_new[["result"]][["features"]])
+    r[["size"]] <- r[["size"]] + r_new[["size"]]
+  }
+
+  feature <- r[["result"]][[1]]
+  coordinates <- unlist(feature[["geometry"]][["coordinates"]], recursive = FALSE)
+  matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+  geometry <- sf::st_polygon(list(matrix_coordinates))
+  feature$properties$geometry <- NULL
+  sh <- sf::st_sf(id = 0, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+  count <- 0
+  for (feature in r[["result"]])
+  {
+    if (count == 0)
+    {
+      count <- count +1
+      next
+    }
+    coordinates <- unlist(feature[["geometry"]][["coordinates"]], recursive = FALSE)
+    matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+    matrix_coordinates <- rbind(matrix_coordinates, matrix_coordinates[1,])
+    geometry <- sf::st_polygon(list(matrix_coordinates))
+    sf_object <- sf::st_sf(id = count, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+    sh <- rbind(sh, sf_object)
+    count <- count + 1
+  }
+  r[["result"]] <- sh
+
   return(r)
 }
 
@@ -200,7 +239,7 @@ path.vector.timestamp.getFeaturesByIds <- function(pathId, timestampId, featureI
 #' @param listAll Optional (logical) whether to list all results (default TRUE)
 #' @return a simple features 'sf' object containing the features as a geometry
 #' @export
-path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, extent, propertyFilter = NULL, token = NULL, listAll = TRUE, epsg = 4326, cordinateBuffer = NULL)
+path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, extent, propertyFilter = NULL, token = NULL, listAll = TRUE, pageStart = NULL, epsg = 4326, coordinateBuffer = NULL)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
   timestampId <- validUuid("timestampId", timestampId, TRUE)
@@ -215,9 +254,9 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
   {
     info <- path.get(pathId, token)
     ts <- list()
-    for (x in info[["vector"]][["timestamp"]])
+    for (x in info[["vector"]][["timestamps"]])
     {
-      if (x[["id"]] == "timestampId")
+      if (x[["id"]] == timestampId)
       {
         ts <- append(ts, list(x))
       }
@@ -228,9 +267,16 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
     zoom <- t[["zoom"]]
     coordinateBuffer <- .5*360/ 2 ** zoom
   }
-
-  p <- sf::st_polygon(list(extent[["xMin"]], extent[["xMax"]], extent[["yMin"]], extent[["yMax"]]))
-  p <- sf::st_sf(p)
+  minx <- extent[["xMin"]]
+  maxx <- extent[["xMax"]]
+  miny <- extent[["yMin"]]
+  maxy <- extent[["yMax"]]
+  p <- sf::st_polygon(list(rbind(c(extent$xMin, extent$yMin),
+                                 c(extent$xMin, extent$yMax),
+                                 c(extent$xMax, extent$yMin),
+                                 c(extent$xMax, extent$yMax),
+                                 c(extent$xMin, extent$yMin))))
+  p <- sf::st_sf(sf::st_sfc(p))
 
   res <- getActualExtent(extent[["xMin"]], extent[["xMax"]], extent[["yMin"]], extent[["yMax"]], glue::glue("EPSG:{epsg}"))
   if (res[["status"]] == 400)
@@ -242,10 +288,11 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
   extent[["xMax"]] <- max(180, extent[["xMax"]] + coordinateBuffer)
   extent[["yMin"]] <- min(-85, extent[["yMin"]] - coordinateBuffer)
   extent[["yMax"]] <- max(85, extent[["yMax"]] + coordinateBuffer)
-
+  print(extent)
   p <- tryCatch(
     {
-      p <- sf::st_set_crs(p, epsg)
+      sf::st_crs(p) <- 4326
+      p <- sf::st_transform(p, 4326)
     },
     error = function(cond)
     {
@@ -254,19 +301,46 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
   )
 
   extent <- sf::st_bbox(p)
-  extent <- list("xMin" = extent[["xmin"]], "xMax" = extent[["xmax"]], "yMin" = extent[["ymin"]], "yMax" = extent[["ymax"]])
+  extent = list("xMin" = extent[[1]], "xMax" = extent[[3]], "yMin" = extent[[2]], "yMax" = extent[[4]])
 
   body <- list("pageStart" = pageStart, "propertyFilter" = propertyFilter, "extent" = extent)
   f <- function(body)
   {
-    return(httr::content(apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/featuresByExtent"), body, token)))
+    r <- apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/featuresByExtent"), body, token)
+    r <- httr::content(r, as= "parsed")
+    return(r)
   }
 
-  r <- recurse(f, listAll, "features")
+  r <- recurse(f, body, listAll, extraKey = "features")
+  if (length(r[["result"]][["features"]]) < 1)
+    return(NULL)
 
-  sh <- sf::st_as_sf(r[["result"]][["features"]])
+  feature <- r[["result"]][["features"]][[1]]
+  coordinates <- unlist(feature[["geometry"]][["coordinates"]], recursive = FALSE)
+  matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+  geometry <- sf::st_polygon(list(matrix_coordinates))
+  feature$properties$geometry <- NULL
+  sh <- sf::st_sf(id = 0, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+  count <- 0
+  for (feature in r[["result"]][["features"]])
+  {
+    if (count == 0)
+    {
+      count <- count +1
+      next
+    }
+    coordinates <- unlist(feature[["geometry"]][["coordinates"]], recursive = FALSE)
+    matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+    matrix_coordinates <- rbind(matrix_coordinates, matrix_coordinates[1,])
+    geometry <- sf::st_polygon(list(matrix_coordinates))
+    sf_object <- sf::st_sf(id = count, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+    sh <- rbind(sh, sf_object)
+    count <- count + 1
+  }
+  sh <- sf::st_set_crs(sh, 4326)
 
-  if (dim(sh[[1]]) == 0)
+
+  if (dim(sh)[[1]] == 0)
   {
     r[["result"]] <- sh
     return(r)
@@ -275,7 +349,7 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
   bounds <- sf::st_bbox(sh)
   px <- (bounds[["xmin"]] + bounds[["xmax"]]) / 2
   py <- (bounds[["ymin"]] + bounds[["ymax"]]) / 2
-  sh <- sh[sf::st_within(sh, sf::st_as_sfc(sf::st_bbox(c(extent['xMin'], extent['yMin'], extent['xMax'], extent['yMax']))))]
+  # sh <- sh[sf::st_within(sh, sf::st_as_sfc(sf::st_bbox(c(extent['xMin'], extent['yMin'], extent['xMax'], extent['yMax']))))]
   sh <- sf::st_set_crs(sh, epsg)
   r[["result"]] <- sh
   return(r)
@@ -285,7 +359,7 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
 #' @param pathId Mandatory (uuid)
 #' @param timestampId Mandatory (uuid)
 #' @param token Optional (string)
-#' @return a simple features 'sf' object containing the features as a geometry
+#' @return a simple features 'sf' object containing the features and the geometry. Append "properties." ("properties.id" for the featureId for instance) to the requested property
 #' @export
 path.vector.timestamp.listFeatures <- function(pathId, timestampId, token = NULL, listAll = TRUE, pageStart = NULL)
 {
@@ -303,8 +377,28 @@ path.vector.timestamp.listFeatures <- function(pathId, timestampId, token = NULL
   }
 
   r <- recurse(f, body, listAll, "features")
-
-  sh <- sf::st_as_sf(r[["result"]][["features"]])
+  feature <- r[["result"]][["features"]][[1]]
+  coordinates <- unlist(feature[["geometry"]][["coordinates"]], recursive = FALSE)
+  matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+  geometry <- sf::st_polygon(list(matrix_coordinates))
+  feature$properties$geometry <- NULL
+  sh <- sf::st_sf(id = 0, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+  count <- 0
+  for (feature in r[["result"]][["features"]])
+  {
+    if (count == 0)
+    {
+      count <- count +1
+      next
+    }
+    coordinates <- unlist(feature[["geometry"]][["coordinates"]], recursive = FALSE)
+    matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+    matrix_coordinates <- rbind(matrix_coordinates, matrix_coordinates[1,])
+    geometry <- sf::st_polygon(list(matrix_coordinates))
+    sf_object <- sf::st_sf(id = count, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+    sh <- rbind(sh, sf_object)
+    count <- count + 1
+  }
   sh <- sf::st_set_crs(sh, 4326)
   r[["result"]] <- sh
   return(r)

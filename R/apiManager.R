@@ -6,7 +6,6 @@ all_names <- function(list) {
   return(length(list) == sum(names(list) != "", na.rm=TRUE))
 }
 
-
 filterNULL <- function(body)
 {
   if (is.null(body))
@@ -47,29 +46,41 @@ apiManager_delete <- function(url, body, token = NULL)
 
 apiManager_get <- function(url, body = NULL, token = NULL, crash = TRUE)
 {
-  if (is.null(body))
-    body <- list("token" = token)
-  else
-    body[["token"]] <- token
+  if (is.null(body)) {
+    body <- list(token = token)
+  } else {
+    body$token <- token
+  }
+
   body <- filterNULL(body)
-  for (key in names(body))
-  {
-    if (!isSingleString(body[[key]]))
-    {
-      body[[key]] <- jsonDumps(body[[key]])
+
+  for (k in names(body)) {
+    if (!is.character(body[[k]])) {
+      body[[k]] <- jsonlite::toJSON(body[[k]], auto_unbox = TRUE)
+        # if (!isNamedList(body[[k]]))
+        #   body[[k]] <- jsonlite::toJSON(unlist(body[[k]]))
+        # else
+        # {
+        #   body[[k]] <- jsonlite::toJSON(body[[k]])
+        #   # Some json hacks
+        #   # Parse the JSON object
+        #   parsed_object <- jsonlite::fromJSON(body[[k]])
+        #
+        #   # Convert the parsed object to a new JSON object with values as single elements
+        #   converted_object <- lapply(parsed_object, function(x) x[[1]])
+        #
+        #   # Convert the converted object back to JSON
+        #   body[[k]] <- jsonlite::toJSON(converted_object)
+        #   print(body[[k]])
+        # }
     }
   }
-  body_string <- ""
-  # There is no good way to encode urls like urllib.parse.urlencode in R
-  for (key in names(body))
-  {
-    val <- body[[key]]
-    body_string <- uPaste(body_string, glue::glue("{key}={val}&"))
-  }
-  # Remove dangling '&'
-  body_string <- substring(body_string, 1, nchar(body_string)-1)
-  url <- uPaste(uPaste(url, '?'), body_string)
+  urllib <- reticulate::import("urllib.parse")
+  query_dict <- reticulate::dict(body)
+  encoded_query <- urllib$urlencode(query_dict)
+  url <- paste0(url, "?", encoded_query)
   r <- apiManager_call(method = httr::GET, url = url, body = NULL, token = token, crash = crash)
+
   return(r)
 }
 

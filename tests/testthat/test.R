@@ -1,9 +1,9 @@
 token = EDPackage::account.logIn(username = 'BStarkenburg', password='Xpj3YhajXuE3yJw')
-print("works")
-##access token
-EDPackage::account.accessToken.create(description = 'hoi', accessList = list(list('pathId'= '46e1e919-8b73-42a3-a575-25c6d45fd93b' , 'access'=list('accessLevel'=100))), token = token)
-tokenId = EDPackage::account.accessToken.get(token, listAll = TRUE)[['result']][[1]][['id']]
-EDPackage::account.accessToken.revoke(accessTokenId = tokenId, token = token)
+# print("works")
+# ##access token
+# EDPackage::account.accessToken.create(description = 'hoi', accessList = list(list('pathId'= '46e1e919-8b73-42a3-a575-25c6d45fd93b' , 'access'=list('accessLevel'=100))), token = token)
+# tokenId = EDPackage::account.accessToken.get(token, listAll = TRUE)[['result']][[1]][['id']]
+# EDPackage::account.accessToken.revoke(accessTokenId = tokenId, token = token)
 
 folderId = '34fe8f32-d5f1-4442-92a5-eb7afcfdf767'
 
@@ -260,7 +260,7 @@ folderId = '34fe8f32-d5f1-4442-92a5-eb7afcfdf767'
 
 
 ###vector layers
-# mapId = EDPackage::path.vector.add( 'test5', token)[['id']]
+# mapId = EDPackage::path.vector.add( 'test', token)[['id']]
 #
 #
 # layerId = EDPackage::path.vector.timestamp.add(mapId,  token = token)[['id']]
@@ -272,66 +272,71 @@ folderId = '34fe8f32-d5f1-4442-92a5-eb7afcfdf767'
 # EDPackage::path.vector.timestamp.trash(mapId, layerId, token)
 # EDPackage::path.vector.timestamp.delete(mapId, layerId, token)
 # layerId = EDPackage::path.vector.timestamp.add(mapId, description = 'test', token = token)[['id']]
-
-
-###vector uploads
-filePath = 'C:/Users/spamb/Downloads/test.zip'
-uploadId = EDPackage::path.vector.timestamp.file.add(pathId = mapId, timestampId = layerId, filePath = filePath, token = token, fileFormat = 'zip')[['id']]
-Sys.sleep(10)
-file_out = 'C:/Users/spamb/Downloads/out.zip'
-EDPackage::path.vector.timestamp.file.download(pathId = mapId, timestampId = layerId, fileId = uploadId, filePath = file_out, token = token)
-os.remove(file_out)
-
-upload = EDPackage::path.vector.timestamp.file.get(pathId = mapId,  timestampId = layerId, token = token)[['result']][[1]]
-while (upload[['status']] != 'completed')
-{
-  Sys.sleep(1)
-  upload = EDPackage::path.vector.timestamp.file.get(pathId = mapId,  timestampId = layerId, token = token)[['result']][[1]]
-}
-print("here5")
-upload = EDPackage::path.vector.timestamp.file.get(pathId = mapId,  timestampId = layerId, token = token)[['result']][[1]]
-
-
-#layer methods
+#
+#
+# ###vector uploads
+# filePath = 'C:/Users/spamb/Downloads/test.zip'
+# uploadId = EDPackage::path.vector.timestamp.file.add(pathId = mapId, timestampId = layerId, filePath = filePath, token = token, fileFormat = 'zip')[['id']]
+# Sys.sleep(10)
+# file_out = 'C:/Users/spamb/Downloads/out.zip'
+# EDPackage::path.vector.timestamp.file.download(pathId = mapId, timestampId = layerId, fileId = uploadId, filePath = file_out, token = token)
+#
+# upload = EDPackage::path.vector.timestamp.file.get(pathId = mapId,  timestampId = layerId, token = token)[['result']][[1]]
+# while (upload[['status']] != 'completed')
+# {
+#   Sys.sleep(1)
+#   upload = EDPackage::path.vector.timestamp.file.get(pathId = mapId,  timestampId = layerId, token = token)[['result']][[1]]
+# }
+# print("here5")
+# upload = EDPackage::path.vector.timestamp.file.get(pathId = mapId,  timestampId = layerId, token = token)[['result']][[1]]
+#
+#
+# #layer methods
+mapId <- "131a6c66-283b-47db-b624-434b0b53713f"
+layerId <- "0bdda146-b875-4e76-856d-ba0e243afc00"
 bounds = EDPackage::path.vector.timestamp.getBounds(mapId, layerId, token)
 
-xMin = bounds.bounds[[1]]
-yMin = bounds.bounds[[2]]
-xMax = bounds.bounds[[3]]
-yMax = bounds.bounds[[4]]
+xMin = sf::st_bbox(bounds)[[1]]
+yMin = sf::st_bbox(bounds)[[2]]
+xMax = sf::st_bbox(bounds)[[3]]
+yMax = sf::st_bbox(bounds)[[4]]
+
 
 bounds = list('xMin'=xMin, 'xMax'=xMax, 'yMin'=yMin, 'yMax'=yMax)
-sh = EDPackage::path.vector.timestamp.getFeaturesByExtent(pathId = mapId, timestampId = layerId, extent =  bounds, token = token, listAll = FALSE, epsg = 4326)
-sh = EDPackage::path.vector.timestamp.getFeaturesByExtent(pathId = mapId, timestampId = layerId, extent =  bounds, token = token, listAll = FALSE, pageStart = sh[['nextPageStart']], epsg = 4326)
 
-plot(sh[['result']])
-Sys.sleep(30)
-sh = EDPackage::path.vector.timestamp.listFeatures(mapId, layerId, token)
+# sh = EDPackage::path.vector.timestamp.getFeaturesByExtent(pathId = mapId, timestampId = layerId, extent =  bounds, token = token, listAll = TRUE, epsg = 4326)
+# sh = EDPackage::path.vector.timestamp.getFeaturesByExtent(pathId = mapId, timestampId = layerId, extent =  bounds, token = token, listAll = FALSE, pageStart = sh[['nextPageStart']], epsg = 4326)
+#
+# print(sh)
+# Sys.sleep(30)
+sh = EDPackage::path.vector.timestamp.listFeatures(mapId, layerId, token, listAll = FALSE)
+#
+# featureIds = sh[['result']][['properties.id']]
 
-featureIds = sh[['result']][['id']]
-
-r =  EDPackage::path.vector.timestamp.getFeaturesByIds(mapId, layerId, featureIds, token)
+#r =  EDPackage::path.vector.timestamp.getFeaturesByIds(mapId, layerId, featureIds, token)
 
 
 r = EDPackage::path.vector.timestamp.getChanges(mapId, layerId, token, listAll = TRUE)
 
-EDPackage::path.vector.editFilter(mapId, list(list('property':'gml_id')), token)
+EDPackage::path.vector.editFilter(mapId, list(list('property'='gml_id')), token)
 
-r = EDPackage::path.get(mapId, token)
-blocked = r[['vector']][['timestamps']][[1]][['availability']][['blocked']]
-while (blocked)
-{
-  Sys.sleep(1)
-  blocked = r[['vector']][['timestamps']][[1]][['availability']][['blocked']]
-}
+# r = EDPackage::path.get(mapId, token)
+# blocked = r[['vector']][['timestamps']][[1]][['availability']][['blocked']]
+# while (blocked)
+# {
+#   Sys.sleep(1)
+#   blocked = r[['vector']][['timestamps']][[1]][['availability']][['blocked']]
+# }
 print("here6")
 r = EDPackage::path.get(mapId, token)
 blocked = r[['vector']][['timestamps']][[1]][['availability']][['blocked']]
 
 
 ###feature module
-features = sh[['result']][[1:2]]
-featureIds = features[['id']]
+
+features = sh[['result']][1:2]
+print(features)
+featureIds = features[['properties.id']]
 
 EDPackage::path.vector.timestamp.feature.add(mapId, layerId, features, token, cores = 10)
 

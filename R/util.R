@@ -19,6 +19,7 @@ isSingleString <- function(input) {
 recurse <- function(f, body, listAll, extraKey = NULL)
 {
   r <- f(body)
+
   if (listAll == TRUE)
   {
     nextPageStart <- r[["nextPageStart"]]
@@ -30,9 +31,9 @@ recurse <- function(f, body, listAll, extraKey = NULL)
       if (!is.null(r[["size"]]))
         r[["size"]] <- uPaste(r[["size"]], r_new[["size"]])
       if (is.null(extraKey))
-        r[["result"]] <- uPaste(r[["result"]], r_new[["result"]])
+        r[["result"]] <- append(r[["result"]], r_new[["result"]])
       else
-        r[["result"]][[extraKey]] <- uPaste(r[["result"]][[extraKey]], r_new[["result"]][[extraKey]])
+        r[["result"]][[extraKey]] <- append(r[["result"]][[extraKey]], r_new[["result"]][[extraKey]])
     }
     r[["nextPageStart"]] <- NULL
   }
@@ -210,3 +211,19 @@ reprojectRaster <- function(r, sourceExtent, targetExtent, targetWidth, targetHe
   result <- list(raster = destination, transform = dst_transform, extent = targetExtent, epsg = targetEpsg)
   return(result)
 }
+
+chunks <- function(l, n = 3000) {
+  l <- validList("l", l, TRUE)
+  n <- validInt("n", n, TRUE)
+  result <- list()
+  for (i in seq(1, length(l), n)) {
+    result <- append(result, list(l[i:min(i + n - 1, length(l))]))
+  }
+  return(result)
+}
+
+isUUID <- function(var) {
+  pattern <- "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+  return(grepl(pattern, var, ignore.case = TRUE))
+}
+

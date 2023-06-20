@@ -4,7 +4,14 @@
 \alias{path.raster.style.edit}
 \title{Edit a raster style}
 \usage{
-path.raster.style.edit(pathId, styleId, method, parameters, default = TRUE)
+path.raster.style.edit(
+  pathId,
+  styleId,
+  method,
+  parameters,
+  token,
+  default = TRUE
+)
 }
 \arguments{
 \item{pathId}{Mandatory (uuid)}
@@ -15,9 +22,9 @@ path.raster.style.edit(pathId, styleId, method, parameters, default = TRUE)
 
 \item{parameters}{Optional (object)}
 
-\item{default}{Optional (logical) default = TRUE}
-
 \item{token}{Mandatory (string)}
+
+\item{default}{Optional (logical) default = TRUE}
 }
 \value{
 ...

@@ -108,13 +108,13 @@ path.vector.timestamp.feature.zipLevels <- function(levelOfDetail1, levelOfDetai
 path.vector.timestamp.feature.add <- function(pathId, timestampId, features, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
-  timestampId < validUuid("timestampId", timestampId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
   token <- validString("token", token, TRUE)
   features <- validSimplefeature("features", features, TRUE)
   showProgress <- validBool("showProgress", showProgress, TRUE)
   cores <- validInt("cores", cores, TRUE)
 
-  levels <- list[levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5] <- path.vector.timestamp.feature.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
+  levels <- path.vector.timestamp.feature.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
   levelOfDetail1 <- levels[[1]]
   levelOfDetail2 <- levels[[2]]
   levelOfDetail3 <- levels[[3]]
@@ -153,7 +153,7 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
   if (!is.null(levels))
   {
     featuresBody <- list("feature" = features, "levelsOfDetail" = levels)
-    body <- list("feature" = featuresBody)
+    body <- list("features" = featuresBody)
     r <- httr::content(apiManager_post(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature"), body, token))
 
   }

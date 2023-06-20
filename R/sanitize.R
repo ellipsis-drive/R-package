@@ -25,7 +25,7 @@ validUuid <- function(name, value, required)
 
     }
   )
-  return(value)
+  return(unlist(value))
 }
 
 validResolution <- function(name, value, required)
@@ -72,14 +72,14 @@ validUuidArray <- function(name, value, required)
   if (!required & is.null(value))
     return(NULL)
 
-  if (!is.list(value) || !is.vector(value))
+  if (!is.list(value) && !is.vector(value))
     stop("ValueError: {name} must be an iterable of uuids")
 
   for (Uuid in value)
   {
     Uuid <- validUuid("uuid", Uuid, TRUE)
   }
-  return(value)
+  return(as.list(unlist(value)))
 }
 
 validString <- function(name, value, required)
@@ -174,10 +174,10 @@ validList <- function(name, value, required)
 {
   if (!required & is.null(value))
     return(NULL)
-  if (!is.list(value) || !is.vector(value))
+  if (!is.list(value) && !is.vector(value))
     stop(glue::glue("ValueError: {name} must be a vector or a list"))
 
-  return(value)
+  return(as.list(value))
 }
 
 validGeoSeries <- function(name, value, required)
