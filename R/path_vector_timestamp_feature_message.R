@@ -34,7 +34,7 @@ path.vector.timestamp.feature.message.get <- function(pathId, timestampId, featu
   r <- recurse(f, body, listAll)
 
   dateList <- list()
-  for (x in dateList[["result"]])
+  for (x in r[["result"]])
   {
     x[["date"]] <- stringToDate(x[["date"]])
     # If wrong, maybe remove list command
@@ -58,24 +58,26 @@ path.vector.timestamp.feature.message.getImage <- function(pathId, timestampId, 
   timestampId <- validUuid("timestampId", timestampId, TRUE)
   messageId <- validUuid("messageId", messageId, TRUE)
   token <- validString("token", token, FALSE)
-
   r <- apiManager_get(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature/message/{messageId}/image"), NULL, token, FALSE)
   img_type <- httr::http_type(r)
   img_data <- httr::content(r)
-
   if (httr::status_code(r) != 200)
   {
     errorMessage <- httr::http_status(r)
     stop(glue::glue("ValueError: {errorMessage}"))
   }
-
+  image_file <- tempfile(fileext = ".jpg")
   if (img_type == "image/png")
   {
-    img <- png::readPNG(img_data)
+    png::writePNG(img_data, target = image_file)
+    img <- png::readPNG(image_file)
+    unlink(image_file)
   }
   else if(img_type == "image/jpeg")
   {
-    img <- jpeg::readJPEG(img_data)
+    jpeg::writeJPEG(img_data, image_file)
+    img <- jpeg::readJPEG(image_file)
+    unlink(image_file)
   }
   else
   {
@@ -106,9 +108,17 @@ path.vector.timestamp.feature.message.add <- function(pathId, timestampId, featu
 
   if (!is.null(image))
   {
-    image <- jpeg::writeJPEG(image, raw())
-    img_str <- base64encode::base64encode(image)
-    img_str <- glue::glue("data:image/jpeg;base64{img_str}")
+    # Save image to a temporary file
+    tmp_file <- tempfile(fileext = ".png")
+    png::writePNG(image, tmp_file)
+
+    # Read the image back as a raw vector
+    buffered <- readBin(tmp_file, "raw", file.info(tmp_file)$size)
+    file.remove(tmp_file)
+
+    # Convert buffer to base64-encoded string
+    img_str <- openssl::base64_encode(buffered)
+    img_str <- paste0("data:image/png;base64,", img_str)
   }
   else
   {
@@ -116,6 +126,7 @@ path.vector.timestamp.feature.message.add <- function(pathId, timestampId, featu
   }
 
   body <- list("image" = img_str, "text" = text)
+  print(img_str)
   r <- apiManager_post(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature/{featureId}/message"), body, token)
   return(httr::content(r))
 }

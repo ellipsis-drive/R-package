@@ -187,7 +187,7 @@ validGeoSeries <- function(name, value, required)
 
   value <- tryCatch(
     {
-      value <- sf::st_sf(sf::st_sfc(value))
+      value <- sf::st_sf(sf::st_sfc(sf::st_geometry(value)))
     },
     error = function(cond)
     {

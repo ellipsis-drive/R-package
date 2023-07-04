@@ -336,6 +336,7 @@ path.raster.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
   matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
   geometry <- sf::st_polygon(list(matrix_coordinates))
   sf_object <- sf::st_sf(id = 0, geometry = sf::st_sfc(geometry))
+  sf_object <- sf::st_make_valid(sf_object)
   return(sf_object)
 }
 

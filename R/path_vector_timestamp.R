@@ -131,6 +131,7 @@ path.vector.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
   matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
   geometry <- sf::st_polygon(list(matrix_coordinates))
   sf_object <- sf::st_sf(id = 0, geometry = sf::st_sfc(geometry))
+  sf_object <- sf::st_make_valid(sf_object)
   return(sf_object)
 }
 
@@ -221,10 +222,11 @@ path.vector.timestamp.getFeaturesByIds <- function(pathId, timestampId, featureI
     matrix_coordinates <- rbind(matrix_coordinates, matrix_coordinates[1,])
     geometry <- sf::st_polygon(list(matrix_coordinates))
     sf_object <- sf::st_sf(id = count, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+    sf_object <- sf::st_make_valid(sf_object)
     sh <- rbind(sh, sf_object)
     count <- count + 1
   }
-  r[["result"]] <- sh
+  r[["result"]] <- sf::st_make_valid(sh)
 
   return(r)
 }
@@ -334,6 +336,7 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
     matrix_coordinates <- rbind(matrix_coordinates, matrix_coordinates[1,])
     geometry <- sf::st_polygon(list(matrix_coordinates))
     sf_object <- sf::st_sf(id = count, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+    sf_object <- sf::st_make_valid(sf_object)
     sh <- rbind(sh, sf_object)
     count <- count + 1
   }
@@ -351,7 +354,7 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
   py <- (bounds[["ymin"]] + bounds[["ymax"]]) / 2
   # sh <- sh[sf::st_within(sh, sf::st_as_sfc(sf::st_bbox(c(extent['xMin'], extent['yMin'], extent['xMax'], extent['yMax']))))]
   sh <- sf::st_set_crs(sh, epsg)
-  r[["result"]] <- sh
+  r[["result"]] <- sf::st_make_valid(sh)
   return(r)
 }
 
@@ -396,10 +399,11 @@ path.vector.timestamp.listFeatures <- function(pathId, timestampId, token = NULL
     matrix_coordinates <- rbind(matrix_coordinates, matrix_coordinates[1,])
     geometry <- sf::st_polygon(list(matrix_coordinates))
     sf_object <- sf::st_sf(id = count, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+    sf_object <- sf::st_make_valid(sf_object)
     sh <- rbind(sh, sf_object)
     count <- count + 1
   }
   sh <- sf::st_set_crs(sh, 4326)
-  r[["result"]] <- sh
+  r[["result"]] <- sf::st_make_valid(sh)
   return(r)
 }

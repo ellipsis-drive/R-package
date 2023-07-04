@@ -1,3 +1,35 @@
+flatten_list_at_idx <- function(main_list, idx)
+{
+  sub_list <- list()
+  sub_list$id <- as.character(idx)
+  sub_list$type <- "Feature"
+  for (name in names(main_list))
+  {
+    if (name == "properties")
+    {
+      properties_list <- list()
+      for (property in names(main_list[[name]]))
+      {
+        new_property <- sub("^properties.", "", property)
+        if (new_property == "id" || new_property == "userId" || new_property == "radius")
+          next
+        properties_list[[new_property]] <- main_list[[name]][[property]][[idx]]
+      }
+      sub_list$properties <- properties_list
+    }
+    else if (name == "geometry")
+    {
+      geometry_list <- list()
+      for (geometry in names(main_list[[name]]))
+      {
+        geometry_list[[geometry]] <- main_list[[name]][[geometry]][[idx]]
+      }
+      sub_list[["geometry"]] <- geometry_list
+    }
+  }
+  return(sub_list)
+}
+
 path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
 {
   features_size <- dim(features)[[1]]
@@ -7,17 +39,21 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
   levelOfDetail4 <- validGeoSeries("levelOfDetail4", levelOfDetail4, FALSE)
   levelOfDetail5 <- validGeoSeries("levelOfDetail5", levelOfDetail5, FALSE)
   features <- validSimplefeature("features", features, TRUE)
-
-  if (!is.null(levelOfDetail1) & length(levelOfDetail1) != features_size)
-    stop(glue::glue("ValueError: levelOfDetail1 must have same length as number of rows in features"))
-  if (!is.null(levelOfDetail2) & length(levelOfDetail2) != features_size)
-    stop(glue::glue("ValueError: levelOfDetail2 must have same length as number of rows in features"))
-  if (!is.null(levelOfDetail3) & length(levelOfDetail3) != features_size)
-    stop(glue::glue("ValueError: levelOfDetail3 must have same length as number of rows in features"))
-  if (!is.null(levelOfDetail4) & length(levelOfDetail4) != features_size)
-    stop(glue::glue("ValueError: levelOfDetail4 must have same length as number of rows in features"))
-  if (!is.null(levelOfDetail5) & length(levelOfDetail5) != features_size)
-    stop(glue::glue("ValueError: levelOfDetail5 must have same length as number of rows in features"))
+  if (!is.null(levelOfDetail1))
+      if(dim(levelOfDetail1)[[1]] != features_size)
+        stop(glue::glue("ValueError: levelOfDetail1 must have same length as number of rows in features"))
+  if (!is.null(levelOfDetail2))
+    if (dim(levelOfDetail2)[[1]] != features_size)
+      stop(glue::glue("ValueError: levelOfDetail2 must have same length as number of rows in features"))
+  if (!is.null(levelOfDetail3))
+    if (dim(levelOfDetail3)[[1]] != features_size)
+      stop(glue::glue("ValueError: levelOfDetail3 must have same length as number of rows in features"))
+  if (!is.null(levelOfDetail4))
+    if (dim(levelOfDetail4)[[1]] != features_size)
+      stop(glue::glue("ValueError: levelOfDetail4 must have same length as number of rows in features"))
+  if (!is.null(levelOfDetail5))
+    if (dim(levelOfDetail5)[[1]] != features_size)
+      stop(glue::glue("ValueError: levelOfDetail5 must have same length as number of rows in features"))
 
   if (!is.null(levelOfDetail2) & is.null(levelOfDetail1))
     stop("ValueError: If levelOfDetail2 is defined, so must levelOfDetail1")
@@ -31,9 +67,10 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
   if (!is.null(levelOfDetail1))
   {
     temp = list()
-    for (x in levelOfDetail1[["features"]])
+    for (x in sf::st_geometry(levelOfDetail1))
     {
-      temp <- append(temp, sf::st_geometry(x))
+      print(x)
+      temp <- append(temp, list(x))
     }
     levelOfDetail1 <- array(unlist(temp))
   }
@@ -121,6 +158,12 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
   levelOfDetail4 <- levels[[4]]
   levelOfDetail5 <- levels[[5]]
 
+  geo_json <- geojsonsf::sf_geojson(features)
+  features_json <- jsonlite::fromJSON(geo_json)
+
+  features_json <- features_json[["features"]]
+  features_names <- sub("^properties.", "", names(features_json[["properties"]]))
+  names(features_json[["properties"]]) <- features_names
   firstTime <- httr::content(apiManager_get(glue::glue("/path/{pathId}"), NULL, token))
   if (!"vector" %in% names(firstTime))
     stop("Can only add features if path is of type vector")
@@ -147,17 +190,36 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
       apiManager_post(glue::glue("/path/{pathId}/vector/property"), body, token)
     }
   }
-  # Parallelize later?
 
-  levels <- path.vector.timestamp.feature.zipLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
-  if (!is.null(levels))
+  indices <- chunks(seq(dim(features)[[1]]))
+  addedIds <- list()
+  for (i in seq(length(indices)))
   {
-    featuresBody <- list("feature" = features, "levelsOfDetail" = levels)
-    body <- list("features" = featuresBody)
-    r <- httr::content(apiManager_post(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature"), body, token))
+    indices_sub <- unlist(indices[[i]])
+    features_sub <- flatten_list_at_idx(features_json, i)
 
+    levels <- path.vector.timestamp.feature.zipLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
+
+    featuresBody <- list()
+    if (!is.null(levels) & length(levels) > 0)
+    {
+
+      for (x in seq(length(indices_sub)))
+      {
+        featuresBody <- append(featuresBody, list("feature" = features_sub, "levelOfDetail" = levels[[x]]))
+      }
+    }
+    else
+    {
+      featuresBody <- list("feature" = features_sub)
+    }
+    body <- list("features" = list(featuresBody))
+    r <- apiManager_post(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature"), body, token)
+    r <- httr::content(r)
+    addedIds <- append(addedIds, r)
   }
-  return(r)
+
+  return(addedIds)
 }
 
 #' Edit features of a vector timestamp
@@ -176,42 +238,62 @@ path.vector.timestamp.feature.add <- function(pathId, timestampId, features, tok
 path.vector.timestamp.feature.edit <- function(pathId, timestampId, featureIds, features = NULL, token, showProgress = TRUE, levelOfDetail1 = NULL, levelOfDetail2 = NULL, levelOfDetail3 = NULL, levelOfDetail4 = NULL, levelOfDetail5 = NULL, cores = 1)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
-  timestampId < validUuid("timestampId", timestampId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
   token <- validString("token", token, TRUE)
   features <- validSimplefeature("features", features, FALSE)
   showProgress <- validBool("showProgress", showProgress, TRUE)
   cores <- validInt("cores", cores, TRUE)
   featureIds <- validUuidArray("featureIds", featureIds, TRUE)
 
-  levels <- list[levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5] <- path.vector.timestamp.feature.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
+  levels <- path.vector.timestamp.feature.manageLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5, features)
   levelOfDetail1 <- levels[[1]]
   levelOfDetail2 <- levels[[2]]
   levelOfDetail3 <- levels[[3]]
   levelOfDetail4 <- levels[[4]]
   levelOfDetail5 <- levels[[5]]
 
-  if (!is.null(features) & length(features) != length(featureIds))
+  if (!is.null(features) & dim(features)[[1]] != length(featureIds))
     stop(glue::glue("featureIds must be of same length as the simple features dataframe"))
 
-  levels <- path.vector.timestamp.feature.zipLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
-  changes = list()
-  if (is.null(levels))
+  indices = chunks(seq(length(featureIds)),1000)
+  for (i in seq(length(indices)))
   {
-    for (x in mapply(featureIds, features))
+    indices_sub <- indices[[i]]
+    featureIds_sub <- sapply(indices_sub, function(i) featureIds[[i]])
+
+    if (!is.null(features))
     {
-      changes <- append(changes, list("featureId" = x[[1]], "newProperties" = x[[2]][["properties"]], "newGeometry" = x[[2]][["geometry"]]))
+      feature_indices <- unlist(indices_sub)
+
+      # Subset the spatial dataframe using the indices
+      features_sub <- features[feature_indices %in% seq_len(nrow(features)), ]
+      features_sub <- geojsonsf::sf_geojson(features_sub)
+      features_sub <- jsonlite::fromJSON(features_sub)
+
     }
-  }
-  else
-  {
-    for (x in mapply(featureIds, features))
+
+    levels <- path.vector.timestamp.feature.zipLevels(levelOfDetail1, levelOfDetail2, levelOfDetail3, levelOfDetail4, levelOfDetail5)
+    changes = list()
+    if (is.null(levels) || length(levels) == 0)
     {
-      changes <- append(changes, list("featureId" = x[[1]], "levelsOfDetail" = levels, "newProperties" = x[[2]][["properties"]], "newGeometry" = x[[2]][["geometry"]]))
+      for (x in seq_along(features_sub))
+      {
+        sub_list <- flatten_list_at_idx(features_sub[["features"]], x)
+        changes <- append(changes, list("featureId" = featureIds_sub[[x]], "newProperties" = sub_list[["properties"]], "newGeometry" = sub_list[["geometry"]]))
+      }
     }
+    else
+    {
+      for (x in seq_along(features_sub))
+      {
+        sub_list <- flatten_list_at_idx(features_sub[["features"]], x)
+        changes <- append(changes, list("featureId" = featureIds_sub[[x]], "levelsOfDetail" = levels, "newProperties" = sub_list[["properties"]], "newGeometry" = sub_list[["geometry"]]))
+      }
+    }
+    body = list("changes" = list(changes))
+    r <- httr::content(apiManager_patch(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature"), body, token))
   }
 
-  body = list("changes" = changes)
-  r <- httr::content(apiManager_patch(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature"), body, token))
   return(r)
 }
 
@@ -225,7 +307,7 @@ path.vector.timestamp.feature.edit <- function(pathId, timestampId, featureIds, 
 path.vector.timestamp.feature.trash <- function(pathId, timestampId, featureIds, token, showProgress = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
-  timestampId < validUuid("timestampId", timestampId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
   token <- validString("token", token, TRUE)
   showProgress <- validBool("showProgress", showProgress, TRUE)
   featureIds <- validUuidArray("featureIds", featureIds, TRUE)
@@ -245,7 +327,7 @@ path.vector.timestamp.feature.trash <- function(pathId, timestampId, featureIds,
 path.vector.timestamp.feature.recover <- function(pathId, timestampId, featureIds, token, showProgress = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
-  timestampId < validUuid("timestampId", timestampId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
   token <- validString("token", token, TRUE)
   showProgress <- validBool("showProgress", showProgress, TRUE)
   featureIds <- validUuidArray("featureIds", featureIds, TRUE)
@@ -267,7 +349,7 @@ path.vector.timestamp.feature.recover <- function(pathId, timestampId, featureId
 path.vector.timestamp.feature.versions <- function(pathId, timestampId, featureId, token = NULL, pageStart = NULL, listAll = TRUE)
 {
   pathId <- validUuid("pathId", pathId, TRUE)
-  timestampId < validUuid("timestampId", timestampId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
   token <- validString("token", token, FALSE)
   featureId <- validUuid("featureId", featureId, TRUE)
   pageStart <- validUuid("pageStart", pageStart, FALSE)
@@ -298,12 +380,42 @@ path.vector.timestamp.feature.versions <- function(pathId, timestampId, featureI
     userIds <- append(userIds, list(x[["user"]][["id"]]))
 
   # Hopefully this works (otherwise look at other instance of from features)
-  sh <- sf::st_as_sf(features)
-  sh[["username"]] <- usernames
-  sh[["userId"]] <- userIds
-  sh[["dates"]] <- dates
+  feature <- features[[1]]
+  coordinates <- unlist(feature[["geometry"]][["coordinates"]], recursive = FALSE)
+  matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+  geometry <- sf::st_polygon(list(matrix_coordinates))
+  feature$properties$geometry <- NULL
+  sh <- sf::st_sf(id = 0, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+  sh[["username"]] <- usernames[[1]]
+  sh[["userId"]] <- userIds[[1]]
+  sh[["dates"]] <- dates[[1]]
 
   sh <- sf::st_set_crs(sh, 4326)
+  sh <- sf::st_make_valid(sh)
+  print(sh)
+  count <- 0
+  for (feature in features)
+  {
+    if (count == 0)
+    {
+      count <- count +1
+      next
+    }
+    coordinates <- unlist(feature[["geometry"]][["coordinates"]], recursive = FALSE)
+    matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
+    geometry <- sf::st_polygon(list(matrix_coordinates))
+    feature$properties$geometry <- NULL
+    if (is.null(feature[["properties"]][["color"]]))
+      feature[["properties"]][["color"]] = 0
+    sf_object <- sf::st_sf(id = count, properties = feature[["properties"]], geometry = sf::st_sfc(geometry))
+    sf_object[["username"]] <- usernames[[count]]
+    sf_object[["userId"]] <- userIds[[count]]
+    sf_object[["dates"]] <- dates[[count]]
+    sf_object <- sf::st_set_crs(sf_object, 4326)
+    sf_object <- sf::st_make_valid(sf_object)
+    sh <- rbind(sh, sf_object)
+    count <- count + 1
+  }
   r[["result"]] <- sh
 
   return(r)

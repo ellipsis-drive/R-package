@@ -327,25 +327,25 @@ EDPackage::path.vector.editFilter(mapId, list(list('property'='gml_id')), token)
 #   Sys.sleep(1)
 #   blocked = r[['vector']][['timestamps']][[1]][['availability']][['blocked']]
 # }
-print("here6")
+
 r = EDPackage::path.get(mapId, token)
 blocked = r[['vector']][['timestamps']][[1]][['availability']][['blocked']]
 
 
 ###feature module
 
-features = sh[['result']][1:2]
-print(features)
+features = sh[['result']][1:2,]
+#print(features)
 featureIds = features[['properties.id']]
 
 EDPackage::path.vector.timestamp.feature.add(mapId, layerId, features, token, cores = 10)
 
-levelsOfDetail1 = features.simplify(tolerance = 1, preserve_topology = TRUE)
+levelsOfDetail1 = sf::st_simplify(features, preserveTopology = TRUE, dTolerance = 1)
 EDPackage::path.vector.timestamp.feature.add(pathId = mapId, timestampId =  layerId, features=features, levelOfDetail1=levelsOfDetail1, token=token)
 
 
-
-EDPackage::path.vector.timestamp.feature.edit(mapId, layerId, featureIds = features[['id']], token = token, features = features)
+print(features)
+EDPackage::path.vector.timestamp.feature.edit(mapId, layerId, featureIds = features[['properties.id']], token = token, features = features)
 
 EDPackage::path.vector.timestamp.feature.trash(mapId, layerId, featureIds, token)
 EDPackage::path.vector.timestamp.feature.recover(mapId, layerId, featureIds, token)
@@ -355,12 +355,12 @@ EDPackage::path.vector.timestamp.feature.versions(mapId, layerId, featureId, tok
 
 ###message module
 EDPackage::path.vector.timestamp.feature.message.add(mapId, layerId, featureId, token, text= 'hoi')
-image <- matrix(0, nrow = 256, ncol = 256)
+set.seed(42)
+image <- as.im(matrix(runif(256*256), nrow = 256, ncol = 256))
 EDPackage::path.vector.timestamp.feature.message.add(mapId, layerId, featureId, token, text= 'hoi', image = image)
 
 messages = EDPackage::path.vector.timestamp.feature.message.get(mapId, layerId, featureIds=list(featureId), token = token)
-
-messageId = list()
+messageId <- list()
 for (m in messages[["result"]])
 {
   if (!is.null(m[["thumbnail"]]))
