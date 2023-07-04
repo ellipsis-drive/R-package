@@ -137,7 +137,7 @@ path.vector.timestamp.feature.series.add <- function(pathId, timestampId, featur
   r_total <- list()
   for (values_sub in chunks_values)
   {
-    body <- list("values" = values_sub)
+    body <- list("values" = list(values_sub))
     r <- apiManager_post(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature/{featureId}/series/element"), body, token)
 
     r_total <- append(r_total, list(httr::content(r)))
@@ -167,15 +167,19 @@ path.vector.timestamp.feature.series.trash <- function(pathId, timestampId, feat
 
   chunks_values <- chunks(seriesIds)
   N <- 0
+  r_total <- list()
   for (seriesIds_sub in chunks_values)
   {
+    print(seriesIds_sub)
     body <- list("seriesIds" = seriesIds_sub, "trashed" = TRUE)
+    print(body)
     r <- apiManager_put(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature/{featureId}/series/element/trashed"), body, token)
 
     r_total <- append(r_total, list(httr::content(r)))
 
     N <- N + 1
   }
+  return(r_total)
 }
 
 #' Recover series of a vector timestamp feature from the trash
@@ -198,14 +202,16 @@ path.vector.timestamp.feature.series.recover <- function(pathId, timestampId, fe
   chunks_values <- chunks(seriesIds)
   N <- 0
   for (seriesIds_sub in chunks_values)
+  r_total <- list()
   {
-    body <- list("seriesIds" = seriesIds_sub, "trashed" = FALSE)
+    body <- list("seriesIds" = list(seriesIds_sub), "trashed" = FALSE)
     r <- apiManager_put(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature/{featureId}/series/element/trashed"), body, token)
 
     r_total <- append(r_total, list(httr::content(r)))
 
     N <- N + 1
   }
+  return(r_total)
 }
 
 #' Get changelog of series of a vector timestamp feature

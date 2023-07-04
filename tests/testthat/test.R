@@ -377,88 +377,89 @@ EDPackage::path.vector.timestamp.feature.message.recover(mapId, layerId, message
 ###series module
 date = Sys.time()
 
-# seriesData <- data.frame(list('x'= list(1,2,3,4))
-# seriesData[['date']] = date
-# EDPackage::path.vector.timestamp.feature.series.add(pathId = mapId, timestampId = layerId, featureId = featureId, seriesData = seriesData, token = token)
-#
-#
-# EDPackage::path.vector.timestamp.feature.series.info(mapId, layerId, featureId,token)
-#
-# r = EDPackage::path.vector.timestamp.feature.series.get(mapId, layerId, featureId, token = token, listAll = TRUE)
-#
-#
-# seriesId = r[['result']][['id']][[1]]
-#
-# EDPackage::path.vector.timestamp.feature.series.trash(mapId, layerId, featureId, list(seriesId), token)
-#
-# EDPackage::path.vector.timestamp.feature.series.recover(mapId, layerId, featureId, list(seriesId), token)
-#
-# EDPackage::path.vector.timestamp.feature.series.changelog(mapId, layerId, featureId, token = token)
-#
-#
-# #style module
-#
-# parameters = list("alpha"=0.5,"width"=2,"radius":list("method"="constant","parameters"=list("value"=7)),"property"="gml_id")
-# styleId = EDPackage::path.vector.style.add(mapId, 'test', 'random', parameters, token = token, default = FALSE)[['id']]
-#
-# EDPackage::path.vector.style.edit(mapId, styleId, token, name = 'sfd', default = FALSE)
-# EDPackage::path.vector.style.delete(mapId, styleId, token)
-#
-#
-# ## properties module
-# featurePropertyId = EDPackage::path.vector.featureProperty.add(pathId = mapId, name = 'new', featurePropertyType = 'string', token = token)[['id']]
-# EDPackage::path.vector.featureProperty.trash(mapId,  featurePropertyId, token)
-#
-# EDPackage::path.vector.featureProperty.recover(mapId, featurePropertyId, token)
-# EDPackage::path.vector.featureProperty.edit(mapId, featurePropertyId, token, required = TRUE)
-#
-# ### order module
-#
-# orderId = EDPackage::path.vector.timestamp.order.add(mapId, layerId, token, extent = list('xMin'=xMin, 'xMax'=xMax, 'yMin'=yMin, 'yMax'=yMax))[['id']]
-#
-# order = EDPackage::path.vector.timestamp.order.get(token)[[1]]
-# while (order[['status']] != 'completed')
-#   Sys.sleep(1)
-# order = EDPackage::path.vector.timestamp.order.get(token)[[1]]
-#
-# file_out = 'C:/Users/spamb/Downloads/out.zip'
-# EDPackage::path.vector.timestamp.order.download(orderId, file_out, token)
-# EDPackage::path.trash(mapId, token)
-# EDPackage::path.delete(mapId, token)
-#
-#
-#
-#
-# ########3some more specific bounds tests
-# rasterId = '56e20fa2-f014-44c1-b46a-cde78e7e6b7e'
-# timestampId = EDPackage::path.get(rasterId,token)[['raster']][['timestamps']][[1]][['id']]
-# EDPackage::path.raster.timestamp.file.get(pathId = rasterId, timestampId = timestampId, token = token)
-#
-# EDPackage::path.raster.timestamp.getBounds(pathId = rasterId, timestampId = timestampId, token=token)
-#
-# vectorId = '67e66823-8bbc-4ace-816a-c4e34282676c'
-# timestampId = 'bc73c75a-cc74-4bb5-a609-ef01992bcc9a'
-#
-# EDPackage::path.vector.timestamp.file.get(pathId = vectorId, timestampId = timestampId, token = token)
-#
-# EDPackage::path.vector.timestamp.getBounds(pathId = vectorId, timestampId = timestampId, token=token)
-#
-#
-#
-#
-# ###hashtags
-# pathId = '59caf510-bab7-44a8-b5ea-c522cfde4ad7'
-# EDPackage::path.hashtag.add(pathId = pathId, hashtag = 'xxx', token = token)
-# EDPackage::path.hashtag.search('x')
-# EDPackage::path.hashtag.delete(pathId = pathId, hashtag = 'xxx', token = token)
-# ####views
-#
-# viewId = EDPackage::view.add(pathId = pathId, name = 'temp', persistent = TRUE, layers = list(list('type'='ellipsis', 'id'=pathId, 'selected'=TRUE ), list('type'='base', 'selected'=TRUE )), token = token)[['id']]
-#
-# EDPackage::view.get(viewId = viewId)
-#
-# EDPackage::view.listViews(token = token)
-#
-# EDPackage::view.edit(viewId = viewId, name = 'temp2', token = token)
-#
-# EDPackage::view.delete(viewId = viewId, token = token)
+seriesData <- data.frame(list('x'= list(1,2,3,4)))
+seriesData[['date']] = date
+EDPackage::path.vector.timestamp.feature.series.add(pathId = mapId, timestampId = layerId, featureId = featureId, seriesData = seriesData, token = token)
+
+
+EDPackage::path.vector.timestamp.feature.series.info(mapId, layerId, featureId,token)
+
+r = EDPackage::path.vector.timestamp.feature.series.get(mapId, layerId, featureId, token = token, listAll = TRUE)
+
+
+seriesId = r[['result']][['id']][[1]]
+
+# Stupid bug, ask daan
+EDPackage::path.vector.timestamp.feature.series.trash(mapId, layerId, featureId, list(seriesId), token)
+
+EDPackage::path.vector.timestamp.feature.series.recover(mapId, layerId, featureId, list(seriesId), token)
+# No bugs...
+EDPackage::path.vector.timestamp.feature.series.changelog(mapId, layerId, featureId, token = token)
+
+
+#style module
+
+parameters = list("alpha"=0.5,"width"=2,"radius"=list("method"="constant","parameters"=list("value"=7)),"property"="gml_id")
+styleId = EDPackage::path.vector.style.add(mapId, 'test', 'random', parameters, token = token, default = FALSE)[['id']]
+
+EDPackage::path.vector.style.edit(mapId, styleId, token, name = 'sfd', default = FALSE)
+EDPackage::path.vector.style.delete(mapId, styleId, token)
+
+
+## properties module
+featurePropertyId = EDPackage::path.vector.featureProperty.add(pathId = mapId, name = 'new', featurePropertyType = 'string', token = token)[['id']]
+EDPackage::path.vector.featureProperty.trash(mapId,  featurePropertyId, token)
+
+EDPackage::path.vector.featureProperty.recover(mapId, featurePropertyId, token)
+EDPackage::path.vector.featureProperty.edit(mapId, featurePropertyId, token, required = TRUE)
+
+### order module
+
+orderId = EDPackage::path.vector.timestamp.order.add(mapId, layerId, token, extent = list('xMin'=xMin, 'xMax'=xMax, 'yMin'=yMin, 'yMax'=yMax))[['id']]
+
+order = EDPackage::path.vector.timestamp.order.get(token)[[1]]
+while (order[['status']] != 'completed')
+  Sys.sleep(1)
+order = EDPackage::path.vector.timestamp.order.get(token)[[1]]
+
+file_out = 'C:/Users/spamb/Downloads/out.zip'
+EDPackage::path.vector.timestamp.order.download(orderId, file_out, token)
+EDPackage::path.trash(mapId, token)
+EDPackage::path.delete(mapId, token)
+
+
+
+
+########3some more specific bounds tests
+rasterId = '56e20fa2-f014-44c1-b46a-cde78e7e6b7e'
+timestampId = EDPackage::path.get(rasterId,token)[['raster']][['timestamps']][[1]][['id']]
+EDPackage::path.raster.timestamp.file.get(pathId = rasterId, timestampId = timestampId, token = token)
+
+EDPackage::path.raster.timestamp.getBounds(pathId = rasterId, timestampId = timestampId, token=token)
+
+vectorId = '67e66823-8bbc-4ace-816a-c4e34282676c'
+timestampId = 'bc73c75a-cc74-4bb5-a609-ef01992bcc9a'
+
+EDPackage::path.vector.timestamp.file.get(pathId = vectorId, timestampId = timestampId, token = token)
+
+EDPackage::path.vector.timestamp.getBounds(pathId = vectorId, timestampId = timestampId, token=token)
+
+
+
+
+###hashtags
+pathId = '59caf510-bab7-44a8-b5ea-c522cfde4ad7'
+EDPackage::path.hashtag.add(pathId = pathId, hashtag = 'xxx', token = token)
+EDPackage::path.hashtag.search('x')
+EDPackage::path.hashtag.delete(pathId = pathId, hashtag = 'xxx', token = token)
+####views
+
+viewId = EDPackage::view.add(pathId = pathId, name = 'temp', persistent = TRUE, layers = list(list('type'='ellipsis', 'id'=pathId, 'selected'=TRUE ), list('type'='base', 'selected'=TRUE )), token = token)[['id']]
+
+EDPackage::view.get(viewId = viewId)
+
+EDPackage::view.listViews(token = token)
+
+EDPackage::view.edit(viewId = viewId, name = 'temp2', token = token)
+
+EDPackage::view.delete(viewId = viewId, token = token)

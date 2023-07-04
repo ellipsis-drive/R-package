@@ -44,7 +44,7 @@ path.vector.timestamp.order.download <- function(orderId, filePath, token)
   filePath <- validString("filePath", filePath, TRUE)
   orderId <- validUuid("pathId", orderId, TRUE)
 
-  if (substr(filePath, nchar(filePath)-5, nchar(filePath)) != ".zip")
+  if (substr(filePath, nchar(filePath)-3, nchar(filePath)) != ".zip")
     stop("ValueError: filePath must end with .zip")
 
   apiManager_download(glue::glue("/path/vector/timestamp/order/{orderId}/data"), filePath, token)

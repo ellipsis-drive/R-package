@@ -33,7 +33,7 @@ path.hashtag.delete <- function(pathId, hashtag, token)
 #' @param hashtag Mandatory (string) the string to search for
 #' @return ...
 #' @export
-path.hashtag.search <- function()
+path.hashtag.search <- function(hashtag)
 {
   hashtag <- validString("hashtag", hashtag, TRUE)
   return(httr::content(apiManager_get("/path/hashtag", list(
