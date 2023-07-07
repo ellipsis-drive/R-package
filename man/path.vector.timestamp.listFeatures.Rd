@@ -20,7 +20,7 @@ path.vector.timestamp.listFeatures(
 \item{token}{Optional (string)}
 }
 \value{
-a simple features 'sf' object containing the features as a geometry
+a simple features 'sf' object containing the features and the geometry. Append "properties." ("properties.id" for the featureId for instance) to the requested property
 }
 \description{
 List available features of a vector timestamp

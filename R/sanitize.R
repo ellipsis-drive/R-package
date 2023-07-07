@@ -341,7 +341,7 @@ validStringArray <- function(name, value, required)
 
   if (any(!sapply(value, is.character)) == FALSE)
     stop(glue::glue("ValueError: {name} must be an iterable of strings"))
-  return(value)
+  return(unlist(value, recursive = FALSE))
 }
 
 validDate <- function(name, value, required)

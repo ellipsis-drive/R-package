@@ -3,7 +3,7 @@ view.listViews <- function(token)
 {
   token <- validString("token", token, TRUE)
 
-  r <- apiManager_get("view", list, token)
+  r <- apiManager_get("/view", list(), token)
   return(httr::content(r))
 }
 
@@ -23,7 +23,7 @@ view.add <- function(pathId, layers, name = NULL, persistent = FALSE, dems = lis
   pathId <- validUuid("pathId", pathId, TRUE)
   layers <- validObject("layers", layers, TRUE)
   token <- validString("token", token, FALSE)
-  name <- validString("name", name, false)
+  name <- validString("name", name, FALSE)
   persistent <- validBool("persistent", persistent, TRUE)
   dems <- validObject("dems", dems, TRUE)
 
@@ -50,6 +50,6 @@ view.delete <- function(viewId, token)
   viewId <- validUuid("viewId", viewId, TRUE)
   token <- validString("token", token, FALSE)
 
-  r <- apiManager_delete(glue::glue("/view/{viewId}", list(), FALSE))
+  r <- apiManager_delete(glue::glue("/view/{viewId}"), list(), token)
   return(httr::content(r))
 }

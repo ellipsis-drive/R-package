@@ -170,9 +170,9 @@ path.vector.timestamp.feature.series.trash <- function(pathId, timestampId, feat
   r_total <- list()
   for (seriesIds_sub in chunks_values)
   {
-    print(seriesIds_sub)
-    body <- list("seriesIds" = seriesIds_sub, "trashed" = TRUE)
-    print(body)
+
+    body <- list("seriesIds" = list(seriesIds_sub), "trashed" = TRUE)
+
     r <- apiManager_put(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature/{featureId}/series/element/trashed"), body, token)
 
     r_total <- append(r_total, list(httr::content(r)))

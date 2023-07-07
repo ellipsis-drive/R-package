@@ -126,7 +126,6 @@ path.vector.timestamp.feature.message.add <- function(pathId, timestampId, featu
   }
 
   body <- list("image" = img_str, "text" = text)
-  print(img_str)
   r <- apiManager_post(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/feature/{featureId}/message"), body, token)
   return(httr::content(r))
 }

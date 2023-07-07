@@ -201,9 +201,9 @@ reprojectRaster <- function(r, sourceExtent, targetExtent, targetWidth, targetHe
   } else {
     resampling <- "bilinear"
   }
-  print(r)
+
   for (i in 1:dim(r)[[3]]) {
-    print(targetExtent)
+
     destination[,,i] <- raster::projectRaster(r[[i]], crs = as.character(targetCrs), method = resampling,
                                       res = c(targetWidth, targetHeight), ext = targetExtent)$data
   }

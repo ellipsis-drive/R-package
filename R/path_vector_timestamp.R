@@ -290,7 +290,7 @@ path.vector.timestamp.getFeaturesByExtent <- function(pathId, timestampId, exten
   extent[["xMax"]] <- max(180, extent[["xMax"]] + coordinateBuffer)
   extent[["yMin"]] <- min(-85, extent[["yMin"]] - coordinateBuffer)
   extent[["yMax"]] <- max(85, extent[["yMax"]] + coordinateBuffer)
-  print(extent)
+
   p <- tryCatch(
     {
       sf::st_crs(p) <- 4326

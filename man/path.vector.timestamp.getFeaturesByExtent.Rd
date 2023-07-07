@@ -11,8 +11,9 @@ path.vector.timestamp.getFeaturesByExtent(
   propertyFilter = NULL,
   token = NULL,
   listAll = TRUE,
+  pageStart = NULL,
   epsg = 4326,
-  cordinateBuffer = NULL
+  coordinateBuffer = NULL
 )
 }
 \arguments{

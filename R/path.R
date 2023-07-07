@@ -7,7 +7,7 @@
 #' @param userId a uuid referencing the ...
 #' @return A name value list containing information about the folder
 #' @export
-path.search <- function(pathTypes = c("raster", "vector", "file", "folder"), root = NULL, text = NULL, active = NULL, userId = NULL, pageStart = NULL, hashtag = NULL, extent = NULL, resolution = NULL, date = NULL, listAll = FALSE, token = NULL)
+path.search <- function(pathTypes = list("raster", "vector", "file", "folder"), root = NULL, text = NULL, active = NULL, userId = NULL, pageStart = NULL, hashtag = NULL, extent = NULL, resolution = NULL, date = NULL, listAll = FALSE, token = NULL)
 {
   token <- validString("token", token, FALSE)
   pathTypes <- validStringArray("pathTypes", pathTypes, TRUE)
@@ -41,7 +41,6 @@ path.search <- function(pathTypes = c("raster", "vector", "file", "folder"), roo
     "resolution" = resolution,
     "date" = date
   )
-
   f <- function(body)
   {
     return(httr::content(apiManager_get("/path", body, token)))
@@ -107,7 +106,7 @@ path.editMetaData <- function(pathId, token, description = NULL, attribution = N
   description <- validString("description", description, FALSE)
   properties <- validObject("properties", properties, FALSE)
   licenseString <- validString("licenseString", licenseString, FALSE)
-  return(httr::content(apiManager_patch(glue::glue("/path/{pathid}/metadata"), list(
+  return(httr::content(apiManager_patch(glue::glue("/path/{pathId}/metadata"), list(
     "description" = description,
     "attribution" = attribution,
     "properties" = properties,
@@ -144,11 +143,11 @@ path.move <- function(pathIds, parentId, token)
   pathIds <- validUuidArray("pathIds", pathIds, TRUE)
   print(pathIds)
   parentId <- validUuid("parentId", parentId, FALSE)
-
-  return(httr::content(apiManager_put("/path/parentId", list(
+  body <- list(
     "pathIds" = pathIds,
     "parentId" = parentId
-  ), token)))
+  )
+  return(httr::content(apiManager_put("/path/parentId", body, token)))
 }
 
 #' Place path in trash

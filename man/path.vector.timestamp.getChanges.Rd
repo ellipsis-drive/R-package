@@ -9,7 +9,8 @@ path.vector.timestamp.getChanges(
   timestampId,
   token = NULL,
   pageStart = NULL,
-  listAll = FALSE
+  listAll = FALSE,
+  actions = NULL
 )
 }
 \arguments{

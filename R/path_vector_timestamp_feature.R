@@ -69,7 +69,6 @@ path.vector.timestamp.feature.manageLevels <- function(levelOfDetail1, levelOfDe
     temp = list()
     for (x in sf::st_geometry(levelOfDetail1))
     {
-      print(x)
       temp <- append(temp, list(x))
     }
     levelOfDetail1 <- array(unlist(temp))
@@ -392,7 +391,6 @@ path.vector.timestamp.feature.versions <- function(pathId, timestampId, featureI
 
   sh <- sf::st_set_crs(sh, 4326)
   sh <- sf::st_make_valid(sh)
-  print(sh)
   count <- 0
   for (feature in features)
   {

@@ -9,7 +9,7 @@ path.vector.timestamp.getFeaturesByIds(
   timestampId,
   featureIds,
   token = NULL,
-  showProgress = NULL
+  showProgress = FALSE
 )
 }
 \arguments{

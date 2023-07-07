@@ -5,7 +5,7 @@
 \title{Search for a path to a folder}
 \usage{
 path.search(
-  pathTypes = c("raster", "vector", "file", "folder"),
+  pathTypes = list("raster", "vector", "file", "folder"),
   root = NULL,
   text = NULL,
   active = NULL,

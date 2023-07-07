@@ -262,7 +262,7 @@ path.raster.timestamp.analyse <- function(pathId, timestampIds, geometry, return
   temp <- geometry
   geometry <- sf::st_set_crs(geometry, glue::glue("EPSG:{epsg}"))
   geometry <- sf::st_set_crs(geometry, "EPSG:4326")
-  geometry <- geometry$geometry
+  geometry <- geojsonio::geojson_json(geometry$geometry)
   sh <- tryCatch(
     {
       sh <- geojsonsf::sf_geojson(temp)
@@ -372,6 +372,17 @@ path.raster.timestamp.deactivate <- function(pathId, timestampId, token)
   r <- apiManager_post(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}/deactivate"), NULL, token)
   r <- httr::content(r)
   return(r)
+}
+
+#' @export
+path.raster.timestamp.delete <- function(pathId, timestampId, token)
+{
+  pathId <- validUuid("pathId", pathId, TRUE)
+  timestampId <- validUuid("timestampId", timestampId, TRUE)
+  token <- validString("token", token, TRUE)
+
+  r <- apiManager_delete(glue::glue("/path/{pathId}/raster/timestamp/{timestampId}"), NULL, token)
+  return(httr::content(r))
 }
 
 #' Move a given timestamp to the trash

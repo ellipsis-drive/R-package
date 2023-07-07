@@ -56,23 +56,31 @@ apiManager_get <- function(url, body = NULL, token = NULL, crash = TRUE)
 
   for (k in names(body)) {
     if (!is.character(body[[k]])) {
-      body[[k]] <- jsonlite::toJSON(body[[k]], auto_unbox = TRUE)
-        # if (!isNamedList(body[[k]]))
-        #   body[[k]] <- jsonlite::toJSON(unlist(body[[k]]))
-        # else
-        # {
-        #   body[[k]] <- jsonlite::toJSON(body[[k]])
-        #   # Some json hacks
-        #   # Parse the JSON object
-        #   parsed_object <- jsonlite::fromJSON(body[[k]])
-        #
-        #   # Convert the parsed object to a new JSON object with values as single elements
-        #   converted_object <- lapply(parsed_object, function(x) x[[1]])
-        #
-        #   # Convert the converted object back to JSON
-        #   body[[k]] <- jsonlite::toJSON(converted_object)
-        #   print(body[[k]])
-        # }
+      tryCatch(
+        {
+          body[[k]] <- jsonlite::toJSON(body[[k]], auto_unbox = TRUE)
+        },
+        error = function(cond)
+        {
+          body <- lapply(body, function(x) {
+            if (is.list(x)) {
+              lapply(x, function(y) {
+                if (uuid::is.UUID(y)) {
+                  as.character(y)
+                } else {
+                  y
+                }
+              })
+            } else if (uuid::is.UUID(x)) {
+              as.character(x)
+            } else {
+              x
+            }
+          })
+          body[[k]] <- jsonlite::toJSON(body[[k]], auto_unbox = TRUE)
+        }
+
+      )
     }
   }
   urllib <- reticulate::import("urllib.parse")
@@ -88,7 +96,8 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
 {
   # Forward declaration
   res <- NULL
-  body <- filterNULL(body)
+  if (!is.null(body))
+    body <- filterNULL(body)
   if (!is.null(body) & (!is.list(body) | (!all_names(body) & sum(names(list) != "", na.rm=TRUE) == 0)))
     stop("ValueError: body of an API call must be of type dict or NULL")
 
@@ -100,24 +109,76 @@ apiManager_call <- function(method, url, body = NULL, token = NULL, crash = TRUE
     res <- tryCatch(
       {
         res <- method(url = uPaste(baseUrl, url), body = jsonlite::toJSON(body, auto_unbox=TRUE), httr::add_headers("Content-Type" = "application/json"), encode = "json")
-      },
+
+        },
       error = function(cond)
       {
-        res <- method(url = uPaste(baseUrl, url), body = body, encode = "form")
+        res <- tryCatch(
+          {
+            body <- lapply(body, function(x) {
+              if (is.list(x)) {
+                lapply(x, function(y) {
+                  if (uuid::is.UUID(y)) {
+                    as.character(y)
+                  } else {
+                    y
+                  }
+                })
+              } else if (uuid::is.UUID(x)) {
+                as.character(x)
+              } else {
+                x
+              }
+            })
+            res <- method(url = uPaste(baseUrl, url), body = jsonlite::toJSON(body, auto_unbox=TRUE), httr::add_headers("Content-Type" = "application/json"), encode = "json")
+          },
+
+          error = function(cond)
+          {
+            res <- method(url = uPaste(baseUrl, url), body = body, encode = "form")
+          }
+        )
+
       }
     )
   }
   else
   {
+
     if (!grepl("Bearer", token, fixed = TRUE))
       token <- paste("bearer", token)
     res <- tryCatch(
       {
         res <- method(url = uPaste(baseUrl, url), body = jsonlite::toJSON(body, auto_unbox=TRUE), httr::add_headers("Content-Type" = "application/json", "Authorization" = token), encode = "json")
-      },
+
+        },
       error = function(cond)
       {
-        res <- method(url = uPaste(baseUrl, url), body = body, httr::add_headers("Authorization" = token), encode = "form")
+        res <- tryCatch(
+          {
+            body <- lapply(body, function(x) {
+              if (is.list(x)) {
+                lapply(x, function(y) {
+                  if (uuid::is.UUID(y)) {
+                    as.character(y)
+                  } else {
+                    y
+                  }
+                })
+              } else if (uuid::is.UUID(x)) {
+                as.character(x)
+              } else {
+                x
+              }
+            })
+            res <- method(url = uPaste(baseUrl, url), body = jsonlite::toJSON(body, auto_unbox=TRUE), httr::add_headers("Content-Type" = "application/json", "Authorization" = token), encode = "json")
+          },
+          error = function(cond)
+          {
+            res <- method(url = uPaste(baseUrl, url), body = body, httr::add_headers("Authorization" = token), encode = "form")
+          }
+        )
+
       }
     )
   }

@@ -4,7 +4,7 @@
 \alias{path.hashtag.search}
 \title{Retrieves all existing hashtags that contain the given string}
 \usage{
-path.hashtag.search()
+path.hashtag.search(hashtag)
 }
 \arguments{
 \item{hashtag}{Mandatory (string) the string to search for}
