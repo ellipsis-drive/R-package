@@ -3,7 +3,7 @@ Type: Package
 Title: Ellipsis Drive R Package
 Version: 1.0.0
 Author: Berend van Starkenburg
-Maintainer: berendstarkenburg@gmail.com
+Maintainer: Berend van Starkenburg <berendstarkenburg@gmail.com>
 Description: 
     This package couples the API of the geospatial cloud storage provided by Ellipsis Drive () with the R interface. It is meant to help you interact with the Ellipsis API.
     For documentation, see ED-package/docs/index.html
