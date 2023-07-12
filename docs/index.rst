@@ -74,6 +74,7 @@ Ellipsis Drive R Package • EDPackage
       Site built with `pkgdown <https://pkgdown.r-lib.org/>`__ 2.0.7.
 
  
+
    .. toctree::
       :maxdepth: 2
       :caption: Package Documentation
