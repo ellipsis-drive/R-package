@@ -1,0 +1,180 @@
+============================================================================
+Download the ordered file — path.vector.timestamp.order.download • EDPackage
+============================================================================
+
+.. raw:: html
+
+   <div class="container template-reference-topic">
+
+.. raw:: html
+
+   <div class="navbar navbar-default navbar-fixed-top"
+   role="navigation">
+
+.. raw:: html
+
+   <div class="container">
+
+.. raw:: html
+
+   <div class="navbar-header">
+
+Toggle navigation
+`EDPackage <../index.html>`__\ 1.0.0
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div id="navbar" class="navbar-collapse collapse">
+
+-  `Reference <../reference/index.html>`__
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div class="row">
+
+.. raw:: html
+
+   <div class="col-md-9 contents">
+
+.. raw:: html
+
+   <div class="page-header">
+
+.. rubric:: Download the ordered file
+   :name: download-the-ordered-file
+
+.. raw:: html
+
+   <div class="hidden name">
+
+``path.vector.timestamp.order.download.Rd``
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div class="ref-description">
+
+Download the ordered file
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div id="ref-usage">
+
+.. raw:: html
+
+   <div class="sourceCode">
+
+.. code:: r
+
+   path.vector.timestamp.order.download(orderId, filePath, token)
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div id="arguments">
+
+.. rubric:: Arguments
+   :name: arguments
+
+orderId
+   Mandatory (uuid)
+
+filePath
+   Mandatory (string) path to local file system where file will be saved
+
+token
+   Mandatory (string)
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div id="value">
+
+.. rubric:: Value
+   :name: value
+
+...
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div id="pkgdown-sidebar" class="col-md-3 hidden-xs hidden-sm">
+
+.. rubric:: Contents
+   :name: contents
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div class="copyright">
+
+Developed by berendstarkenburg@gmail.com.
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div class="pkgdown">
+
+Site built with `pkgdown <https://pkgdown.r-lib.org/>`__ 2.0.7.
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   </div>
