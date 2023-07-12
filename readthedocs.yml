@@ -1,7 +1,0 @@
-version: 2
-
-build:
-  image: latest
-
-env:
-  R_HOME: "D:/Programs/R/R-4.2.2"
