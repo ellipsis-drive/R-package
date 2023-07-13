@@ -4,3 +4,5 @@ To install the package, simply run
 ```
 remotes::install_github("ellipsis-drive/R-package")
 ```
+
+For documentation, see: https://ellipsis-drive.github.io/R-package/
