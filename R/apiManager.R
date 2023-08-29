@@ -86,6 +86,7 @@ apiManager_get <- function(url, body = NULL, token = NULL, crash = TRUE)
   urllib <- reticulate::import("urllib.parse")
   query_dict <- reticulate::dict(body)
   encoded_query <- urllib$urlencode(query_dict)
+
   url <- paste0(url, "?", encoded_query)
   r <- apiManager_call(method = httr::GET, url = url, body = NULL, token = token, crash = crash)
 

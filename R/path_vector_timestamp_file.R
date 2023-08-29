@@ -18,7 +18,7 @@ path.vector.timestamp.file.add <- function(pathId, timestampId, filePath, token,
     fastUpload <- "false"
 
   seperator <- "/"
-  fileName <- tail(strsplit(filePath, seperator)[[1]], 1)
+  fileName <- utils::tail(strsplit(filePath, seperator)[[1]], 1)
 
   body <- list("name" = fileName, "epsg" = epsg, "format" = fileFormat, "dateColumns" = dateColumns, "datePatterns" = datePatterns, "fastUpload" = fastUpload)
   r <- apiManager_upload(glue::glue("/path/{pathId}/vector/timestamp/{timestampId}/file"), filePath, body, token)

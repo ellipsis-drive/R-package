@@ -1,4 +1,5 @@
-token = EDPackage::account.logIn(username = 'BStarkenburg', password='')
+library(here)
+token = EDPackage::account.logIn(username = 'BStarkenburg', password='Xpj3YhajXuE3yJw')
 # print("works")
 # ##access token
  EDPackage::account.accessToken.create(description = 'hoi', accessList = list(list('pathId'= '46e1e919-8b73-42a3-a575-25c6d45fd93b' , 'access'=list('accessLevel'=100))), token = token)
@@ -24,10 +25,11 @@ print("account done")
 #
 #
 # ###files
- filePath = 'C:/Users/spamb/Downloads/0.tif'
+ filePath = here::here("test_files", "0.tif")
+ print(filePath)
  pathId = EDPackage::path.file.add(filePath, demo_token)[['id']]
  Sys.sleep(10)
- EDPackage::path.file.download(pathId = pathId, filePath =  'C:/Users/spamb/Downloads/out.tif')
+ EDPackage::path.file.download(pathId = pathId, filePath =  filePath)
  EDPackage::path.trash(pathId, demo_token)
  EDPackage::path.delete(pathId, demo_token)
 print("files done")
@@ -56,7 +58,7 @@ for (x in result)
 demoId = demoId[[1]]
 print("user done")
 # # ##path
-  rasterInfo = EDPackage::path.get('34fe8f32-d5f1-4442-92a5-eb7afcfdf767', token)
+  rasterInfo = EDPackage::path.get('4f36d9af-e4d2-4b9d-a91c-6953a2c358a5', token)
 #
 info = EDPackage::path.get(folderId, token)
 #
@@ -244,7 +246,7 @@ timestampId = "ba5b418a-a39e-4d84-9411-e23c096085a3"
 uploads = EDPackage::path.raster.timestamp.file.get(mapId, timestampId, token)
 uploadId = uploads[['result']][[1]][['id']]
 #
-file_out = 'C:/Users/spamb/Downloads/out.tif'
+file_out = here::here("test_files", "out.tif")#'C:/Users/spamb/Downloads/out.tif'
 Sys.sleep(10)
  EDPackage::path.raster.timestamp.file.download(pathId = mapId, timestampId = timestampId, token = token, fileId = uploadId, filePath = file_out)
 #
@@ -278,10 +280,11 @@ EDPackage::path.vector.timestamp.trash(mapId, layerId, token)
 #
  print("vector layers done")
 # ###vector uploads
-filePath = 'C:/Users/spamb/Downloads/test.zip'
+filePath = here::here("test_files", "test.zip")
+print(filePath)
  uploadId = EDPackage::path.vector.timestamp.file.add(pathId = mapId, timestampId = layerId, filePath = filePath, token = token, fileFormat = 'zip')[['id']]
 Sys.sleep(10)
-file_out = 'C:/Users/spamb/Downloads/out.zip'
+file_out = here::here("test_files", "out.zip")#paste0(filePath, "/out.zip")#'C:/Users/spamb/Downloads/out.zip'
 EDPackage::path.vector.timestamp.file.download(pathId = mapId, timestampId = layerId, fileId = uploadId, filePath = file_out, token = token)
 #
 upload = EDPackage::path.vector.timestamp.file.get(pathId = mapId,  timestampId = layerId, token = token)[['result']][[1]]
@@ -426,7 +429,7 @@ while (order[['status']] != 'completed')
   Sys.sleep(1)
 order = EDPackage::path.vector.timestamp.order.get(token)[[1]]
 
-file_out = 'C:/Users/spamb/Downloads/out.zip'
+file_out = here::here("test_files", "out.zip")#paste0(file'C:/Users/spamb/Downloads/out.zip'
 EDPackage::path.vector.timestamp.order.download(orderId, file_out, token)
 EDPackage::path.trash(mapId, token)
 EDPackage::path.delete(mapId, token)
