@@ -1,4 +1,4 @@
-token = EDPackage::account.logIn(username = 'BStarkenburg', password='Xpj3YhajXuE3yJw')
+token = EDPackage::account.logIn(username = 'BStarkenburg', password='')
 # print("works")
 # ##access token
  EDPackage::account.accessToken.create(description = 'hoi', accessList = list(list('pathId'= '46e1e919-8b73-42a3-a575-25c6d45fd93b' , 'access'=list('accessLevel'=100))), token = token)
