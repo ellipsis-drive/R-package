@@ -334,7 +334,17 @@ path.raster.timestamp.getBounds <- function(pathId, timestampId, token = NULL)
   r <- httr::content(r)
   coordinates <- unlist(r[["coordinates"]][[1]], recursive = FALSE)
   matrix_coordinates <- matrix(unlist(coordinates), ncol = 2, byrow = TRUE)
-  geometry <- sf::st_polygon(list(matrix_coordinates))
+
+  looped_matrix <- matrix()
+
+  # if needed add the first row to the matrix to close the polygons (needed for st_polygon call)
+  if(all(matrix_coordinates[1,] == matrix_coordinates[nrow(matrix_coordinates),])) {
+    looped_matrix <- matrix_coordinates
+  } else {
+    looped_matrix <- rbind(matrix_coordinates, matrix_coordinates[1, ])
+  }
+
+  geometry <- sf::st_polygon(list(looped_matrix))
   sf_object <- sf::st_sf(id = 0, geometry = sf::st_sfc(geometry))
   sf_object <- sf::st_make_valid(sf_object)
   return(sf_object)
