@@ -18,13 +18,11 @@ Imports:
   sf,
   matrixcalc,
   purrr,
-  rgdal,
   sp,
   jsonlite,
   recolorize,
   geojsonsf,
   utils,
-  rgeos,
   urltools,
   reticulate,
   geojsonio
