@@ -25,7 +25,8 @@ Imports:
   utils,
   urltools,
   reticulate,
-  geojsonio
+  geojsonio,
+  spatstat
 RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)
