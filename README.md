@@ -2,7 +2,7 @@
 
 The EDPackage is a wrapper around the Ellipsis Drive API. Using this package you can perform all API transactions using simple R objects.
 
-##Install
+## Install
 You can install this package using remotes. If remotes is not yet installed, install remotes first.
 
 ```
@@ -19,7 +19,7 @@ The pakcage is now installed under the name EDPackage
 library(EDPackage)
 ```
 
-##Examples
+## Examples
 List layers in your my Drive root:
 ```
 token = EDPackage::account.logIn(username = 'demo_user', password = 'demo_user')
@@ -55,7 +55,7 @@ EDPackage::path.vector.timestamp.file.add(pathId =vectorLayerId, timestampId=tim
 
 ```
 
-##Documentation
+## Documentation
 The function names and parameters are exactly the same as for the python package. You can find the documentation here: https://ellipsis-package.readthedocs.io/en/latest/
 
 
