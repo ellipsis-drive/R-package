@@ -46,7 +46,7 @@ path.raster.editBand <- function(pathId, bandNumber, name, token)
 #' @param includesTransparent Optional (logical) default FALSE
 #' @return ...
 #' @export
-path.raster.edit <- function(pathId, token, interpolation = NULL, includesTransparent = FALSE)
+path.raster.edit <- function(pathId, token, interpolation = NULL, includesTransparent = NULL)
 {
   token <- validString("token", token, TRUE)
   pathId <- validUuid("pathId", pathId, TRUE)
