@@ -237,7 +237,7 @@ apiManager_upload <- function(url, filePath, body, token, key = "data")
 
 apiManager_download <- function(url, filePath, token)
 {
-  token <- paste("Bearer ", token)
+  token <- paste("Bearer", token)
 
   res <- tryCatch(
     {
